@@ -5,7 +5,7 @@ function App() {
     <>
       <p>test </p>
 
-      <p className="read-the-docs">:D</p>
+      <p className="read-the-docs">:|</p>
     </>
   );
 }
