@@ -6,6 +6,7 @@ import Review from "./components/Review";
 import QnA from "./components/QnA";
 import MyPage from "./components/MyPage";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import ReviewForm from "./components/ReviewForm";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/feed" element={<Feed />} />
             <Route path="/navigation" element={<Navigation />} />
             <Route path="/review" element={<Review />} />
+            <Route path="/review/form" element={<ReviewForm />} />
             <Route path="/qna" element={<QnA />} />
             <Route path="/myPage" element={<MyPage />} />
           </Routes>
