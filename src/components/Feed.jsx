@@ -10,21 +10,22 @@ const Feed = () => {
   useEffect(() => {
     api.get("/feeds")
       .then(response => {
+
         setFeeds(response.data);
         console.log(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error: ", error);
       });
   }, []);
 
   return (
-    <div className="p-4 border border-gray-300 rounded-md">
-      Feed 페이지
+    <div className="max-w-md mx-auto p-4 border border-gray-300 rounded-md bg-white">
+      <h1 className="text-xl font-bold mb-4">Feed 페이지</h1>
       <FeedFilter />
-      <FeedList feeds = {feeds} />
+      <FeedList feeds={feeds} />
     </div>
   );
-}
+};
 
 export default Feed;
