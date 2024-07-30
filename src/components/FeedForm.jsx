@@ -34,7 +34,7 @@ const FeedForm = () => {
   return (
     <div className="p-4 max-w-md mx-auto mt-10 border rounded-md shadow-md bg-white">
       FeedForm 페이지 <br /><br />
-      <h2 className="text-2xl font-bold mb-4">{id ? 'Edit Review' : 'Add Review'}</h2>
+      <h2 className="text-2xl font-bold mb-4">{id ? 'Edit Feed' : 'Add Feed'}</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
