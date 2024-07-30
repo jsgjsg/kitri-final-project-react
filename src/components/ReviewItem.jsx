@@ -1,11 +1,22 @@
-import React from 'react';
+// src/components/ReviewItem.jsx
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReviewComment from './ReviewComment';
 
 const ReviewItem = ({ review }) => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleButtonClick = () => {
     navigate(`/review/form`); // ReviewForm 페이지로 이동
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -26,8 +37,17 @@ const ReviewItem = ({ review }) => {
       >
         Edit Review
       </button>
+      <button
+        onClick={handleOpenModal}
+        className="mt-4 ml-2 bg-green-500 text-white p-2 rounded-md hover:bg-green-600 transition-colors text-sm"
+      >
+        View Comments
+      </button>
+
+      {/* ReviewComment 컴포넌트 */}
+      <ReviewComment isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
-}
+};
 
 export default ReviewItem;
