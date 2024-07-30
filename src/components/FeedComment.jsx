@@ -1,7 +1,6 @@
-// src/components/FeedComment.jsx
-import React, { useState } from 'react';
-import FeedCommentForm from './FeedCommentForm';
-import FeedCommentList from './FeedCommentList';
+import React, { useState } from "react";
+import FeedCommentForm from "./FeedCommentForm";
+import FeedCommentList from "./FeedCommentList";
 
 const FeedComment = ({ isOpen, onClose }) => {
   const [comments, setComments] = useState([]);
@@ -16,9 +15,7 @@ const FeedComment = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-md shadow-lg w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4">Comments</h2>
-        <FeedCommentForm
-          onSubmit={handleSubmitComment}
-        />
+        <FeedCommentForm onSubmit={handleSubmitComment} />
         <br />
         <FeedCommentList comments={comments} />
         <button
