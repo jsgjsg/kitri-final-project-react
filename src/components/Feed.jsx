@@ -20,8 +20,8 @@ const Feed = () => {
   }, []);
 
   return (
-    <div className="max-w-md mx-auto p-4 border border-gray-300 rounded-md bg-white">
-      <h1 className="text-xl font-bold mb-4">Feed 페이지</h1>
+    <div className="p-4 border border-gray-300 rounded-md bg-white">
+      <h1 className="text-2xl font-bold mb-4">Feed 페이지</h1>
       <FeedFilter />
       <FeedList feeds={feeds} />
     </div>
