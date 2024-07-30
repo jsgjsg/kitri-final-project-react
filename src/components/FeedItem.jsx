@@ -1,48 +1,78 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import FeedComment from './FeedComment';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  AiOutlinePlus,
+  AiOutlineHeart,
+  AiOutlineComment,
+  AiOutlineShareAlt,
+} from "react-icons/ai"; // 아이콘 가져오기
+import FeedComment from "./FeedComment.jsx";
 
 const FeedItem = ({ feed }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleButtonClick = () => {
-    navigate(`/feed/form`); // FeedForm 페이지로 이동
+  const handleAddPost = () => {
+    navigate("/feed/form"); // 게시물 추가 페이지로 이동
   };
 
   const handleOpenModal = () => {
-    setIsModalOpen(true);
+    setIsModalOpen(true); // 댓글 모달 열기
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsModalOpen(false); // 댓글 모달 닫기
   };
 
   return (
-    <div className="p-4 border border-gray-300 rounded-md mb-4 bg-white shadow-md max-w-sm mx-auto">
-      <h3 className="text-lg font-semibold mb-2 truncate">작성자 : {feed.user_id}</h3>
-      <h3 className="text-lg font-semibold mb-2 truncate">{feed.item}</h3>
-      <img src={feed.image} alt={feed.item} className="w-full h-32 object-cover mb-2 rounded" />
-      <p className="text-gray-700 mb-2 text-sm"><strong>Content:</strong> {feed.content}</p>
-      <p className="text-gray-700 mb-2 text-sm"><strong>Animal:</strong> {feed.animal}</p>
-      <p className="text-gray-700 mb-2 text-sm"><strong>Created_at:</strong> {feed.created_at}</p>
+    <div
+      className="mx-auto my-4 p-4 bg-white rounded-lg shadow-lg transition duration-300 hover:shadow-xl border-2 border-gray-300"
+      style={{
+        width: "300px",
+        minHeight: "500px",
+        position: "relative",
+      }}
+    >
       <button
-        onClick={handleButtonClick}
-        className="mt-4 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors text-sm"
+        onClick={handleAddPost}
+        className="absolute top-2 right-2 text-blue-500"
       >
-        Edit Feed
+        <AiOutlinePlus className="text-3xl" />
       </button>
-      <button
-        onClick={handleOpenModal}
-        className="mt-4 ml-2 bg-green-500 text-white p-2 rounded-md hover:bg-green-600 transition-colors text-sm"
+      <div
+        className="flex flex-col items-center h-full"
+        style={{ paddingLeft: "16px", paddingRight: "16px" }}
       >
-        View Comments
-      </button>
-
-      {/* FeedComment 컴포넌트 */}
-      <FeedComment isOpen={isModalOpen} onClose={handleCloseModal} />
+        <div className="flex justify-between w-full mb-2">
+          <span className="text-sm mb-4">{feed.user_id}</span>
+          <span className="text-sm">
+            {feed.created_at
+              ? new Date(feed.created_at).toLocaleDateString()
+              : "Invalid Date"}
+          </span>
+        </div>
+        <div className="w-full mb-4">
+          <img
+            src={feed.image}
+            alt={feed.item}
+            className="w-full h-64 border-2 border-gray-300 mb-4"
+          />
+        </div>
+        <p className="text-sm text-gray-700 text-center mb-4">{feed.content}</p>
+        <div className="flex justify-center space-x-6 mb-4">
+          <AiOutlineHeart className="text-red-500 cursor-pointer text-xl" />
+          <AiOutlineComment
+            className="text-gray-600 cursor-pointer text-xl"
+            onClick={handleOpenModal}
+          />
+          <AiOutlineShareAlt className="text-gray-600 cursor-pointer text-xl" />
+        </div>
+      </div>
+      {isModalOpen && (
+        <FeedComment isOpen={isModalOpen} onClose={handleCloseModal} />
+      )}
     </div>
   );
-}
+};
 
 export default FeedItem;
