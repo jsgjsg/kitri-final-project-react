@@ -2,12 +2,13 @@ import axios from "axios";
 import ReviewFilter from "./ReviewFilter";
 import ReviewList from "./ReviewList";
 import { useEffect, useState } from "react";
+import api from "../api/api";
 
 const Review = () => {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:8080/api/reviews")
+    api.get("/reviews")
       .then(response => {
         setReviews(response.data);
         console.log(response.data);
