@@ -8,6 +8,8 @@ import MyPage from "./components/MyPage";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ReviewForm from "./components/ReviewForm";
 import FeedForm from "./components/FeedForm";
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   return (
@@ -15,7 +17,7 @@ function App() {
       <div className="flex flex-col min-h-screen">
         <nav className="bg-gray-800 text-white fixed w-full top-0 left-0 z-10 shadow-md">
           <ul className="flex justify-around p-4 space-x-6">
-            <li><Link to="/" className="hover:text-yellow-300 transition-colors">Home</Link></li>
+            <li><Link to="/dashboard" className="hover:text-yellow-300 transition-colors">Home</Link></li>
             <li><Link to="/test" className="hover:text-yellow-300 transition-colors">Test</Link></li>
             <li><Link to="/feed" className="hover:text-yellow-300 transition-colors">Feed</Link></li>
             <li><Link to="/navigation" className="hover:text-yellow-300 transition-colors">Navigation</Link></li>
@@ -27,6 +29,8 @@ function App() {
 
         <main className="flex-1 pt-16 p-6 bg-gray-100">
           <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/test" element={<Test />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/feed/form" element={<FeedForm />} />
