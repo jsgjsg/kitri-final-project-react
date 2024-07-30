@@ -1,4 +1,5 @@
 // src/components/Login.jsx
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,9 +13,24 @@ const Login = () => {
     // 로그인 처리 로직 추가
     console.log('Username:', username);
     console.log('Password:', password);
+    const data = {username, password};
+
+    axios.post("http://127.0.0.1:8080/api/auth/login", data)
+      .then(response => {
+        console.log("Response: ", response.data);
+        const { token } = response.data;
+        localStorage.setItem("jwtToken", token);
+        alert("Login successful!");
+
+        // 로그인 성공 후 리다이렉트
+        navigate('/dashboard'); // 로그인 후 이동할 페이지
+      })
+      .catch(error => {
+        console.error("Error: ", error);
+
+        alert("Login failed");
+      })
     
-    // 로그인 성공 후 리다이렉트
-    navigate('/dashboard'); // 로그인 후 이동할 페이지
   };
 
   return (

@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "../api/api";
 
 const Test = () => {
   const [test, setTest] = useState(null);
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:8080/test")
+    api.get("http://127.0.0.1:8080/test")
       .then(response => {
         console.log(response);
         console.log("Data: ", response.data);
