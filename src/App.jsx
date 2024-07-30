@@ -6,6 +6,7 @@ import Navigation from "./components/Navigation";
 import Review from "./components/Review";
 import QnA from "./components/QnA";
 import MyPage from "./components/MyPage";
+import Login from "./components/Login";
 import {
   BrowserRouter as Router,
   Routes,
@@ -101,6 +102,7 @@ function App() {
         </nav>
         <main className="flex-1 pt-16 p-6 bg-gray-100 ml-64">
           <Routes>
+            <Route path="/login" element={<Login />} />
             <Route path="/test" element={<Test />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/feed/form" element={<FeedForm />} />
