@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import FeedComment from './FeedComment';
 
 const FeedItem = ({ feed }) => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleButtonClick = () => {
     navigate(`/feed/form`); // FeedForm 페이지로 이동
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -22,6 +32,15 @@ const FeedItem = ({ feed }) => {
       >
         Edit Feed
       </button>
+      <button
+        onClick={handleOpenModal}
+        className="mt-4 ml-2 bg-green-500 text-white p-2 rounded-md hover:bg-green-600 transition-colors text-sm"
+      >
+        View Comments
+      </button>
+
+      {/* FeedComment 컴포넌트 */}
+      <FeedComment isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 }
