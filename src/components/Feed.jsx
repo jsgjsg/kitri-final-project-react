@@ -2,12 +2,13 @@ import axios from "axios";
 import FeedFilter from "./FeedFilter";
 import FeedList from "./FeedList";
 import { useEffect, useState } from "react";
+import api from "../api/api";
 
 const Feed = () => {
   const [feeds, setFeeds] = useState([]);
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:8080/api/feeds")
+    api.get("/feeds")
       .then(response => {
         setFeeds(response.data);
         console.log(response.data);
