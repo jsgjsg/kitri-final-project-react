@@ -1,4 +1,3 @@
-// src/components/FeedComment.jsx
 import React, { useState } from "react";
 import FeedCommentForm from "./FeedCommentForm";
 import FeedCommentList from "./FeedCommentList";

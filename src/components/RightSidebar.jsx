@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import {
+  AiOutlineHome,
   AiOutlineExperiment,
   AiOutlineAppstore,
   AiOutlineForm,
@@ -10,7 +11,17 @@ import {
 
 const RightSidebar = () => {
   return (
-    <nav className="fixed top-0 right-0 h-full flex flex-col space-y-4 p-4 bg-white shadow-lg">
+    <nav className="fixed top-20 right-2 h-full flex flex-col space-y-4 p-4 bg-gray shadow-lg z-50">
+      <NavLink
+        to="/"
+        className={({ isActive }) =>
+          isActive
+            ? "bg-yellow-300 text-black p-4 rounded-md flex items-center"
+            : "bg-gray-800 text-white p-4 rounded-md flex items-center hover:bg-gray-700 transition-colors"
+        }
+      >
+        <AiOutlineHome className="mr-2" /> Home
+      </NavLink>
       <NavLink
         to="/test"
         className={({ isActive }) =>
