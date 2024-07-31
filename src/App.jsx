@@ -4,7 +4,7 @@ import Test from "./components/Test";
 import Feed from "./components/Feed";
 import Navigation from "./components/Navigation";
 import Review from "./components/Review";
-import QnA from "./components/QnA";
+import Qna from "./components/Qna";
 import MyPage from "./components/MyPage";
 import Login from "./components/Login";
 import {
@@ -23,6 +23,8 @@ import {
   AiOutlineQuestionCircle,
   AiOutlineUser,
 } from "react-icons/ai";
+import QnaForm from "./components/QnaForm";
+import QnaDetail from "./components/QnaDetail";
 
 function App() {
   return (
@@ -109,7 +111,9 @@ function App() {
             <Route path="/navigation" element={<Navigation />} />
             <Route path="/review" element={<Review />} />
             <Route path="/review/form" element={<ReviewForm />} />
-            <Route path="/qna" element={<QnA />} />
+            <Route path="/qna" element={<Qna />} />
+            <Route path="/qna/form" element={<QnaForm />} />
+            <Route path="/qna/detail" element={<QnaDetail />} />
             <Route path="/myPage" element={<MyPage />} />
           </Routes>
         </main>
