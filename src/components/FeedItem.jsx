@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FeedComment from "./FeedComment";
+import { FaComments, FaPlus, FaHeart, FaRegHeart } from "react-icons/fa"; // FaHeart 추가
 
 const FeedItem = ({ feed }) => {
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleButtonClick = () => {
-    navigate("/feed/form"); // FeedForm 페이지로 이동
-  };
+  const navigate = useNavigate();
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -18,43 +15,43 @@ const FeedItem = ({ feed }) => {
     setIsModalOpen(false);
   };
 
+  const handleButtonClick = () => {
+    navigate("/feed/form");
+  };
+
   return (
-    <div className="p-4 border border-gray-300 rounded-md mb-4 bg-white shadow-md">
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-semibold truncate">
-          작성자: {feed.user_id}
-        </h3>
-        <button className="text-blue-500">+</button>
-      </div>
+    <div className="relative p-4 border border-gray-300 rounded-md mb-4 bg-white shadow-lg w-full max-w-xs h-150">
+      <button
+        onClick={handleButtonClick}
+        className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
+      >
+        <FaPlus />
+      </button>
+      <h3 className="text-lg font-semibold truncate mb-2">{feed.user_id}</h3>
       <img
         src={feed.image}
-        alt={feed.item}
-        className="w-full h-32 object-cover mb-2 rounded"
+        alt={feed.image}
+        className="w-full h-64 object-cover mb-2 rounded"
       />
-      <p className="text-gray-700 mb-2 text-sm">
-        <strong>내용:</strong> {feed.content}
-      </p>
-      <p className="text-gray-700 mb-2 text-sm">
-        <strong>동물:</strong> {feed.animal}
-      </p>
-      <p className="text-gray-700 mb-2 text-sm">
-        <strong>작성일:</strong> {feed.created_at}
-      </p>
-      <div className="flex justify-between">
-        <button
-          onClick={handleButtonClick}
-          className="mt-4 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors text-sm"
-        >
-          게시물 수정
+      <p className="text-gray-700 mb-2 text-sm">category : {feed.animal}</p>
+      <p className="text-gray-700 mb-2 text-sm">{feed.content}</p>
+      <p className="text-gray-500 text-xs mb-2">{feed.created_at}</p>
+      {/* created_at 필드 추가 */}
+      <div className="flex justify-end mt-2">
+        <button className="flex items-center space-x-1 text-red-500 p-2 rounded transition-colors mr-3 hover:bg-red-200">
+          {/* <FaHeart /> */}
+          <FaRegHeart />
         </button>
         <button
           onClick={handleOpenModal}
-          className="mt-4 bg-green-500 text-white p-2 rounded-md hover:bg-green-600 transition-colors text-sm"
+          className="flex items-center space-x-1 text-green-500 p-2 rounded hover:bg-green-200 transition-colors"
         >
-          댓글 보기
+          <FaComments />
         </button>
       </div>
-      <FeedComment isOpen={isModalOpen} onClose={handleCloseModal} />
+      {isModalOpen && (
+        <FeedComment isOpen={isModalOpen} onClose={handleCloseModal} />
+      )}
     </div>
   );
 };

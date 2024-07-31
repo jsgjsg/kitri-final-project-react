@@ -1,4 +1,3 @@
-// src/components/FeedCommentList.jsx
 import React from "react";
 
 const FeedCommentList = ({ comments }) => {

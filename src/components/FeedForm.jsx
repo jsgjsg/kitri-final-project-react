@@ -28,7 +28,7 @@ const FeedForm = () => {
   };
 
   const handleCancel = () => {
-    navigate("/feed"); // Feed 페이지로 이동
+    navigate(-1); // Feed 페이지로 이동
   };
 
   return (
@@ -36,7 +36,7 @@ const FeedForm = () => {
       FeedForm 페이지 <br />
       <br />
       <h2 className="text-2xl font-bold mb-4">
-        {id ? "Edit Review" : "Add Review"}
+        {id ? "Edit Form" : "Add Form"}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -51,6 +51,21 @@ const FeedForm = () => {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className="mt-1 p-2 border rounded-md w-full"
+            required
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="content"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Content
+          </label>
+          <textarea
+            id="content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             className="mt-1 p-2 border rounded-md w-full"
             required
           />
