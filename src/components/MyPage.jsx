@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import api from '../api/api';
 
 const MyPage = () => {
+  const [profile, setProfile] = useState({});
+
+  useEffect(() => {
+    api
+      .get("/users/me")
+      .then((response) => {
+        console.log(response.data);
+        setProfile(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching profile: ", error);
+      });
+  }, []);
+
   return (
     <div className="p-4 border border-gray-300 rounded-md bg-white">
       <h2 className="text-xl font-bold mb-4">MyPage 페이지</h2>
       <div className="mb-2">
-        <strong>이름:</strong> 사용자 이름
+        <strong>이름:</strong> {profile.nickname}
       </div>
       <div className="mb-4">
         <strong>한줄 소개:</strong> 한줄 소개 내용
