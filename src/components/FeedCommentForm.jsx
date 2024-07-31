@@ -1,4 +1,3 @@
-// src/components/FeedCommentForm.jsx
 import React, { useState } from "react";
 
 const FeedCommentForm = ({ onSubmit }) => {
@@ -10,8 +9,8 @@ const FeedCommentForm = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(comment); // 부모 컴포넌트에 댓글을 전달
-    setComment(""); // 제출 후 댓글 내용 비우기
+    onSubmit(comment);
+    setComment("");
   };
 
   return (
