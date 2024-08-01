@@ -1,17 +1,17 @@
-// src/components/Signup.jsx
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaUser, FaLock, FaSignature } from "react-icons/fa"; // 새로운 아이콘 추가
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [usernameError, setUsernameError] = useState('');
-  const [nicknameError, setNicknameError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [nicknameError, setNicknameError] = useState("");
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(false);
   const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
 
@@ -19,51 +19,53 @@ const Signup = () => {
     if (password && confirmPassword && password !== confirmPassword) {
       setPasswordError("패스워드가 일치하지 않습니다.");
     } else {
-      setPasswordError('');
+      setPasswordError("");
     }
   }, [password, confirmPassword]);
 
   const checkUsernameAvailability = () => {
-    if(!username) {
+    if (!username) {
       setUsernameError("아이디를 입력해주세요.");
       setIsUsernameAvailable(false);
       return;
     }
-    axios.get(`http://127.0.0.1:8080/api/auth/check-username?username=${username}`)
-      .then(response => {
+    axios
+      .get(`http://127.0.0.1:8080/api/auth/check-username?username=${username}`)
+      .then((response) => {
         if (response.data) {
-          setUsernameError('사용 가능한 아이디입니다.');
+          setUsernameError("사용 가능한 아이디입니다.");
           setIsUsernameAvailable(true);
         } else {
-          setUsernameError('이미 사용 중인 아이디입니다.');
+          setUsernameError("이미 사용 중인 아이디입니다.");
           setIsUsernameAvailable(false);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error: ", error);
-        setUsernameError('아이디 중복 조회 서버 오류');
+        setUsernameError("아이디 중복 조회 서버 오류");
       });
   };
 
   const checkNicknameAvailability = () => {
-    if(!nickname) {
+    if (!nickname) {
       setNicknameError("닉네임을 입력해주세요.");
       setIsNicknameAvailable(false);
       return;
     }
-    axios.get(`http://127.0.0.1:8080/api/auth/check-nickname?nickname=${nickname}`)
-      .then(response => {
+    axios
+      .get(`http://127.0.0.1:8080/api/auth/check-nickname?nickname=${nickname}`)
+      .then((response) => {
         if (response.data) {
-          setNicknameError('사용 가능한 닉네임입니다.');
+          setNicknameError("사용 가능한 닉네임입니다.");
           setIsNicknameAvailable(true);
         } else {
-          setNicknameError('이미 사용 중인 닉네임입니다.');
+          setNicknameError("이미 사용 중인 닉네임입니다.");
           setIsNicknameAvailable(false);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error: ", error);
-        setNicknameError('닉네임 중복 조회 서버 오류');
+        setNicknameError("닉네임 중복 조회 서버 오류");
       });
   };
 
@@ -83,43 +85,47 @@ const Signup = () => {
     // 회원가입 처리 로직 추가
     const data = { username, password, nickname };
 
-    axios.post("http://127.0.0.1:8080/api/auth/signup", data)
-      .then(response => {
+    axios
+      .post("http://127.0.0.1:8080/api/auth/signup", data)
+      .then((response) => {
         console.log("Response: ", response.data);
         alert("회원가입 성공!");
 
         // 회원가입 성공 후 리다이렉트
-        navigate('/login'); // 로그인 페이지로 이동
+        navigate("/login"); // 로그인 페이지로 이동
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error: ", error);
         alert("Registration failed");
       });
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Signup</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="flex items-center">
+    <div className="flex items-start justify-center h-screen bg-gray-100 pt-8 overflow-hidden">
+      <div className="bg-white p-16 rounded-lg shadow-lg w-full max-w-xl border-4 border-black relative">
+        <h2 className="text-3xl font-bold mb-8 text-center">Signup</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex items-center space-x-2">
             <div className="flex-grow">
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                아이디
+              <label
+                htmlFor="username"
+                className="block text-lg font-medium text-gray-700"
+              >
+                <FaUser className="inline-block mr-2" /> 아이디
               </label>
               <input
                 id="username"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
             <button
               type="button"
               onClick={checkUsernameAvailability}
-              className="ml-2 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
+              className="mt-8 bg-pastel-blue text-black p-2 rounded-md border-4 border-black hover:bg-pastel-blue-light transition-colors"
             >
               중복 조회
             </button>
@@ -127,24 +133,27 @@ const Signup = () => {
           {usernameError && (
             <p className="text-red-500 text-sm">{usernameError}</p>
           )}
-          <div className="flex items-center">
+          <div className="flex items-center space-x-2">
             <div className="flex-grow">
-              <label htmlFor="nickname" className="block text-sm font-medium text-gray-700">
-                닉네임
+              <label
+                htmlFor="nickname"
+                className="block text-lg font-medium text-gray-700"
+              >
+                <FaSignature className="inline-block mr-2" /> 닉네임
               </label>
               <input
                 id="nickname"
                 type="text"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
             <button
               type="button"
               onClick={checkNicknameAvailability}
-              className="ml-2 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
+              className="mt-8 bg-pastel-green text-black p-2 rounded-md border-4 border-black hover:bg-pastel-green-light transition-colors"
             >
               중복 조회
             </button>
@@ -153,28 +162,34 @@ const Signup = () => {
             <p className="text-red-500 text-sm">{nicknameError}</p>
           )}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              비밀번호
+            <label
+              htmlFor="password"
+              className="block text-lg font-medium text-gray-700"
+            >
+              <FaLock className="inline-block mr-2" /> 비밀번호
             </label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-              비밀번호 확인
+            <label
+              htmlFor="confirmPassword"
+              className="block text-lg font-medium text-gray-700"
+            >
+              <FaLock className="inline-block mr-2" /> 비밀번호 확인
             </label>
             <input
               id="confirmPassword"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
             {passwordError && (
@@ -183,20 +198,20 @@ const Signup = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
+            className="w-full bg-pastel-yellow text-black p-3 rounded-md border-4 border-black hover:bg-pastel-yellow-light transition-colors"
           >
             Signup
           </button>
         </form>
         <div className="mt-4 text-center">
-            <button
-              type="button"
-              onClick={() => navigate('/login')}
-              className="bg-gray-300 text-gray-700 p-2 rounded-md hover:bg-gray-400 transition-colors"
-            >
-              로그인 페이지로 이동
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => navigate("/login")}
+            className="bg-pastel-gray text-black p-3 rounded-md border-4 border-black hover:bg-gray-600 transition-colors"
+          >
+            로그인 페이지로 이동
+          </button>
+        </div>
       </div>
     </div>
   );

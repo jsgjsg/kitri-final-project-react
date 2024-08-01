@@ -1,82 +1,84 @@
-// src/components/Login.jsx
-import axios from 'axios';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaUser, FaLock, FaPaw } from "react-icons/fa"; // 새로운 아이콘 추가
 
 const Login = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 로그인 처리 로직 추가
-    console.log('Username:', username);
-    console.log('Password:', password);
-    const data = {username, password};
+    const data = { username, password };
 
-    axios.post("http://127.0.0.1:8080/api/auth/login", data)
-      .then(response => {
-        console.log("Response: ", response.data);
+    axios
+      .post("http://127.0.0.1:8080/api/auth/login", data)
+      .then((response) => {
         const { token } = response.data;
         localStorage.setItem("jwtToken", token);
         alert("Login successful!");
-
-        // 로그인 성공 후 리다이렉트
-        navigate('/dashboard'); // 로그인 후 이동할 페이지
+        navigate("/dashboard");
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error: ", error);
-
         alert("Login failed");
-      })
+      });
   };
 
   const handleSignUp = () => {
-    navigate('/signup'); // 회원가입 페이지로 이동
+    navigate("/signup");
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="flex items-start justify-center h-screen bg-gray-100 pt-20">
+      <div className="bg-white p-16 rounded-lg shadow-lg w-full max-w-xl border-4 border-black relative">
+        <FaPaw className="text-4xl text-pink-500 absolute top-10 right-10" />{" "}
+        {/* 발바닥 아이콘 위치 수정 */}
+        <h2 className="text-3xl font-bold mb-8 text-center">Login</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-              Username
+            <label
+              htmlFor="username"
+              className="block text-lg font-medium text-gray-700"
+            >
+              <FaUser className="inline-block mr-2" /> Username
             </label>
             <input
               id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Password
+            <label
+              htmlFor="password"
+              className="block text-lg font-medium text-gray-700"
+            >
+              <FaLock className="inline-block mr-2" /> Password
             </label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
+            className="w-full bg-pastel-blue text-black p-3 rounded-md border-4 border-black hover:bg-pastel-blue-light transition-colors"
           >
             Login
           </button>
         </form>
         <button
           onClick={handleSignUp}
-          className="mt-4 w-full bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600 transition-colors"
+          className="mt-6 w-full bg-pastel-gray text-black p-3 rounded-md border-4 border-black hover:bg-gray-600 transition-colors"
         >
           Signup
         </button>
