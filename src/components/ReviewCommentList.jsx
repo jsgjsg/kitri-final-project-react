@@ -1,5 +1,4 @@
-// src/components/ReviewCommentList.jsx
-import React from 'react';
+import React from "react";
 
 const ReviewCommentList = ({ comments }) => {
   return (

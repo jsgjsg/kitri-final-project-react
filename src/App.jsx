@@ -5,7 +5,7 @@ import Test from "./components/Test";
 import Feed from "./components/Feed";
 import Navigation from "./components/Navigation";
 import Review from "./components/Review";
-import Qna from "./components/Qna";
+import Qna from "./components/QnA";
 import MyPage from "./components/MyPage";
 import Login from "./components/Login";
 import {
