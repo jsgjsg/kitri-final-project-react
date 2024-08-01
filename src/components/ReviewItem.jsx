@@ -67,7 +67,7 @@ const ReviewItem = ({ review }) => {
         </button>
       </div>
       {isModalOpen && (
-        <ReviewComment isOpen={isModalOpen} onClose={handleCloseModal} />
+        <ReviewComment reviewId={review.id} isOpen={isModalOpen} onClose={handleCloseModal} />
       )}
     </div>
   );
