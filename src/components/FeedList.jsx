@@ -3,7 +3,7 @@ import FeedItem from "./FeedItem";
 
 const FeedList = ({ feeds }) => {
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full font-doodle">
       {feeds.length === 0 ? (
         <p>No feeds available.</p>
       ) : (
