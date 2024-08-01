@@ -24,10 +24,15 @@ const Signup = () => {
   }, [password, confirmPassword]);
 
   const checkUsernameAvailability = () => {
+    if(!username) {
+      setUsernameError("아이디를 입력해주세요.");
+      setIsUsernameAvailable(false);
+      return;
+    }
     axios.get(`http://127.0.0.1:8080/api/auth/check-username?username=${username}`)
       .then(response => {
-        if (response.data.available) {
-          setUsernameError('');
+        if (response.data) {
+          setUsernameError('사용 가능한 아이디입니다.');
           setIsUsernameAvailable(true);
         } else {
           setUsernameError('이미 사용 중인 아이디입니다.');
@@ -41,10 +46,15 @@ const Signup = () => {
   };
 
   const checkNicknameAvailability = () => {
+    if(!nickname) {
+      setNicknameError("닉네임을 입력해주세요.");
+      setIsNicknameAvailable(false);
+      return;
+    }
     axios.get(`http://127.0.0.1:8080/api/auth/check-nickname?nickname=${nickname}`)
       .then(response => {
-        if (response.data.available) {
-          setNicknameError('');
+        if (response.data) {
+          setNicknameError('사용 가능한 닉네임입니다.');
           setIsNicknameAvailable(true);
         } else {
           setNicknameError('이미 사용 중인 닉네임입니다.');
@@ -178,6 +188,15 @@ const Signup = () => {
             Signup
           </button>
         </form>
+        <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={() => navigate('/login')}
+              className="bg-gray-300 text-gray-700 p-2 rounded-md hover:bg-gray-400 transition-colors"
+            >
+              로그인 페이지로 이동
+            </button>
+          </div>
       </div>
     </div>
   );
