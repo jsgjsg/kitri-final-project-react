@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/api';
+import { useNavigate } from 'react-router-dom';
 
 const MyPage = () => {
   const [profile, setProfile] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     api
@@ -15,6 +17,15 @@ const MyPage = () => {
         console.error("Error fetching profile: ", error);
       });
   }, []);
+  
+  const handleLogout = () => {
+    api.post("/auth/logout")
+    .then((response) => {
+      localStorage.removeItem('jwtToken'); // JWT 토큰 삭제
+      alert(response.data);
+      navigate('/login'); // 로그인 페이지로 이동
+    })
+  }
 
   return (
     <div className="p-4 border border-gray-300 rounded-md bg-white">
@@ -49,7 +60,10 @@ const MyPage = () => {
         <button className="w-5/6 bg-blue-500 text-white p-2 rounded hover:bg-blue-700 mx-auto block">
           회원 정보 수정
         </button>
-        <button className="w-5/6 bg-blue-500 text-white p-2 rounded hover:bg-blue-700 mx-auto block">
+        <button
+          className="w-1/2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
+          onClick={handleLogout}
+        >
           Logout
         </button>
         <button className="w-5/6 bg-blue-500 text-white p-2 rounded hover:bg-blue-700 mx-auto block">
