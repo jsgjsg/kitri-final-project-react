@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import QnaList from "./QnaList";
 
-const Qna = () => {
+const QnA = () => {
   const navigate = useNavigate();
 
   // QAs 데이터 받기
@@ -26,4 +26,4 @@ const Qna = () => {
   );
 }
 
-export default Qna;
+export default QnA;
