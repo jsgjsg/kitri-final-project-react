@@ -1,5 +1,6 @@
 import React from "react";
 import "./index.css"; // Tailwind CSS 포함
+import Dashboard from "./components/Dashboard";
 import Test from "./components/Test";
 import Feed from "./components/Feed";
 import Navigation from "./components/Navigation";
@@ -26,6 +27,7 @@ import {
 } from "react-icons/ai";
 import QnaForm from "./components/QnaForm";
 import QnaDetail from "./components/QnaDetail";
+import Signup from "./components/Signup";
 
 function App() {
   return (
@@ -33,7 +35,9 @@ function App() {
       <div className="flex min-h-screen bg-gray-100">
         <main className="flex-1 p-6 bg-gray-100 flex justify-center items-center pt-20 mr-24">
           <Routes>
+            <Route path="/" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/test" element={<Test />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/feed/form" element={<FeedForm />} />

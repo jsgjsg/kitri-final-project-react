@@ -30,7 +30,10 @@ const Login = () => {
 
         alert("Login failed");
       })
-    
+  };
+
+  const handleSignUp = () => {
+    navigate('/signup'); // 회원가입 페이지로 이동
   };
 
   return (
@@ -71,6 +74,12 @@ const Login = () => {
             Login
           </button>
         </form>
+        <button
+          onClick={handleSignUp}
+          className="mt-4 w-full bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600 transition-colors"
+        >
+          Signup
+        </button>
       </div>
     </div>
   );
