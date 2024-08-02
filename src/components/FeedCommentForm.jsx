@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaPaperPlane } from "react-icons/fa";
 
 const FeedCommentForm = ({ onSubmit }) => {
   const [comment, setComment] = useState("");
@@ -18,17 +19,17 @@ const FeedCommentForm = ({ onSubmit }) => {
       <textarea
         value={comment}
         onChange={handleCommentChange}
-        className="w-full p-2 border rounded-md"
+        className="w-full p-2 border-2 border-black rounded-md"
         rows="4"
         placeholder="Write your comment here..."
         required
       />
-      <div className="flex justify-between">
+      <div className="flex justify-end">
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
+          className="bg-pastel-blue text-black p-2 rounded-md border-2 border-black hover:bg-blue-600 transition-colors flex items-center"
         >
-          Submit Comment
+          <FaPaperPlane className="mr-2" /> Submit Comment
         </button>
       </div>
     </form>
