@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FeedComment from "./FeedComment";
-import { FaComments, FaPlus, FaHeart, FaRegHeart } from "react-icons/fa"; // FaHeart 추가
+import { FaComments, FaEdit, FaPlus, FaHeart, FaRegHeart } from "react-icons/fa"; // FaHeart 추가
 
-const FeedItem = ({ feed }) => {
+const FeedItem = ({ user, feed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const [isMe, setIsMe] = useState(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -19,14 +20,25 @@ const FeedItem = ({ feed }) => {
     navigate("/feed/form");
   };
 
+  if(user.id === feed.userId) setIsMe(true);
+
   return (
     <div className="relative p-4 border border-gray-300 rounded-md mb-4 bg-white shadow-lg w-full max-w-xs h-150">
-      <button
-        onClick={handleButtonClick}
-        className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
-      >
-        <FaPlus />
-      </button>
+      {isMe ? (
+        <button
+          onClick={handleButtonClick}
+          className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
+        >
+          <FaEdit />
+        </button>
+      ) : (
+        <button
+          onClick={handleButtonClick}
+          className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
+        >
+          <FaPlus />
+        </button>
+      )}
       <h3 className="text-lg font-semibold truncate mb-2">{feed.user_id}</h3>
       <img
         src={feed.image}
