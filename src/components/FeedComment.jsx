@@ -77,7 +77,7 @@ const FeedComment = ({ feedId, isOpen, onClose }) => {
         <div className="flex justify-end">
           <button
             onClick={onClose}
-            className="mt-4 bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition-colors flex items-center"
+            className="mt-4 bg-yellow-500 text-white p-2 rounded-md hover:bg-red-600 transition-colors flex items-center"
           >
             <FaTimes className="mr-2" /> Close
           </button>

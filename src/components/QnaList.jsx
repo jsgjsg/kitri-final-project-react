@@ -1,15 +1,14 @@
+import React from "react";
 import QnaItem from "./QnaItem";
+import { AiFillQuestionCircle } from "react-icons/ai";
 
 const QnaList = () => {
-
-  // QAs 받고 map으로 QA => QnaItem으로
-  
   return (
-    <div className="p-4 border border-gray-300 rounded-md bg-white">
-      QnaList 페이지
+    <div className="flex flex-col items-center w-full mt-6">
       <QnaItem />
+      {/* QnaItem을 추가적으로 반복하여 리스트를 구성할 수 있습니다 */}
     </div>
   );
-}
+};
 
 export default QnaList;
