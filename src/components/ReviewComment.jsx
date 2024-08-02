@@ -4,12 +4,13 @@ import ReviewCommentList from "./ReviewCommentList";
 import api from "../api/api.jsx";
 
 const ReviewComment = ({ reviewId, isOpen, onClose }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({}); // 사용자 정보 상태변수
   const [comments, setComments] = useState([]);
 
   console.log(reviewId);
 
   useEffect(() => {
+    // 접속중인 사용자 정보 가져오기
     api.get(`/users/me`)
     .then((response) => {
       console.log(response.data);

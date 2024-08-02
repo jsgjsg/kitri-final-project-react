@@ -50,7 +50,7 @@ const FeedItem = ({ feed }) => {
         </button>
       </div>
       {isModalOpen && (
-        <FeedComment isOpen={isModalOpen} onClose={handleCloseModal} />
+        <FeedComment feedId={feed.id} isOpen={isModalOpen} onClose={handleCloseModal} />
       )}
     </div>
   );
