@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { FaPlus, FaTimes } from "react-icons/fa";
 
 const ReviewForm = () => {
   const { id } = useParams(); // 수정 시 사용할 리뷰 ID
@@ -32,17 +33,15 @@ const ReviewForm = () => {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto mt-10 border rounded-md shadow-md bg-white">
-      ReviewForm 페이지 <br />
-      <br />
-      <h2 className="text-2xl font-bold mb-4">
+    <div className="p-6 max-w-3xl mx-auto mt-10 border-2 border-black rounded-md shadow-md bg-white font-doodle">
+      <h2 className="text-3xl font-bold mb-4">
         {id ? "Edit Review" : "Add Review"}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label
             htmlFor="title"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-gray-700"
           >
             Title
           </label>
@@ -51,14 +50,14 @@ const ReviewForm = () => {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 p-2 border rounded-md w-full"
+            className="mt-1 p-2 border-2 border-black rounded-md w-full"
             required
           />
         </div>
         <div>
           <label
             htmlFor="content"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-gray-700"
           >
             Content
           </label>
@@ -66,23 +65,23 @@ const ReviewForm = () => {
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="mt-1 p-2 border rounded-md w-full"
+            className="mt-1 p-2 border-2 border-black rounded-md w-full"
             required
           />
         </div>
-        <div className="flex space-x-4">
+        <div className="flex justify-end space-x-4">
           <button
             type="submit"
-            className="bg-blue-500 text-white p-2 rounded-md"
+            className="bg-pastel-blue text-black p-2 rounded-md border-2 border-black flex items-center"
           >
-            {id ? "Update" : "Add"}
+            <FaPlus className="mr-2" /> {id ? "Update" : "Add"}
           </button>
           <button
             type="button"
             onClick={handleCancel}
-            className="bg-gray-500 text-white p-2 rounded-md"
+            className="bg-gray-500 text-white p-2 rounded-md border-2 border-black flex items-center"
           >
-            Cancel
+            <FaTimes className="mr-2" /> Cancel
           </button>
         </div>
       </form>

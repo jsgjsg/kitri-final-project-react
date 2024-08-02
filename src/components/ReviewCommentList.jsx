@@ -3,12 +3,17 @@ import ReviewCommentItem from "./ReviewCommentItem";
 
 const ReviewCommentList = ({ comments, onDelete }) => {
   return (
-    <div className="space-y-4 max-h-96 overflow-y-auto"> {/* 고정된 높이와 스크롤 추가 */}
+    <div className="space-y-4 max-h-96 overflow-y-auto">
       {comments.length === 0 ? (
         <p className="text-gray-500">No comments yet.</p>
       ) : (
-        comments.map((comment) => (
-          <ReviewCommentItem key={comment.id} comment={comment} onDelete={onDelete}/>
+        comments.map((comment, index) => (
+          <div
+            key={index}
+            className="p-2 border-2 border-black rounded-md bg-gray-50"
+          >
+            <ReviewCommentItem comment={comment} onDelete={onDelete} />
+          </div>
         ))
       )}
     </div>
