@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaPaperPlane } from "react-icons/fa";
 
 const ReviewCommentForm = ({ onSubmit }) => {
   const [comment, setComment] = useState("");
@@ -9,9 +10,8 @@ const ReviewCommentForm = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    onSubmit(comment); // 부모 컴포넌트에 댓글을 전달
-    setComment(""); // 제출 후 댓글 내용 비우기
+    onSubmit(comment);
+    setComment("");
   };
 
   return (
@@ -19,17 +19,17 @@ const ReviewCommentForm = ({ onSubmit }) => {
       <textarea
         value={comment}
         onChange={handleCommentChange}
-        className="w-full p-2 border rounded-md"
+        className="w-full p-2 border-2 border-black rounded-md"
         rows="4"
         placeholder="Write your comment here..."
         required
       />
-      <div className="flex justify-between">
+      <div className="flex justify-end">
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
+          className="bg-pastel-blue text-black p-2 rounded-md border-2 border-black hover:bg-blue-600 transition-colors flex items-center"
         >
-          Submit Comment
+          <FaPaperPlane className="mr-2" /> Submit Comment
         </button>
       </div>
     </form>

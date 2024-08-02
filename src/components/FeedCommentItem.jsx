@@ -1,20 +1,21 @@
-const FeedCommentItem = ({comment, onDelete}) => {
+import React from "react";
 
+const FeedCommentItem = ({ comment, onDelete }) => {
   return (
-    <div>
+    <div className="p-2 border-1 border-black rounded-md bg-gray-50 space-y-2">
       <div>작성자 : {comment.nickname}</div>
       <div>내용 : {comment.content}</div>
-      <div>작성 시간 : {comment.createdAt}</div>
-      <div className="flex justify-between mt-2">
+      <div className="flex justify-between items-center">
+        <span>작성 시간 : {comment.createdAt}</span>
         <button
           onClick={() => onDelete(comment.id)}
-          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
+          className="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-700 transition-colors"
         >
           삭제
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default FeedCommentItem;

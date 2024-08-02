@@ -101,31 +101,31 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex items-start justify-center h-screen bg-gray-100 pt-8 overflow-hidden">
-      <div className="bg-white p-16 rounded-lg shadow-lg w-full max-w-xl border-4 border-black relative">
-        <h2 className="text-3xl font-bold mb-8 text-center">Signup</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="flex items-start justify-center bg-gray-100 pt-8 overflow-hidden">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm border-4 border-black relative">
+        <h2 className="text-2xl font-bold mb-4 text-center">Signup</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex items-center space-x-2">
             <div className="flex-grow">
               <label
                 htmlFor="username"
-                className="block text-lg font-medium text-gray-700"
+                className="block text-base font-medium text-gray-700"
               >
-                <FaUser className="inline-block mr-2" /> 아이디
+                <FaUser className="inline-block mr-1" /> 아이디
               </label>
               <input
                 id="username"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 block w-full p-2 border-2 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
             <button
               type="button"
               onClick={checkUsernameAvailability}
-              className="mt-8 bg-pastel-blue text-black p-2 rounded-md border-4 border-black hover:bg-pastel-blue-light transition-colors"
+              className="mt-6 bg-pastel-blue text-black p-2 rounded-md border-2 border-black hover:bg-pastel-blue-light transition-colors"
             >
               중복 조회
             </button>
@@ -137,23 +137,23 @@ const Signup = () => {
             <div className="flex-grow">
               <label
                 htmlFor="nickname"
-                className="block text-lg font-medium text-gray-700"
+                className="block text-base font-medium text-gray-700"
               >
-                <FaSignature className="inline-block mr-2" /> 닉네임
+                <FaSignature className="inline-block mr-1" /> 닉네임
               </label>
               <input
                 id="nickname"
                 type="text"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
-                className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 block w-full p-2 border-2 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
             <button
               type="button"
               onClick={checkNicknameAvailability}
-              className="mt-8 bg-pastel-green text-black p-2 rounded-md border-4 border-black hover:bg-pastel-green-light transition-colors"
+              className="mt-6 bg-pastel-green text-black p-2 rounded-md border-2 border-black hover:bg-pastel-green-light transition-colors"
             >
               중복 조회
             </button>
@@ -164,32 +164,32 @@ const Signup = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-lg font-medium text-gray-700"
+              className="block text-base font-medium text-gray-700"
             >
-              <FaLock className="inline-block mr-2" /> 비밀번호
+              <FaLock className="inline-block mr-1" /> 비밀번호
             </label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 block w-full p-2 border-2 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
           <div>
             <label
               htmlFor="confirmPassword"
-              className="block text-lg font-medium text-gray-700"
+              className="block text-base font-medium text-gray-700"
             >
-              <FaLock className="inline-block mr-2" /> 비밀번호 확인
+              <FaLock className="inline-block mr-1" /> 비밀번호 확인
             </label>
             <input
               id="confirmPassword"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 block w-full p-2 border-2 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
             {passwordError && (
@@ -198,7 +198,7 @@ const Signup = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-pastel-yellow text-black p-3 rounded-md border-4 border-black hover:bg-pastel-yellow-light transition-colors"
+            className="w-full bg-pastel-yellow text-black p-2 rounded-md border-2 border-black hover:bg-pastel-yellow-light transition-colors"
           >
             Signup
           </button>
@@ -207,7 +207,7 @@ const Signup = () => {
           <button
             type="button"
             onClick={() => navigate("/login")}
-            className="bg-pastel-gray text-black p-3 rounded-md border-4 border-black hover:bg-gray-600 transition-colors"
+            className="bg-pastel-gray text-black p-2 rounded-md border-2 border-black hover:bg-gray-600 transition-colors"
           >
             로그인 페이지로 이동
           </button>
