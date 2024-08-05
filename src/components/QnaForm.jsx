@@ -1,17 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPenAlt, FaTimes } from "react-icons/fa";
 import { AiFillQuestionCircle } from "react-icons/ai";
+import api from "../api/api";
 
 const QnaForm = () => {
+  const [user, setUser] = useState({}); // 사용자 정보 상태변수
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [question, setQuestion] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      navigate("/login"); // 토큰이 없으면 로그인 페이지로 이동
+      return;
+    }
+
+    api
+      .get("/users/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+        navigate("/login"); // 오류가 발생하면 로그인 페이지로 이동
+      });
+  }, [navigate]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Submit form data
-    console.log({ title, content });
+    const qnaData = {
+      qa: {
+        title: title,
+      },
+      question: {
+        question: question,
+      },
+    };
+
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      navigate("/login"); // 토큰이 없으면 로그인 페이지로 이동
+      return;
+    }
+
+    api
+      .post("/qa", qnaData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        navigate("/qna"); // 전송 후 Qna 페이지로 이동
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
   };
 
   const handleCancel = () => {
@@ -39,13 +88,13 @@ const QnaForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="content" className="block text-2xl font-bold mb-2">
+          <label htmlFor="question" className="block text-2xl font-bold mb-2">
             내용
           </label>
           <textarea
-            id="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            id="question"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
             className="w-full p-3 border-2 border-black rounded"
             rows="6"
             required

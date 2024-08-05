@@ -9,12 +9,13 @@ const FeedForm = () => {
   const location = useLocation();
   const feed = location.state?.feed || {};
 
+  // 상태 변수 정의
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState(null);
-  const [animal, setAnimal] = useState("cat");
-  const [hashtags, setHashtags] = useState("");
-  const [hashtagsList, setHashtagsList] = useState([]);
+  const [content, setContent] = useState(""); // 피드 내용 상태변수
+  const [image, setImage] = useState(null); // 이미지 파일 상태변수
+  const [animal, setAnimal] = useState("cat"); // 동물 종류 상태변수
+  const [hashtags, setHashtags] = useState(""); // 해시태그 입력 상태변수
+  const [hashtagsList, setHashtagsList] = useState([]); // 해시태그 리스트 상태변수
 
   useEffect(() => {
     // 접속중인 사용자 정보 가져오기
@@ -29,6 +30,7 @@ const FeedForm = () => {
       });
   }, []);
 
+  // URL 파라미터에 따라 초기 상태 설정
   useEffect(() => {
     if (id) {
       setContent(feed.content);
@@ -37,61 +39,66 @@ const FeedForm = () => {
       setHashtagsList([]);
     }
   }, [id]);
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const feed = {userId: user.id, content, animal, image, hashtagsList};
+    const feed = { userId: user.id, content, animal, image, hashtagsList };
 
     if (id) {
       console.log("Updating review with ID:", id);
 
-      api.put(`/feeds/${id}`, feed)
-      .then((response) => {
-        console.log("Content:", content);
-        console.log("Image:", image);
-        console.log("animal:", animal);
-        console.log("Hashtags:", hashtagsList);
-        console.log(response.data);
-        alert("글 수정 완료");
-        navigate("/feed");
-      })
-      .catch((error) => {
-        console.error("Error: ", error);
-      });
+      api
+        .put(`/feeds/${id}`, feed)
+        .then((response) => {
+          console.log("Content:", content);
+          console.log("Image:", image);
+          console.log("animal:", animal);
+          console.log("Hashtags:", hashtagsList);
+          console.log(response.data);
 
+          alert("글 수정 완료");
+          navigate("/feed");
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
     } else {
       console.log("Adding new review");
 
-      api.post("/feeds", feed)
-      .then((response) => {
-        console.log("Content:", content);
-        console.log("Image:", image);
-        console.log("animal:", animal);
-        console.log("Hashtags:", hashtagsList);
-        console.log(response.data);
-        alert("글 작성 완료");
-        navigate("/feed");
-      })
-      .catch((error) => {
-        console.error("Error: ", error);
-      });
+      api
+        .post("/feeds", feed)
+        .then((response) => {
+          console.log("Content:", content);
+          console.log("Image:", image);
+          console.log("animal:", animal);
+          console.log("Hashtags:", hashtagsList);
+          console.log(response.data);
+          alert("글 작성 완료");
+          navigate("/feed");
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
     }
-
   };
 
+  // 폼 취소 처리
   const handleCancel = () => {
-    navigate(-1);
+    navigate(-1); // 이전 페이지로 이동
   };
 
+  // 이미지 변경 처리
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
   };
 
+  // 해시태그 입력 변경 처리
   const handleHashtagsChange = (e) => {
     setHashtags(e.target.value);
   };
 
+  // 해시태그 추가 처리
   const addHashtag = () => {
     if (hashtags.trim() && !hashtagsList.includes(hashtags.trim())) {
       setHashtagsList([...hashtagsList, hashtags.trim()]);
@@ -99,13 +106,15 @@ const FeedForm = () => {
     }
   };
 
+  // 해시태그 제거 처리
   const removeHashtag = (hashtag) => {
-    setHashtagsList(hashtagsList.filter(tag => tag !== hashtag));
+    setHashtagsList(hashtagsList.filter((tag) => tag !== hashtag));
   };
 
   const handleDelete = () => {
     if (window.confirm("정말로 이 피드를 삭제하시겠습니까?")) {
-      api.delete(`/feeds/${id}`)
+      api
+        .delete(`/feeds/${id}`)
         .then(() => {
           alert("피드가 삭제되었습니다.");
           navigate("/feed");
@@ -119,9 +128,7 @@ const FeedForm = () => {
   return (
     <div className="p-6 w-80 mx-auto border-2 border-black rounded-md shadow-md bg-white font-doodle">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-3xl font-bold">
-          {id ? "Edit Form" : "Add Form"}
-        </h2>
+        <h2 className="text-3xl font-bold">{id ? "Edit Form" : "Add Form"}</h2>
         {id && (
           <button
             onClick={handleDelete}
@@ -237,7 +244,6 @@ const FeedForm = () => {
       </form>
     </div>
   );
-  
 };
 
 export default FeedForm;

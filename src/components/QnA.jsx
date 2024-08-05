@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from "react";
+import api from "../api/api";
 import { useNavigate } from "react-router-dom";
 import QnaList from "./QnaList";
 import { AiFillQuestionCircle } from "react-icons/ai";
@@ -6,9 +8,37 @@ import { FaPlus } from "react-icons/fa";
 const QnA = () => {
   const navigate = useNavigate();
 
+  const [user, setUser] = useState({}); // 사용자 정보 상태변수
+  const [Qnas, setQnas] = useState([]);
+
+  console.log("QNA14");
+  useEffect(() => {
+    // 접속중인 사용자 정보 가져오기
+    api
+      .get(`/users/me`)
+      .then((response) => {
+        console.log(response.data);
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+
+    api
+      .get("/qa")
+      .then((response) => {
+        setQnas(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching qas: ", error);
+      });
+  }, []);
+
   const handleButtonClick = () => {
     navigate("/qna/form"); // QnaForm 페이지로 이동
   };
+  console.log(Qnas);
 
   return (
     <div className="flex flex-col items-center w-full font-doodle relative bg-gray-100 pt-30">
@@ -23,7 +53,14 @@ const QnA = () => {
         >
           <FaPlus className="text-xl" />
         </button>
-        <QnaList />
+        <div className="p-6 border-black rounded-md bg-white font-doodle max-w-3xl mx-auto mt-1">
+          <div
+            className="relative bg-pastel-pink-light p-10 rounded-m2 shadow-lg"
+            style={{ height: "600px" }}
+          >
+            <QnaList user={user} Qnas={Qnas} />
+          </div>
+        </div>
       </div>
     </div>
   );
