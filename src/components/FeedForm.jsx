@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { FaPlus, FaTimes } from "react-icons/fa";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { FaPlus, FaTimes, FaTrash } from "react-icons/fa";
 import api from "../api/api";
 
 const FeedForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const feed = location.state?.feed || {};
 
   // 상태 변수 정의
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
@@ -31,36 +33,54 @@ const FeedForm = () => {
   // URL 파라미터에 따라 초기 상태 설정
   useEffect(() => {
     if (id) {
-      setContent("Sample Content");
-      setImage(null);
-      setAnimal("cat");
-      setHashtagsList(["sampleHashtag1", "sampleHashtag2"]);
+      setContent(feed.content);
+      setImage(feed.image);
+      setAnimal(feed.animal);
+      setHashtagsList([]);
     }
   }, [id]);
 
-  // 폼 제출 처리
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (id) {
-      console.log("Updating review with ID:", id);
-    } else {
-      console.log("Adding new review");
-    }
 
     const feed = { userId: user.id, content, animal, image, hashtagsList };
 
-    api
-      .post("/feeds", feed)
-      .then((response) => {
-        console.log("Content:", content);
-        console.log("Image:", image);
-        console.log("animal:", animal);
-        console.log("Hashtags:", hashtagsList);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error: ", error);
-      });
+    if (id) {
+      console.log("Updating review with ID:", id);
+
+      api
+        .put(`/feeds/${id}`, feed)
+        .then((response) => {
+          console.log("Content:", content);
+          console.log("Image:", image);
+          console.log("animal:", animal);
+          console.log("Hashtags:", hashtagsList);
+          console.log(response.data);
+
+          alert("글 수정 완료");
+          navigate("/feed");
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
+    } else {
+      console.log("Adding new review");
+
+      api
+        .post("/feeds", feed)
+        .then((response) => {
+          console.log("Content:", content);
+          console.log("Image:", image);
+          console.log("animal:", animal);
+          console.log("Hashtags:", hashtagsList);
+          console.log(response.data);
+          alert("글 작성 완료");
+          navigate("/feed");
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
+    }
   };
 
   // 폼 취소 처리
@@ -91,11 +111,34 @@ const FeedForm = () => {
     setHashtagsList(hashtagsList.filter((tag) => tag !== hashtag));
   };
 
+  const handleDelete = () => {
+    if (window.confirm("정말로 이 피드를 삭제하시겠습니까?")) {
+      api
+        .delete(`/feeds/${id}`)
+        .then(() => {
+          alert("피드가 삭제되었습니다.");
+          navigate("/feed");
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
+    }
+  };
+
   return (
     <div className="p-6 w-80 mx-auto border-2 border-black rounded-md shadow-md bg-white font-doodle">
-      <h2 className="text-3xl font-bold mb-4">
-        {id ? "Edit Form" : "Add Form"}
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-3xl font-bold">{id ? "Edit Form" : "Add Form"}</h2>
+        {id && (
+          <button
+            onClick={handleDelete}
+            className="text-red-600 hover:text-red-800"
+            aria-label="Delete"
+          >
+            <FaTrash size={24} />
+          </button>
+        )}
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label
