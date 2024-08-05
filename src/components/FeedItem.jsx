@@ -17,8 +17,12 @@ const FeedItem = ({ user, feed }) => {
     setIsModalOpen(false);
   };
 
-  const handleButtonClick = () => {
+  const handleCreateButton = () => {
     navigate("/feed/form");
+  };
+  
+  const handleUpdateButton = () => {
+    navigate(`/feed/form/${feed.id}`, { state: { feed } });
   };
 
   if(!isMe && user.id === feed.userId) {
@@ -26,18 +30,20 @@ const FeedItem = ({ user, feed }) => {
     console.log(isMe);
   }
 
+  console.log(feed);
+
   return (
     <div className="relative p-4 border border-gray-300 rounded-md mb-4 bg-white shadow-lg w-full max-w-xs h-150">
       {isMe ? (
         <button
-          onClick={handleButtonClick}
+          onClick={handleUpdateButton}
           className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
         >
           <FaEdit />
         </button>
       ) : (
         <button
-          onClick={handleButtonClick}
+          onClick={handleCreateButton}
           className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
         >
           <FaPlus />
