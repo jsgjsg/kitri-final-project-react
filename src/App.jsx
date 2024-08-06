@@ -51,7 +51,7 @@ function App() {
             <Route path="/myPage" element={<MyPage />} />
           </Routes>
         </main>
-        <nav className="fixed top-20 right-10 flex flex-col space-y-4 p-4 bg-white shadow-lg rounded-lg">
+        <nav className="fixed top-80 right-10 flex flex-col space-y-4 p-4 bg-white shadow-lg rounded-lg">
           <NavLink
             to="/"
             className={({ isActive }) =>
