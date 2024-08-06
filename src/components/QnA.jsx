@@ -3,21 +3,22 @@ import api from "../api/api";
 import { useNavigate } from "react-router-dom";
 import QnaList from "./QnaList";
 import { AiFillQuestionCircle } from "react-icons/ai";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTrashAlt } from "react-icons/fa";
+import { FiSearch } from "react-icons/fi";
 
 const QnA = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
   const [Qnas, setQnas] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 변수
+  const [filteredQnas, setFilteredQnas] = useState([]); // 필터링된 QnA 상태 변수
 
-  console.log("QNA14");
   useEffect(() => {
     // 접속중인 사용자 정보 가져오기
     api
       .get(`/users/me`)
       .then((response) => {
-        console.log(response.data);
         setUser(response.data);
       })
       .catch((error) => {
@@ -28,17 +29,45 @@ const QnA = () => {
       .get("/qa")
       .then((response) => {
         setQnas(response.data);
-        console.log(response.data);
+        setFilteredQnas(response.data); // 초기 QnA 데이터 설정
       })
       .catch((error) => {
         console.error("Error fetching qas: ", error);
       });
   }, []);
 
+  useEffect(() => {
+    // 검색어 변경 시 필터링 로직
+    setFilteredQnas(
+      Qnas.filter((qna) =>
+        qna.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [searchTerm, Qnas]);
+
   const handleButtonClick = () => {
     navigate("/qna/form"); // QnaForm 페이지로 이동
   };
-  console.log(Qnas);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+  const handleDelete = (id) => {
+    if (window.confirm("정말로 이 QnA를 삭제하시겠습니까?")) {
+      console.log("58");
+      api
+        .delete(`/qa/${id}`)
+        .then(() => {
+          console.log("61");
+          // setQnas(Qnas.filter((qna) => qna.id !== id));
+          // setFilteredQnas(filteredQnas.filter((qna) => qna.id !== id));
+          console.log("62");
+        })
+        .catch((error) => {
+          console.error("Error deleting QnA: ", error);
+        });
+    }
+  };
 
   return (
     <div className="flex flex-col items-center w-full font-doodle relative bg-gray-100 pt-30">
@@ -46,6 +75,22 @@ const QnA = () => {
         <div className="flex items-center w-full">
           <AiFillQuestionCircle className="text-5xl text-pink-500 mr-2" />
           <h2 className="text-4xl font-bold">Qna 페이지</h2>
+          <div className="ml-auto flex items-center space-x-2">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="p-2 border rounded"
+              placeholder="검색어를 입력하세요"
+            />
+            <FiSearch className="text-2xl text-gray-700" />
+          </div>
+          <button
+            onClick={() => handleDelete(id)}
+            className="absolute top-0 right-8 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <FaTrashAlt />
+          </button>
         </div>
         <button
           onClick={handleButtonClick}
@@ -55,7 +100,11 @@ const QnA = () => {
         </button>
         <div className="w-full max-w-3xl h-[650px] overflow-y-auto p-6 border-black rounded-md bg-white font-doodle mt-4 shadow-inner">
           <div className="bg-pastel-pink-light p-4 rounded-md shadow-lg h-full overflow-y-auto">
-            <QnaList user={user} Qnas={Qnas} />
+            <QnaList
+              user={user}
+              Qnas={filteredQnas}
+              handleDelete={handleDelete}
+            />
           </div>
         </div>
       </div>
