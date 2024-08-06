@@ -43,7 +43,7 @@ const QnA = () => {
   return (
     <div className="flex flex-col items-center w-full font-doodle relative bg-gray-100 pt-30">
       <div className="flex flex-col items-center w-full max-w-3xl bg-white border-4 border-black rounded-md p-6 mb-20 shadow-lg relative">
-        <div className="flex items-center w-full mb-6">
+        <div className="flex items-center w-full">
           <AiFillQuestionCircle className="text-5xl text-pink-500 mr-2" />
           <h2 className="text-4xl font-bold">Qna 페이지</h2>
         </div>
@@ -53,11 +53,8 @@ const QnA = () => {
         >
           <FaPlus className="text-xl" />
         </button>
-        <div className="p-6 border-black rounded-md bg-white font-doodle max-w-3xl mx-auto mt-1">
-          <div
-            className="relative bg-pastel-pink-light p-10 rounded-m2 shadow-lg"
-            style={{ height: "600px" }}
-          >
+        <div className="w-full max-w-3xl h-[650px] overflow-y-auto p-6 border-black rounded-md bg-white font-doodle mt-4 shadow-inner">
+          <div className="bg-pastel-pink-light p-4 rounded-md shadow-lg h-full overflow-y-auto">
             <QnaList user={user} Qnas={Qnas} />
           </div>
         </div>
