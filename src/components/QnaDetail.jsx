@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillQuestionCircle } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
-import { FaTrashAlt } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/api"; // api 모듈을 import
+import QnaDetailList from "./QnaDetailList";
 
 const QnaDetail = () => {
   const { qaId } = useParams();
   const navigate = useNavigate();
-  const scrollRef = useRef(null);
 
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
   const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState([]);
   const [newQuestion, setNewQuestion] = useState("");
 
   useEffect(() => {
@@ -39,9 +39,19 @@ const QnaDetail = () => {
         setQuestions(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching qas: ", error);
+        console.error("Error fetching questions: ", error);
       });
-  }, [navigate, qaId]);
+
+    api
+      .get(`/qa/${qaId}/answers`)
+      .then((response) => {
+        setAnswers(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching answers: ", error);
+      });
+
+  }, [qaId, navigate]);
 
   const handleDelete = (questionId) => {
     if (window.confirm("정말로 이 질문을 삭제하시겠습니까?")) {
@@ -55,12 +65,6 @@ const QnaDetail = () => {
         });
     }
   };
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [questions]);
 
   const handleInputChange = (e) => {
     setNewQuestion(e.target.value);
@@ -96,47 +100,37 @@ const QnaDetail = () => {
         <AiFillQuestionCircle className="text-4xl text-pink-500 mr-2" />
         <h2 className="text-3xl font-bold">QnaDetail 페이지</h2>
       </div>
-      <div className="flex-1 overflow-y-auto overflow-x-hidden" ref={scrollRef}>
-        {questions.map((question, index) => (
-          <div key={index} className="relative mb-4 group">
-            <div className="relative flex-1 ml-4 bg-white rounded-lg p-3 shadow-lg mt-10 mr-4 border-2 border-black">
-              <button className="text-pink-600 w-full hover:underline text-left">
-                {question.question}
-              </button>
-              <div className="absolute top-1/2 transform -translate-y-1/2 right-[-10px] w-0 h-0 border-t-[12px] border-t-transparent border-l-[23px] border-l-white border-b-[12px] border-b-transparent"></div>
-            </div>
-            {user.id === question.userId && (
-              <button
-                onClick={() => handleDelete(question.id)}
-                className="absolute top-3 right-8 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <FaTrashAlt />
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
+      
       {user.id === questions[0]?.userId && (
-        <div className="mt-6 flex items-center">
-          <input
-            type="text"
-            value={newQuestion}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded"
-            placeholder="새 질문을 입력하세요"
-          />
-          <button
-            onClick={handleSubmit}
-            className="ml-2 p-2 bg-pink-500 text-white rounded flex-shrink-0"
-          >
-            질문하기
-          </button>
-          <button
-            onClick={handleEndChat}
-            className="ml-2 p-2 bg-red-500 text-white rounded flex-shrink-0"
-          >
-            <FiLogOut className="text-xl" />
-          </button>
+        <div className="mt-6 flex flex-col flex-grow">
+          <div className="overflow-y-auto max-h-80 mb-4">
+            <QnaDetailList
+              user={user}
+              questions={questions}
+              handleDelete={handleDelete}
+            />
+          </div>
+          <div className="flex">
+            <input
+              type="text"
+              value={newQuestion}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+              placeholder="새 질문을 입력하세요"
+            />
+            <button
+              onClick={handleSubmit}
+              className="ml-2 p-2 bg-pink-500 text-white rounded flex-shrink-0"
+            >
+              질문하기
+            </button>
+            <button
+              onClick={handleEndChat}
+              className="ml-2 p-2 bg-red-500 text-white rounded flex-shrink-0"
+            >
+              <FiLogOut className="text-xl" />
+            </button>
+          </div>
         </div>
       )}
     </div>
