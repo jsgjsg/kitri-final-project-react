@@ -17,22 +17,21 @@ const QnaItem = ({ user, Qna }) => {
   };
 
   return (
-    <div>
-      <div className="flex items-center mt-2 mr-2">
-        <FaUser className=" flex-end mr-2 text-2xl text-gray-700" />
-        <span className="text-2xl">{Qna.userId}</span>
-      </div>
-      <div className="relative flex-1 ml-4 bg-white rounded-lg p-3 shadow-lg mt-10">
+    <div className="flex justify-between items-center mt-4 p-4 w-full max-w-2xl mx-auto">
+      <div className="relative flex-1 bg-white rounded-lg p-3 shadow-lg">
         <button
           onClick={handleTitleClick}
-          className="text-pink-600 w-80 h-210 hover:underline flex items-center justify-end"
+          className="text-pink-600 w-full hover:underline text-left"
         >
           {Qna.title}
         </button>
         <div className="absolute top-1/2 transform -translate-y-1/2 right-[-10px] w-0 h-0 border-t-[12px] border-t-transparent border-l-[23px] border-l-white border-b-[12px] border-b-transparent"></div>
       </div>
+      <div className="flex items-center ml-4">
+        <FaUser className="mr-2 text-2xl text-gray-700" />
+        <span className="text-2xl">{Qna.userId}</span>
+      </div>
     </div>
   );
 };
-
 export default QnaItem;
