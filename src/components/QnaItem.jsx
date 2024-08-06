@@ -18,7 +18,7 @@ const QnaItem = ({ user, Qna }) => {
 
   return (
     <div className="flex justify-between items-center mt-4 p-4 w-full max-w-2xl mx-auto">
-      <div className="relative flex-1 bg-white rounded-lg p-3 shadow-lg">
+      <div className="relative flex-1 bg-white rounded-lg p-3 shadow-lg max-w-1/5 ">
         <button
           onClick={handleTitleClick}
           className="text-pink-600 w-full hover:underline text-left"
