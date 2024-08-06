@@ -73,7 +73,9 @@ const FeedComment = ({ feedId, isOpen, onClose }) => {
         <h2 className="text-2xl font-semibold mb-4">Comments</h2>
         <FeedCommentForm onSubmit={handleSubmitComment} />
         <br />
-        <FeedCommentList onDelete={handleDelete} comments={comments} />
+        <div className="max-h-80 overflow-y-auto">
+          <FeedCommentList onDelete={handleDelete} comments={comments} />
+        </div>
         <div className="flex justify-end">
           <button
             onClick={onClose}
