@@ -58,10 +58,8 @@ const QnA = () => {
       api
         .delete(`/qa/${id}`)
         .then(() => {
-          console.log("61");
-          // setQnas(Qnas.filter((qna) => qna.id !== id));
-          // setFilteredQnas(filteredQnas.filter((qna) => qna.id !== id));
-          console.log("62");
+          setQnas(Qnas.filter((qna) => qna.id !== id));
+          setFilteredQnas(filteredQnas.filter((qna) => qna.id !== id));
         })
         .catch((error) => {
           console.error("Error deleting QnA: ", error);
