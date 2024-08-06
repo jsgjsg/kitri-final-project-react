@@ -9,8 +9,9 @@ const FeedItem = ({ user, feed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const [isMe, setIsMe] = useState(false);
-  const { feedWithUser, likeCount, liked: initialLiked } = feed; // initialLiked 추가
+  const { feedWithUser, likeCount: initialLikeCount, liked: initialLiked } = feed; // initialLiked 추가
   const [liked, setLiked] = useState(initialLiked); // liked 상태 추가
+  const [likeCount, setLikeCount] = useState(initialLikeCount);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -41,7 +42,8 @@ const FeedItem = ({ user, feed }) => {
     api
       .post(`/feeds/${feedWithUser.id}/like`, { liked: newLiked })
       .then((response) => {
-        console.log(response.data);
+        setLikeCount(response.data); // 좋아요 개수를 return받음
+
         // 좋아요 상태가 업데이트되면 로컬 상태도 업데이트합니다.
         setLiked(newLiked);
       })
@@ -82,6 +84,7 @@ const FeedItem = ({ user, feed }) => {
           onClick={handleLikeToggle}
           className="flex items-center space-x-1 text-red-500 p-2 rounded transition-colors mr-3 hover:bg-red-200">
           { liked ? <FaHeart /> : <FaRegHeart /> }
+          { likeCount && <span className="ml-1">{likeCount}</span> }
         </button>
         <button
           onClick={handleOpenModal}

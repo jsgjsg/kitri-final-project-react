@@ -27,7 +27,10 @@ const FeedFilter = () => {
         placeholder="검색..."
         className="p-2 border border-gray-300 rounded"
       />
-      <AiOutlineSearch className="p-2" />
+      <button className="flex items-center space-x-2 p-2 bg-gray-200 rounded hover:bg-gray-300 transition-colors">
+        <AiOutlineSearch className="text-2xl" />
+        <span>Search</span>
+      </button>
       <select
         value={filter}
         onChange={handleFilterChange}
