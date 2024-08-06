@@ -12,11 +12,14 @@ const QnaDetail = () => {
 
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
   const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState([]);
   const [newQuestion, setNewQuestion] = useState("");
 
   useEffect(() => {
-    const feed = { userId: user.id };
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      navigate("/login"); // 토큰이 없으면 로그인 페이지로 이동
+      return;
+    }
 
     // 접속중인 사용자 정보 가져오기
     api
@@ -38,7 +41,7 @@ const QnaDetail = () => {
       .catch((error) => {
         console.error("Error fetching qas: ", error);
       });
-  }, []);
+  }, [navigate, qaId]);
 
   const handleDelete = (questionId) => {
     if (window.confirm("정말로 이 질문을 삭제하시겠습니까?")) {
@@ -57,7 +60,7 @@ const QnaDetail = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [questions, answers]);
+  }, [questions]);
 
   const handleInputChange = (e) => {
     setNewQuestion(e.target.value);
@@ -72,12 +75,12 @@ const QnaDetail = () => {
           console.log(response.data);
           setQuestions([
             ...questions,
-            { userId: user.id, question: newQuestion },
+            { id: response.data.id, userId: user.id, question: newQuestion },
           ]);
           setNewQuestion("");
         })
         .catch((error) => {
-          console.error("Error fetching qas: ", error);
+          console.error("Error posting question: ", error);
         });
     }
   };
@@ -102,36 +105,40 @@ const QnaDetail = () => {
               </button>
               <div className="absolute top-1/2 transform -translate-y-1/2 right-[-10px] w-0 h-0 border-t-[12px] border-t-transparent border-l-[23px] border-l-white border-b-[12px] border-b-transparent"></div>
             </div>
-            <button
-              onClick={() => handleDelete(question.id)}
-              className="absolute top-3 right-8 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-              <FaTrashAlt />
-            </button>
+            {user.id === question.userId && (
+              <button
+                onClick={() => handleDelete(question.id)}
+                className="absolute top-3 right-8 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <FaTrashAlt />
+              </button>
+            )}
           </div>
         ))}
       </div>
-      <div className="mt-6 flex items-center">
-        <input
-          type="text"
-          value={newQuestion}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded"
-          placeholder="새 질문을 입력하세요"
-        />
-        <button
-          onClick={handleSubmit}
-          className="ml-2 p-2 bg-pink-500 text-white rounded flex-shrink-0"
-        >
-          질문하기
-        </button>
-        <button
-          onClick={handleEndChat}
-          className="ml-2 p-2 bg-red-500 text-white rounded flex-shrink-0"
-        >
-          <FiLogOut className="text-xl" />
-        </button>
-      </div>
+      {user.id === questions[0]?.userId && (
+        <div className="mt-6 flex items-center">
+          <input
+            type="text"
+            value={newQuestion}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+            placeholder="새 질문을 입력하세요"
+          />
+          <button
+            onClick={handleSubmit}
+            className="ml-2 p-2 bg-pink-500 text-white rounded flex-shrink-0"
+          >
+            질문하기
+          </button>
+          <button
+            onClick={handleEndChat}
+            className="ml-2 p-2 bg-red-500 text-white rounded flex-shrink-0"
+          >
+            <FiLogOut className="text-xl" />
+          </button>
+        </div>
+      )}
     </div>
   );
 };
