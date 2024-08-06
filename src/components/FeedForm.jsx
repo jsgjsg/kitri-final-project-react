@@ -7,7 +7,7 @@ const FeedForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const feed = location.state?.feed || {};
+  const feed = location.state?.feedWithUser || {};
 
   // 상태 변수 정의
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
