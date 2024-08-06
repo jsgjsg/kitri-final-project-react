@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 import FeedComment from "./FeedComment";
 import { FaComments, FaEdit, FaPlus, FaHeart, FaRegHeart } from "react-icons/fa"; // FaHeart 추가
 import NoImage from "../assets/images/NoImage.jpg";
+import api from "../api/api";
 
 const FeedItem = ({ user, feed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const [isMe, setIsMe] = useState(false);
+  const { feedWithUser, likeCount, liked: initialLiked } = feed; // initialLiked 추가
+  const [liked, setLiked] = useState(initialLiked); // liked 상태 추가
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -22,15 +25,30 @@ const FeedItem = ({ user, feed }) => {
   };
   
   const handleUpdateButton = () => {
-    navigate(`/feed/form/${feed.id}`, { state: { feed } });
+    navigate(`/feed/form/${feedWithUser.id}`, { state: { feedWithUser } });
   };
 
-  if(!isMe && user.id === feed.userId) {
+  if(!isMe && user.id === feedWithUser.userId) {
     setIsMe(true); // !isMe를 하지 않으면 무한 렌더링
     console.log(isMe);
   }
 
-  console.log(feed);
+  const handleLikeToggle = () => {
+    // liked 상태를 토글합니다.
+    const newLiked = !liked;
+
+    // 서버에 좋아요 상태 업데이트 요청을 보냅니다.
+    api
+      .post(`/feeds/${feedWithUser.id}/like`, { liked: newLiked })
+      .then((response) => {
+        console.log(response.data);
+        // 좋아요 상태가 업데이트되면 로컬 상태도 업데이트합니다.
+        setLiked(newLiked);
+      })
+      .catch((error) => {
+        console.error("Error toggling like: ", error);
+      });
+  };
 
   return (
     <div className="relative p-4 border border-gray-300 rounded-md mb-4 bg-white shadow-lg w-full max-w-xs h-150">
@@ -49,20 +67,21 @@ const FeedItem = ({ user, feed }) => {
           <FaPlus />
         </button>
       )}
-      <h3 className="text-lg font-semibold truncate mb-2">{feed.userId}</h3>
+      <h3 className="text-lg font-semibold truncate mb-2">{feedWithUser.nickname}</h3>
       <img
-        src={feed.image || NoImage}
-        alt={feed.image ? "Feed Image" : "No Image Available"}
+        src={feedWithUser.image || NoImage}
+        alt={feedWithUser.image ? "Feed Image" : "No Image Available"}
         className="w-full h-64 object-cover mb-2 rounded"
       />
-      <p className="text-gray-700 mb-2 text-sm">category : {feed.animal}</p>
-      <p className="text-gray-700 mb-2 text-sm">{feed.content}</p>
-      <p className="text-gray-500 text-xs mb-2">{feed.createdAt}</p>
+      <p className="text-gray-700 mb-2 text-sm">category : {feedWithUser.animal}</p>
+      <p className="text-gray-700 mb-2 text-sm">{feedWithUser.content}</p>
+      <p className="text-gray-500 text-xs mb-2">{feedWithUser.createdAt}</p>
       {/* created_at 필드 추가 */}
       <div className="flex justify-end mt-2">
-        <button className="flex items-center space-x-1 text-red-500 p-2 rounded transition-colors mr-3 hover:bg-red-200">
-          {/* <FaHeart /> */}
-          <FaRegHeart />
+        <button
+          onClick={handleLikeToggle}
+          className="flex items-center space-x-1 text-red-500 p-2 rounded transition-colors mr-3 hover:bg-red-200">
+          { liked ? <FaHeart /> : <FaRegHeart /> }
         </button>
         <button
           onClick={handleOpenModal}
@@ -72,7 +91,7 @@ const FeedItem = ({ user, feed }) => {
         </button>
       </div>
       {isModalOpen && (
-        <FeedComment feedId={feed.id} isOpen={isModalOpen} onClose={handleCloseModal} />
+        <FeedComment feedId={feedWithUser.id} isOpen={isModalOpen} onClose={handleCloseModal} />
       )}
     </div>
   );

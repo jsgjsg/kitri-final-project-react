@@ -24,7 +24,6 @@ const Feed = () => {
       .get("/feeds")
       .then((response) => {
         setFeeds(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching feeds: ", error);
