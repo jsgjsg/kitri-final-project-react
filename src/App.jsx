@@ -35,10 +35,8 @@ function App() {
       <div className="flex min-h-screen bg-gray-100">
         <main className="flex-1 p-6 bg-gray-100 flex justify-center items-center pt-20 mr-24">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/test" element={<Test />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/feed/form/" element={<FeedForm />} />
             <Route path="/feed/form/:id" element={<FeedForm />} />
@@ -52,30 +50,6 @@ function App() {
           </Routes>
         </main>
         <nav className="fixed top-80 right-10 flex flex-col space-y-4 p-4 bg-white shadow-lg rounded-lg">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              isActive
-                ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
-                : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
-            }
-          >
-            <AiOutlineHome className="text-2xl mr-2" />
-            <span className="flex-grow"> Home</span>
-            {/* 텍스트에 flex-grow 추가 */}
-          </NavLink>
-          <NavLink
-            to="/test"
-            className={({ isActive }) =>
-              isActive
-                ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
-                : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
-            }
-          >
-            <AiOutlineExperiment className="text-2xl mr-2" />
-            <span className="flex-grow">Test</span>
-            {/* 텍스트에 flex-grow 추가 */}
-          </NavLink>
           <NavLink
             to="/feed"
             className={({ isActive }) =>
