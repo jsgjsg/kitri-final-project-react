@@ -42,7 +42,8 @@ function App() {
             <Route path="/feed/form/:id" element={<FeedForm />} />
             <Route path="/navigation" element={<Navigation />} />
             <Route path="/review" element={<Review />} />
-            <Route path="/review/form" element={<ReviewForm />} />
+            <Route path="/review/form/" element={<ReviewForm />} />
+            <Route path="/review/form/:id" element={<ReviewForm />} />
             <Route path="/qna" element={<Qna />} />
             <Route path="/qna/form" element={<QnaForm />} />
             <Route path="/qna/detail/:qaId" element={<QnaDetail />} />
