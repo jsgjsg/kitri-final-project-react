@@ -2,16 +2,28 @@ import React, { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaPaw, FaBone, FaCandyCane, FaFutbol, FaPills } from "react-icons/fa";
 
-const ReviewFilter = () => {
-  const [animalFilter, setAnimalFilter] = useState("all");
-  const [categoryFilter, setCategoryFilter] = useState("all");
+const ReviewFilter = ({ setKeyword, setAnimalFilter, setCategoryFilter }) => {
+  const [animalFilter, setAnimal] = useState("all");
+  const [categoryFilter, setCategory] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleAnimalFilterChange = (e) => {
+    setAnimal(e.target.value);
     setAnimalFilter(e.target.value);
+    console.log("setAnimal");
   };
 
   const handleCategoryFilterChange = (e) => {
+    setCategory(e.target.value);
     setCategoryFilter(e.target.value);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearch = () => {
+    setKeyword(searchTerm);
   };
 
   const getCategoryIcon = () => {
@@ -34,9 +46,16 @@ const ReviewFilter = () => {
       <input
         type="text"
         placeholder="검색..."
+        value={searchTerm}
+        onChange={handleSearchChange}
         className="p-2 border border-gray-300 rounded"
       />
-      <AiOutlineSearch className="p-2" />
+      <button
+        onClick={handleSearch}
+        className="flex items-center space-x-2 p-2 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+      >
+        <AiOutlineSearch />
+      </button>
       <select
         value={animalFilter}
         onChange={handleAnimalFilterChange}

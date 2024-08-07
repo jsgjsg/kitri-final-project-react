@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/api"; // api 모듈을 import
 import QnaDetailList from "./QnaDetailList";
 
+// 답변이랑 질문 배열에 전부 가져오기
 const QnaDetail = () => {
   const { qaId } = useParams();
   const navigate = useNavigate();
@@ -50,8 +51,8 @@ const QnaDetail = () => {
       .catch((error) => {
         console.error("Error fetching answers: ", error);
       });
-
   }, []);
+
 
   const handleDelete = (questionId) => {
     if (window.confirm("정말로 이 질문을 삭제하시겠습니까?")) {
@@ -100,7 +101,7 @@ const QnaDetail = () => {
         <AiFillQuestionCircle className="text-4xl text-pink-500 mr-2" />
         <h2 className="text-3xl font-bold">QnaDetail 페이지</h2>
       </div>
-      
+
       {user.id === questions[0]?.userId && (
         <div className="mt-6 flex flex-col flex-grow">
           <div className="overflow-y-auto max-h-80 mb-4">

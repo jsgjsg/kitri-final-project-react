@@ -1,13 +1,15 @@
 import React from "react";
 import ReviewItem from "./ReviewItem";
 
-const ReviewList = ({ reviews }) => {
+const ReviewList = ({ user, reviews }) => {
   return (
-    <div className="grid grid-cols-1 gap-4">
+    <div className="flex flex-wrap justify-center items-center gap-4 max-w-full">
       {reviews.length === 0 ? (
         <p>No reviews available.</p>
       ) : (
-        reviews.map((review) => <ReviewItem key={review.id} review={review} />)
+        reviews.map((review) => (
+          <ReviewItem key={review.id} user={user} review={review} />
+        ))
       )}
     </div>
   );

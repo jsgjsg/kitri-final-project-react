@@ -3,12 +3,14 @@ import api from "../api/api";
 import FeedList from "./FeedList";
 import FeedFilter from "./FeedFilter";
 import exampleImage from "../assets/images/example.jpg";
+import { FaPlus, FaUser, FaArrowUp, FaSyncAlt } from "react-icons/fa";
 
 const Feed = () => {
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
   const [feeds, setFeeds] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [filter, setFilter] = useState("all");
+  const [showScrollIcon, setShowScrollIcon] = useState(false);
 
   useEffect(() => {
     // 접속중인 사용자 정보 가져오기
@@ -21,7 +23,8 @@ const Feed = () => {
       .catch((error) => {
         console.error("Error: ", error);
       });
-    
+
+    // ?query=검색어
     api
       .get(`/feeds`)
       .then((response) => {
@@ -30,6 +33,20 @@ const Feed = () => {
       .catch((error) => {
         console.error("Error fetching feeds: ", error);
       });
+
+    const handleScroll = () => {
+      if (window.pageYOffset > 100) {
+        setShowScrollIcon(true);
+      } else {
+        setShowScrollIcon(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -44,17 +61,49 @@ const Feed = () => {
       });
   }, [keyword, filter]);
 
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-3xl p-4 bg-white shadow-lg rounded-lg border border-gray-300">
-      <div className="flex items-center justify-between w-full mb-4">
-        <img
-          src={exampleImage}
-          alt="Example"
-          className="w-100 h-20 object-cover mb-2 rounded"
-        />
-        <FeedFilter setKeyword={setKeyword} filter={filter} setFilter={setFilter}/>
+      <div className="fixed top-0 left-0 right-0 bg-white z-10 shadow-md p-4">
+        <div className="flex items-center justify-between w-full mb-4">
+          <img
+            src={exampleImage}
+            alt="Example"
+            className="w-100 h-20 object-cover mb-2 rounded"
+          />
+
+          <FeedFilter
+            setKeyword={setKeyword}
+            filter={filter}
+            setFilter={setFilter}
+          />
+        </div>
+        <div className="flex justify-center space-x-4 mb-4">
+          <button className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+            <FaPlus className="mr-2" /> Add Feed
+          </button>
+          <button className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+            <FaUser className="mr-2" /> My Feeds
+          </button>
+        </div>
       </div>
-      <FeedList user={user} feeds={feeds} />
+      <div className="pt-32">
+        <FeedList user={user} feeds={feeds} />
+      </div>
+      <button
+        className="fixed right-10 bottom-10 bg-gray-200 text-gray-700 p-4 rounded-full hover:bg-gray-300 transition-colors z-10"
+        onClick={showScrollIcon ? handleScrollToTop : handleRefresh}
+        aria-label={showScrollIcon ? "Scroll to top" : "Refresh"}
+      >
+        {showScrollIcon ? <FaArrowUp /> : <FaSyncAlt />}
+      </button>
     </div>
   );
 };
