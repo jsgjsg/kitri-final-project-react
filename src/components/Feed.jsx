@@ -8,6 +8,7 @@ const Feed = () => {
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
   const [feeds, setFeeds] = useState([]);
   const [keyword, setKeyword] = useState("");
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     // 접속중인 사용자 정보 가져오기
@@ -33,16 +34,15 @@ const Feed = () => {
   }, []);
 
   useEffect(() => {
-      // ?query=검색어
     api
-      .get(`/feeds/search?query=${keyword}`)
+      .get(`/feeds/search?query=${keyword}&animal=${filter}`)
       .then((response) => {
         setFeeds(response.data);
       })
       .catch((error) => {
         console.error("Error fetching feeds: ", error);
       });
-  }, [keyword]);
+  }, [keyword, filter]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-3xl p-4 bg-white shadow-lg rounded-lg border border-gray-300">
@@ -52,7 +52,7 @@ const Feed = () => {
           alt="Example"
           className="w-100 h-20 object-cover mb-2 rounded"
         />
-        <FeedFilter setKeyword={setKeyword} />
+        <FeedFilter setKeyword={setKeyword} filter={filter} setFilter={setFilter}/>
       </div>
       <FeedList user={user} feeds={feeds} />
     </div>

@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaPaw, FaCat, FaDog } from "react-icons/fa";
 
-const FeedFilter = ({ setKeyword }) => {
-  const [filter, setFilter] = useState("all");
+const FeedFilter = ({ setKeyword, filter, setFilter }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleFilterChange = (e) => {
