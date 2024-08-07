@@ -31,7 +31,6 @@ const FeedItem = ({ user, feed }) => {
 
   if(!isMe && user.id === feedWithUser.userId) {
     setIsMe(true); // !isMe를 하지 않으면 무한 렌더링
-    console.log(isMe);
   }
 
   const handleLikeToggle = () => {
