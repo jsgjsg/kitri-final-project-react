@@ -51,34 +51,36 @@ const ReviewItem = ({ user, review }) => {
           <FaPlus />
         </button>
       )}
-      <h3 className="text-lg font-semibold truncate mb-2">{review.item}</h3>
+      <h3 className="text-lg font-semibold truncate mb-2">
+        {reviewWithUser.item}
+      </h3>
       <img
-        src={review.image}
-        alt={review.image}
+        src={reviewWithUser.image}
+        alt={reviewWithUser.image}
         className="w-full h-64 object-cover mb-2 rounded"
       />
       <p className="text-gray-700 mb-2 text-sm">
-        <strong>Good:</strong> {review.good}
+        <strong>Good:</strong> {reviewWithUser.good}
       </p>
       <p className="text-gray-700 mb-2 text-sm">
-        <strong>Bad:</strong> {review.bad}
+        <strong>Bad:</strong> {reviewWithUser.bad}
       </p>
       <p className="text-gray-700 mb-2 text-sm">
-        <strong>Tip:</strong> {review.tip}
+        <strong>Tip:</strong> {reviewWithUser.tip}
       </p>
       <p className="text-gray-700 mb-2 text-sm">
-        <strong>Repurchase:</strong> {review.repurchase ? "Yes" : "No"}
+        <strong>Repurchase:</strong> {reviewWithUser.repurchase ? "Yes" : "No"}
       </p>
       <p className="text-gray-700 mb-2 text-sm">
-        <strong>Satisfaction:</strong> {review.satisfaction}
+        <strong>Satisfaction:</strong> {reviewWithUser.satisfaction}
       </p>
       <p className="text-gray-700 mb-2 text-sm">
-        <strong>Animal:</strong> {review.animal}
+        <strong>Animal:</strong> {reviewWithUser.animal}
       </p>
       <p className="text-gray-700 mb-2 text-sm">
-        <strong>Category:</strong> {review.category}
+        <strong>Category:</strong> {reviewWithUser.category}
       </p>
-      <p className="text-gray-500 text-xs mb-2">{review.created_at}</p>
+      <p className="text-gray-500 text-xs mb-2">{reviewWithUser.created_at}</p>
       <div className="flex justify-end mt-2">
         <button className="flex items-center space-x-1 text-red-500 p-2 rounded transition-colors mr-3 hover:bg-red-200">
           <FaRegHeart />
@@ -92,7 +94,7 @@ const ReviewItem = ({ user, review }) => {
       </div>
       {isModalOpen && (
         <ReviewComment
-          reviewId={review.id}
+          reviewId={reviewWithUser.id}
           isOpen={isModalOpen}
           onClose={handleCloseModal}
         />

@@ -7,7 +7,7 @@ const ReviewForm = () => {
   const { id } = useParams(); // 수정 시 사용할 리뷰 ID
   const navigate = useNavigate();
   const location = useLocation();
-  const review = location.state?.feedWithUser || {};
+  const review = location.state?.reviewWithUser || {};
 
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
   const [item, setItem] = useState(""); // 사용자 정보 상태변수
@@ -86,7 +86,7 @@ const ReviewForm = () => {
       console.log("Adding new review");
 
       api
-        .post("/reviews", review)
+        .post(`/reviews`, review)
         .then((response) => {
           console.log("item:", item);
           console.log("good:", good);

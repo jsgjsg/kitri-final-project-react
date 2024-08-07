@@ -7,6 +7,9 @@ import exampleImage from "../assets/images/example.jpg";
 const Review = () => {
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
   const [reviews, setReviews] = useState([]);
+  const [keyword, setKeyword] = useState("");
+  const [animalFilter, setAnimalFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   useEffect(() => {
     // 접속중인 사용자 정보 가져오기
@@ -31,6 +34,21 @@ const Review = () => {
       });
   }, []);
 
+  useEffect(() => {
+    api
+      .get(
+        `/reviews/search?query=${keyword}&animal=${animalFilter}&category=${categoryFilter}`
+      )
+      .then((response) => {
+        setReviews(response.data);
+        console.log(`${animalFilter}`);
+        console.log(`${categoryFilter}`);
+      })
+      .catch((error) => {
+        console.error("Error fetching reviews: ", error);
+      });
+  }, [keyword, animalFilter, categoryFilter]);
+
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-3xl p-4 bg-white shadow-lg rounded-lg border border-gray-300">
       <div className="flex items-center justify-between w-full mb-4">
@@ -40,7 +58,11 @@ const Review = () => {
           className="w-100 h-20 object-cover mb-2 rounded"
         />
         <div className="flex items-center space-x-4">
-          <ReviewFilter />
+          <ReviewFilter
+            setKeyword={setKeyword}
+            setAnimalFilter={setAnimalFilter}
+            setCategoryFilter={setCategoryFilter}
+          />
         </div>
       </div>
       <ReviewList user={user} reviews={reviews} />
