@@ -5,9 +5,21 @@ import api from "../api/api";
 import exampleImage from "../assets/images/example.jpg";
 
 const Review = () => {
+  const [user, setUser] = useState({}); // 사용자 정보 상태변수
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
+    // 접속중인 사용자 정보 가져오기
+    api
+      .get(`/users/me`)
+      .then((response) => {
+        console.log(response.data);
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+
     api
       .get("http://127.0.0.1:8080/api/reviews")
       .then((response) => {
@@ -31,7 +43,7 @@ const Review = () => {
           <ReviewFilter />
         </div>
       </div>
-      <ReviewList reviews={reviews} />
+      <ReviewList user={user} reviews={reviews} />
     </div>
   );
 };

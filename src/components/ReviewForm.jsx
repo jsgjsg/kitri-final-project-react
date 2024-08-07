@@ -1,72 +1,306 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { FaPlus, FaTimes } from "react-icons/fa";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { FaPlus, FaTimes, FaTrash } from "react-icons/fa";
+import api from "../api/api";
 
 const ReviewForm = () => {
   const { id } = useParams(); // 수정 시 사용할 리뷰 ID
   const navigate = useNavigate();
+  const location = useLocation();
+  const review = location.state?.feedWithUser || {};
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [user, setUser] = useState({}); // 사용자 정보 상태변수
+  const [item, setItem] = useState(""); // 사용자 정보 상태변수
+  const [good, setGood] = useState("");
+  const [bad, setBad] = useState("");
+  const [tip, setTip] = useState("");
+  const [image, setImage] = useState(null);
+  const [repurchase, setRepurchase] = useState("");
+  const [satisfaction, setSatisfaction] = useState(5);
+  const [animal, setAnimal] = useState("cat");
+  const [category, setCategory] = useState("");
+
+  useEffect(() => {
+    // 접속중인 사용자 정보 가져오기
+    api
+      .get(`/users/me`)
+      .then((response) => {
+        console.log(response.data);
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+  }, []);
 
   useEffect(() => {
     if (id) {
-      // 수정 모드: 기존 데이터 불러오기
-      // API 호출로 데이터 가져오는 부분은 제외했습니다.
-      setTitle("Sample Title"); // 예시 데이터
-      setContent("Sample Content"); // 예시 데이터
+      setItem(review.item);
+      setGood(review.good);
+      setBad(review.bad);
+      setTip(review.tip);
+      setImage(review.image);
+      setRepurchase(review.repurchase);
+      setSatisfaction(review.satisfaction);
+      setAnimal(review.animal);
+      setCategory(review.category);
     }
   }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 폼 제출 로직은 제외했습니다.
+    const review = {
+      userId: user.id,
+      item,
+      good,
+      bad,
+      tip,
+      image,
+      repurchase,
+      satisfaction,
+      animal,
+      category,
+    };
     if (id) {
-      console.log("Updating review with ID:", id);
+      api
+        .put(`/reviews/${id}`, review)
+        .then((response) => {
+          console.log("item:", item);
+          console.log("good:", good);
+          console.log("bad:", bad);
+          console.log("tip:", tip);
+          console.log("image:", image);
+          console.log("repurchase", repurchase);
+          console.log("satisfaction:", satisfaction);
+          console.log("animal :", animal);
+          console.log("category:", category);
+          console.log(response.data);
+
+          alert("글 수정 완료");
+          navigate("/review");
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
     } else {
       console.log("Adding new review");
+
+      api
+        .post("/reviews", review)
+        .then((response) => {
+          console.log("item:", item);
+          console.log("good:", good);
+          console.log("bad:", bad);
+          console.log("tip:", tip);
+          console.log("image:", image);
+          console.log("repurchase", repurchase);
+          console.log("satisfaction:", satisfaction);
+          console.log("animal :", animal);
+          console.log("category:", category);
+          console.log(response.data);
+          alert("글 작성 완료");
+          navigate("/review");
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
     }
   };
 
+  // 폼 취소 처리
   const handleCancel = () => {
-    navigate("/review"); // Review 페이지로 이동
+    navigate(-1); // 이전 페이지로 이동
+  };
+
+  // 이미지 변경 처리
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const handleDelete = () => {
+    if (window.confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
+      api
+        .delete(`/reviews/${id}`)
+        .then(() => {
+          alert("리뷰가 삭제되었습니다.");
+          navigate("/review");
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
+    }
   };
 
   return (
     <div className="p-6 max-w-3xl mx-auto mt-10 border-2 border-black rounded-md shadow-md bg-white font-doodle">
-      <h2 className="text-3xl font-bold mb-4">
-        {id ? "Edit Review" : "Add Review"}
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-3xl font-bold">
+          {id ? "Edit Review" : "Add Review"}
+        </h2>
+        {id && (
+          <button
+            onClick={handleDelete}
+            className="text-red-600 hover:text-red-800"
+            aria-label="Delete"
+          >
+            <FaTrash size={24} />
+          </button>
+        )}
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label
-            htmlFor="title"
+            htmlFor="image"
             className="block text-lg font-medium text-gray-700"
           >
-            Title
+            Image
           </label>
           <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            type="file"
+            id="image"
+            onChange={handleImageChange}
+            className="mt-1 p-2 border-2 border-black rounded-md w-full"
+          />
+        </div>
+
+        <div className="flex space-x-4">
+          <div className="w-1/2">
+            <label
+              htmlFor="repurchase"
+              className="block text-lg font-medium text-gray-700"
+            >
+              repurchase
+            </label>
+            <select
+              id="repurchase"
+              value={repurchase}
+              onChange={(e) => setRepurchase(e.target.value)}
+              className="mt-1 p-2 border-2 border-black rounded-md w-full"
+              required
+            >
+              <option value="1">재구매</option>
+              <option value="0">구매</option>
+            </select>
+          </div>
+          <div className="w-1/2">
+            <label
+              htmlFor="satisfaction"
+              className="block text-lg font-medium text-gray-700"
+            >
+              satisfaction
+            </label>
+            <select
+              id="satisfaction"
+              value={satisfaction}
+              onChange={(e) => setSatisfaction(e.target.value)}
+              className="mt-1 p-2 border-2 border-black rounded-md w-full"
+              required
+            >
+              <option value="1">⭐</option>
+              <option value="2">⭐⭐</option>
+              <option value="3">⭐⭐⭐</option>
+              <option value="4">⭐⭐⭐⭐</option>
+              <option value="5">⭐⭐⭐⭐⭐</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label
+            htmlFor="animal"
+            className="block text-lg font-medium text-gray-700"
+          >
+            Animal animal
+          </label>
+          <select
+            id="animal"
+            value={animal}
+            onChange={(e) => setAnimal(e.target.value)}
             className="mt-1 p-2 border-2 border-black rounded-md w-full"
             required
+          >
+            <option value="All">All</option>
+            <option value="cat">Cat</option>
+            <option value="dog">Dog</option>
+            <option value="etc">Etc</option>
+          </select>
+        </div>
+
+        <div>
+          <label
+            htmlFor="item"
+            className="block text-lg font-medium text-gray-700"
+          >
+            category
+          </label>
+          <select
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="mt-1 p-2 border-2 border-black rounded-md w-full "
+            required
+          >
+            <option value="All">전체</option>
+            <option value="fodder">사료</option>
+            <option value="Snack">간식</option>
+            <option value="toy">장난감</option>
+            <option value="nutritional">영양제</option>
+          </select>
+        </div>
+
+        <div>
+          <label
+            htmlFor="item"
+            className="block text-lg font-medium text-gray-700"
+          >
+            Item
+          </label>
+          <input
+            id="item"
+            value={item}
+            onChange={(e) => setItem(e.target.value)}
+            className="mt-1 p-2 border-2 border-black rounded-md w-full"
+            required
+          />
+          <label
+            htmlFor="good"
+            className="block text-lg font-medium text-gray-700"
+          >
+            good
+          </label>
+          <textarea
+            id="good"
+            value={good}
+            onChange={(e) => setGood(e.target.value)}
+            className="mt-1 p-2 border-2 border-black rounded-md w-full"
           />
         </div>
         <div>
           <label
-            htmlFor="content"
+            htmlFor="bad"
             className="block text-lg font-medium text-gray-700"
           >
-            Content
+            bad
           </label>
           <textarea
-            id="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            id="bad"
+            value={bad}
+            onChange={(e) => setBad(e.target.value)}
             className="mt-1 p-2 border-2 border-black rounded-md w-full"
-            required
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="tip"
+            className="block text-lg font-medium text-gray-700"
+          >
+            tip
+          </label>
+          <textarea
+            id="tip"
+            value={tip}
+            onChange={(e) => setTip(e.target.value)}
+            className="mt-1 p-2 border-2 border-black rounded-md w-full"
           />
         </div>
         <div className="flex justify-end space-x-4">

@@ -1,9 +1,10 @@
 import { FaTrashAlt } from "react-icons/fa";
 
-const QnaDetailItem = ({question, user, handleDelete}) => {
+// 최신순으로 정렬해서 보내기
+const QnaDetailItem = ({ question, user, handleDelete }) => {
   console.log("HI");
-  
-  return(
+
+  return (
     <div className="relative mb-4 group">
       <div className="relative flex-1 ml-4 bg-white rounded-lg p-3 shadow-lg mt-10 mr-4 border-2 border-black">
         <button className="text-pink-600 w-full hover:underline text-left">
@@ -20,7 +21,7 @@ const QnaDetailItem = ({question, user, handleDelete}) => {
         </button>
       )}
     </div>
-  )
-}
+  );
+};
 
 export default QnaDetailItem;

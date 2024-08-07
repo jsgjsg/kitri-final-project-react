@@ -141,21 +141,20 @@ const FeedForm = () => {
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label
-            htmlFor="content"
-            className="block text-lg font-medium text-gray-700"
-          >
-            Content
-          </label>
-          <textarea
-            id="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="mt-1 p-2 border-2 border-black rounded-md w-full"
-            required
-          />
-        </div>
-        <div>
+          <div>
+            <label
+              htmlFor="image"
+              className="block text-lg font-medium text-gray-700"
+            >
+              Image
+            </label>
+            <input
+              type="file"
+              id="image"
+              onChange={handleImageChange}
+              className="mt-1 p-2 border-2 border-black rounded-md w-full"
+            />
+          </div>
           <label
             htmlFor="animal"
             className="block text-lg font-medium text-gray-700"
@@ -174,20 +173,7 @@ const FeedForm = () => {
             <option value="etc">Etc</option>
           </select>
         </div>
-        <div>
-          <label
-            htmlFor="image"
-            className="block text-lg font-medium text-gray-700"
-          >
-            Image
-          </label>
-          <input
-            type="file"
-            id="image"
-            onChange={handleImageChange}
-            className="mt-1 p-2 border-2 border-black rounded-md w-full"
-          />
-        </div>
+
         <div>
           <label
             htmlFor="hashtags"
@@ -210,6 +196,21 @@ const FeedForm = () => {
             >
               Add
             </button>
+          </div>
+          <div>
+            <label
+              htmlFor="content"
+              className="block text-lg font-medium text-gray-700"
+            >
+              Content
+            </label>
+            <textarea
+              id="content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="mt-1 p-2 border-2 border-black rounded-md w-full"
+              required
+            />
           </div>
           <div className="mt-2 flex flex-wrap space-x-2">
             {hashtagsList.map((tag, index) => (
