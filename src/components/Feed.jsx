@@ -50,6 +50,7 @@ const Feed = () => {
   }, []);
 
   useEffect(() => {
+          // ?query=검색어
     api
       .get(`/feeds/search?query=${keyword}&animal=${filter}`)
       .then((response) => {

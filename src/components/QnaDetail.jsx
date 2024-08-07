@@ -51,7 +51,8 @@ const QnaDetail = () => {
       .catch((error) => {
         console.error("Error fetching answers: ", error);
       });
-  }, [qaId, navigate]);
+  }, []);
+
 
   const handleDelete = (questionId) => {
     if (window.confirm("정말로 이 질문을 삭제하시겠습니까?")) {
