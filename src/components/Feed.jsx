@@ -22,7 +22,6 @@ const Feed = () => {
         console.error("Error: ", error);
       });
     
-      // ?query=검색어
     api
       .get(`/feeds`)
       .then((response) => {
@@ -34,6 +33,7 @@ const Feed = () => {
   }, []);
 
   useEffect(() => {
+          // ?query=검색어
     api
       .get(`/feeds/search?query=${keyword}&animal=${filter}`)
       .then((response) => {

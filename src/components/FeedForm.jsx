@@ -8,6 +8,7 @@ const FeedForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const feed = location.state?.feedWithUser || {};
+  const feedHashtags = location.state?.feedHashtags || {};
 
   // 상태 변수 정의
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
@@ -36,14 +37,23 @@ const FeedForm = () => {
       setContent(feed.content);
       setImage(feed.image);
       setAnimal(feed.animal);
-      setHashtagsList([]);
+      setHashtagsList(feedHashtags.map((tag) => tag.hashtag));
     }
   }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const feed = { userId: user.id, content, animal, image, hashtagsList };
+    let reqHashtags = [];
+    hashtagsList.forEach((hashtag) => {
+      reqHashtags.push({hashtag: hashtag});
+    });
+
+    const feed = {
+      feedWithUser: {userId: user.id, content, animal, image},
+      feedHashtags: reqHashtags
+    }
+    console.log(feed);
 
     if (id) {
       console.log("Updating review with ID:", id);
@@ -53,7 +63,7 @@ const FeedForm = () => {
         .then((response) => {
           console.log("Content:", content);
           console.log("Image:", image);
-          console.log("animal:", animal);
+          console.log("animal:", animal); 
           console.log("Hashtags:", hashtagsList);
           console.log(response.data);
 
@@ -160,7 +170,7 @@ const FeedForm = () => {
             htmlFor="animal"
             className="block text-lg font-medium text-gray-700"
           >
-            Animal animal
+            Animal
           </label>
           <select
             id="animal"
@@ -211,11 +221,11 @@ const FeedForm = () => {
               Add
             </button>
           </div>
-          <div className="mt-2 flex flex-wrap space-x-2">
+          <div className="mt-4 flex flex-wrap">
             {hashtagsList.map((tag, index) => (
               <div
                 key={index}
-                className="bg-gray-200 p-1 rounded-md flex items-center"
+                className="bg-gray-200 p-1 rounded-md flex items-center mt-2 mr-2"
               >
                 <span className="mr-2">{tag}</span>
                 <FaTimes

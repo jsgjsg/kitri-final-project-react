@@ -9,7 +9,7 @@ const FeedItem = ({ user, feed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const [isMe, setIsMe] = useState(false);
-  const { feedWithUser, likeCount: initialLikeCount, liked: initialLiked } = feed; // initialLiked 추가
+  const { feedWithUser, likeCount: initialLikeCount, liked: initialLiked, feedHashtags } = feed; // initialLiked 추가
   const [liked, setLiked] = useState(initialLiked); // liked 상태 추가
   const [likeCount, setLikeCount] = useState(initialLikeCount);
 
@@ -26,7 +26,7 @@ const FeedItem = ({ user, feed }) => {
   };
   
   const handleUpdateButton = () => {
-    navigate(`/feed/form/${feedWithUser.id}`, { state: { feedWithUser } });
+    navigate(`/feed/form/${feedWithUser.id}`, { state: { feedWithUser, feedHashtags } });
   };
 
   if(!isMe && user.id === feedWithUser.userId) {
@@ -74,10 +74,22 @@ const FeedItem = ({ user, feed }) => {
         alt={feedWithUser.image ? "Feed Image" : "No Image Available"}
         className="w-full h-64 object-cover mb-2 rounded"
       />
+      {/* 해시태그 공간 추가 */}
+      {feedHashtags && feedHashtags.length > 0 && (
+        <div className="flex flex-wrap mb-2">
+          {feedHashtags.map((tag, index) => (
+            <span key={index} className="mr-2 mb-2 px-2 py-1 bg-gray-200 text-gray-700 rounded-full text-xs">
+              #{tag.hashtag}
+            </span>
+          ))}
+        </div>
+      )}
+      
       <p className="text-gray-700 mb-2 text-sm">category : {feedWithUser.animal}</p>
       <p className="text-gray-700 mb-2 text-sm">{feedWithUser.content}</p>
       <p className="text-gray-500 text-xs mb-2">{feedWithUser.createdAt}</p>
       {/* created_at 필드 추가 */}
+
       <div className="flex justify-end mt-2">
         <button
           onClick={handleLikeToggle}
