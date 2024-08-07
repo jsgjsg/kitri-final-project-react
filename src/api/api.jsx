@@ -29,6 +29,8 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+let hasAlerted = false;
+
 // 응답 인터셉터 추가 (선택 사항)
 api.interceptors.response.use(
   (response) => response,
@@ -37,10 +39,13 @@ api.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       // 로그아웃 처리 예: localStorage에서 토큰 삭제
       localStorage.removeItem('jwtToken');
-      alert("접근 권한이 없습니다. 로그인 해주세요");
-
-      // 로그인 페이지로 리디렉션
-      window.location.href = '/login';
+      
+      if (!hasAlerted) {
+        hasAlerted = true;
+        alert("접근 권한이 없습니다. 로그인 해주세요");
+        // 로그인 페이지로 리디렉션
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
