@@ -2,11 +2,19 @@ import React, { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaPaw, FaCat, FaDog } from "react-icons/fa";
 
-const FeedFilter = () => {
-  const [filter, setFilter] = useState("all");
+const FeedFilter = ({ setKeyword, filter, setFilter }) => {
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearch = () => {
+    setKeyword(searchTerm);
   };
 
   const getIcon = () => {
@@ -25,9 +33,14 @@ const FeedFilter = () => {
       <input
         type="text"
         placeholder="검색..."
+        value={searchTerm}
+        onChange={handleSearchChange}
         className="p-2 border border-gray-300 rounded"
       />
-      <button className="flex items-center space-x-2 p-2 bg-gray-200 rounded hover:bg-gray-300 transition-colors">
+      <button
+        onClick={handleSearch}
+        className="flex items-center space-x-2 p-2 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+      >
         <AiOutlineSearch className="text-2xl" />
         <span>Search</span>
       </button>
