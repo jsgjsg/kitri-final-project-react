@@ -1,114 +1,137 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { FaPlus, FaTimes, FaTrash } from "react-icons/fa";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import api from "../api/api";
+import { storage } from "../../firebaseConfig";
 
 const FeedForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const feed = location.state?.feedWithUser || {};
-  const feedHashtags = location.state?.feedHashtags || {};
+  const feedHashtags = location.state?.feedHashtags || [];
 
-  // 상태 변수 정의
-  const [user, setUser] = useState({}); // 사용자 정보 상태변수
-  const [content, setContent] = useState(""); // 피드 내용 상태변수
-  const [image, setImage] = useState(null); // 이미지 파일 상태변수
-  const [animal, setAnimal] = useState("cat"); // 동물 종류 상태변수
-  const [hashtags, setHashtags] = useState(""); // 해시태그 입력 상태변수
-  const [hashtagsList, setHashtagsList] = useState([]); // 해시태그 리스트 상태변수
+  const [user, setUser] = useState({});
+  const [content, setContent] = useState("");
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const [animal, setAnimal] = useState("cat");
+  const [hashtags, setHashtags] = useState("");
+  const [hashtagsList, setHashtagsList] = useState([]);
 
   useEffect(() => {
-    // 접속중인 사용자 정보 가져오기
     api
       .get(`/users/me`)
       .then((response) => {
-        console.log(response.data);
         setUser(response.data);
       })
       .catch((error) => {
-        console.error("Error: ", error);
+        console.error("Error fetching user data:", error);
       });
   }, []);
 
-  // URL 파라미터에 따라 초기 상태 설정
   useEffect(() => {
     if (id) {
       setContent(feed.content);
-      setImage(feed.image);
+      setImageUrl(feed.image);
       setAnimal(feed.animal);
       setHashtagsList(feedHashtags.map((tag) => tag.hashtag));
     }
-  }, [id]);
+  }, [id, feed, feedHashtags]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    let reqHashtags = [];
-    hashtagsList.forEach((hashtag) => {
-      reqHashtags.push({hashtag: hashtag});
-    });
-
-    const feed = {
-      feedWithUser: {userId: user.id, content, animal, image},
-      feedHashtags: reqHashtags
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
     }
-    console.log(feed);
+  };
+
+  const handleUpload = () => {
+    return new Promise((resolve, reject) => {
+      if (image) {
+        const storageRef = ref(storage, `images/${image.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            // Progress function (optional)
+            console.log("Upload is in progress...");
+          },
+          (error) => {
+            console.error("Upload error:", error);
+            reject(error);
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              setImageUrl(downloadURL);
+              resolve(downloadURL);
+            });
+          }
+        );
+      } else {
+        resolve(imageUrl);
+      }
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let uploadedImageUrl = imageUrl;
+
+    if (image) {
+      try {
+        uploadedImageUrl = await handleUpload();
+      } catch (error) {
+        console.error("Image upload failed:", error);
+        alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
+        return;
+      }
+    }
+
+    const reqHashtags = hashtagsList.map((hashtag) => ({ hashtag }));
+
+    const feedData = {
+      feedWithUser: {
+        userId: user.id,
+        content,
+        animal,
+        image: uploadedImageUrl,
+      },
+      feedHashtags: reqHashtags,
+    };
 
     if (id) {
-      console.log("Updating review with ID:", id);
-
       api
-        .put(`/feeds/${id}`, feed)
+        .put(`/feeds/${id}`, feedData)
         .then((response) => {
-          console.log("Content:", content);
-          console.log("Image:", image);
-          console.log("animal:", animal); 
-          console.log("Hashtags:", hashtagsList);
-          console.log(response.data);
-
           alert("글 수정 완료");
           navigate("/feed");
         })
         .catch((error) => {
-          console.error("Error: ", error);
+          console.error("Error updating feed:", error);
         });
     } else {
-      console.log("Adding new review");
-
       api
-        .post("/feeds", feed)
+        .post("/feeds", feedData)
         .then((response) => {
-          console.log("Content:", content);
-          console.log("Image:", image);
-          console.log("animal:", animal);
-          console.log("Hashtags:", hashtagsList);
-          console.log(response.data);
           alert("글 작성 완료");
           navigate("/feed");
         })
         .catch((error) => {
-          console.error("Error: ", error);
+          console.error("Error creating feed:", error);
         });
     }
   };
 
-  // 폼 취소 처리
   const handleCancel = () => {
-    navigate(-1); // 이전 페이지로 이동
+    navigate(-1);
   };
 
-  // 이미지 변경 처리
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-  };
-
-  // 해시태그 입력 변경 처리
   const handleHashtagsChange = (e) => {
     setHashtags(e.target.value);
   };
 
-  // 해시태그 추가 처리
   const addHashtag = () => {
     if (hashtags.trim() && !hashtagsList.includes(hashtags.trim())) {
       setHashtagsList([...hashtagsList, hashtags.trim()]);
@@ -116,7 +139,6 @@ const FeedForm = () => {
     }
   };
 
-  // 해시태그 제거 처리
   const removeHashtag = (hashtag) => {
     setHashtagsList(hashtagsList.filter((tag) => tag !== hashtag));
   };
@@ -130,7 +152,7 @@ const FeedForm = () => {
           navigate("/feed");
         })
         .catch((error) => {
-          console.error("Error: ", error);
+          console.error("Error deleting feed:", error);
         });
     }
   };
@@ -165,6 +187,7 @@ const FeedForm = () => {
               className="mt-1 p-2 border-2 border-black rounded-md w-full"
             />
           </div>
+
           <label
             htmlFor="animal"
             className="block text-lg font-medium text-gray-700"

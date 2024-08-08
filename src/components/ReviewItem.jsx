@@ -55,11 +55,13 @@ const ReviewItem = ({ user, review }) => {
       <h3 className="text-lg font-semibold truncate mb-2">
         {reviewWithUser.item}
       </h3>
-      <img
-        src={reviewWithUser.image}
-        alt={reviewWithUser.image}
-        className="w-full h-64 object-cover mb-2 rounded"
-      />
+      {reviewWithUser.image && (
+        <img
+          src={reviewWithUser.image}
+          alt="Review Image"
+          className="w-full h-64 object-contain mb-2 rounded"
+        />
+      )}
       <p className="text-gray-700 mb-2 text-sm">
         <strong>Good:</strong> {reviewWithUser.good}
       </p>
