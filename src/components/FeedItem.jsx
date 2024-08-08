@@ -7,8 +7,7 @@ import {
   FaPlus,
   FaHeart,
   FaRegHeart,
-} from "react-icons/fa"; // FaHeart 추가
-import NoImage from "../assets/images/NoImage.jpg";
+} from "react-icons/fa";
 import api from "../api/api";
 
 const FeedItem = ({ user, feed }) => {
@@ -20,8 +19,8 @@ const FeedItem = ({ user, feed }) => {
     likeCount: initialLikeCount,
     liked: initialLiked,
     feedHashtags,
-  } = feed; // initialLiked 추가
-  const [liked, setLiked] = useState(initialLiked); // liked 상태 추가
+  } = feed;
+  const [liked, setLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
 
   const handleOpenModal = () => {
@@ -47,16 +46,12 @@ const FeedItem = ({ user, feed }) => {
   }
 
   const handleLikeToggle = () => {
-    // liked 상태를 토글합니다.
     const newLiked = !liked;
 
-    // 서버에 좋아요 상태 업데이트 요청을 보냅니다.
     api
       .post(`/feeds/${feedWithUser.id}/like`, { liked: newLiked })
       .then((response) => {
-        setLikeCount(response.data); // 좋아요 개수를 return받음
-
-        // 좋아요 상태가 업데이트되면 로컬 상태도 업데이트합니다.
+        setLikeCount(response.data);
         setLiked(newLiked);
       })
       .catch((error) => {
@@ -84,12 +79,13 @@ const FeedItem = ({ user, feed }) => {
       <h3 className="text-lg font-semibold truncate mb-2">
         {feedWithUser.nickname}
       </h3>
-      <img
-        src={feedWithUser.image || NoImage}
-        alt={feedWithUser.image ? "Feed Image" : "No Image Available"}
-        className="w-full h-64 object-cover mb-2 rounded"
-      />
-      {/* 해시태그 공간 추가 */}
+      {feedWithUser.image && (
+        <img
+          src={feedWithUser.image}
+          alt="Review Image"
+          className="w-full h-64 object-contain mb-2 rounded"
+        />
+      )}
       {feedHashtags && feedHashtags.length > 0 && (
         <div className="flex flex-wrap mb-2">
           {feedHashtags.map((tag, index) => (
@@ -102,14 +98,11 @@ const FeedItem = ({ user, feed }) => {
           ))}
         </div>
       )}
-
       <p className="text-gray-700 mb-2 text-sm">
         category : {feedWithUser.animal}
       </p>
       <p className="text-gray-700 mb-2 text-sm">{feedWithUser.content}</p>
       <p className="text-gray-500 text-xs mb-2">{feedWithUser.createdAt}</p>
-      {/* created_at 필드 추가 */}
-
       <div className="flex justify-end mt-2">
         <button
           onClick={handleLikeToggle}
