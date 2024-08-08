@@ -28,6 +28,7 @@ import {
 import QnaForm from "./components/QnaForm";
 import QnaDetail from "./components/QnaDetail";
 import Signup from "./components/Signup";
+import AccountDeletion from "./components/AccountDeletion";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/delete-account" element={<AccountDeletion />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/feed/form/" element={<FeedForm />} />
             <Route path="/feed/form/:id" element={<FeedForm />} />
