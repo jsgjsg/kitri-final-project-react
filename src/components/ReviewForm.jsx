@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { FaPlus, FaTimes, FaTrash } from "react-icons/fa";
 import api from "../api/api";
-// import { storage, ref, getDownloadURL, uploadBytes } from "../firebaseConfig";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../firebaseConfig";
 
 const ReviewForm = () => {
   const { id } = useParams(); // 수정 시 사용할 리뷰 ID
@@ -47,46 +48,83 @@ const ReviewForm = () => {
       setAnimal(review.animal);
       setCategory(review.category);
     }
-  }, [id, review]);
+  }, [id]);
 
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-
-    if (file) {
-      const storageRef = ref(storage, `images/${file.name}`);
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      setImageUrl(url);
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
     }
+  };
+
+  const handleUpload = () => {
+    return new Promise((resolve, reject) => {
+      if (image) {
+        const storageRef = ref(storage, `images/${image.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            // Progress function (optional)
+          },
+          (error) => {
+            console.error("Upload error:", error);
+            reject(error);
+          },
+          () => {
+            // Complete function
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              setImageUrl(downloadURL);
+              console.log("File available at", downloadURL);
+              resolve(downloadURL);
+            });
+          }
+        );
+      } else {
+        resolve();
+      }
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const reviewData = {
+    const imageName = await handleUpload();
+
+    const review = {
       userId: user.id,
       item,
       good,
       bad,
       tip,
-      image: imageUrl,
+      image: imageName || review.image,
       repurchase,
       satisfaction,
       animal,
       category,
     };
 
-    try {
-      if (id) {
-        await api.put(`/reviews/${id}`, reviewData);
-        alert("글 수정 완료");
-      } else {
-        await api.post(`/reviews`, reviewData);
-        alert("글 작성 완료");
-      }
-      navigate("/review");
-    } catch (error) {
-      console.error("Error: ", error);
+    if (id) {
+      api
+        .put(`/reviews/${id}`, review)
+        .then((response) => {
+          console.log(response.data);
+          alert("글 수정 완료");
+          navigate("/review");
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
+    } else {
+      api
+        .post(`/reviews`, review)
+        .then((response) => {
+          console.log(response.data);
+          alert("글 작성 완료");
+          navigate("/review");
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
     }
   };
 
@@ -214,7 +252,7 @@ const ReviewForm = () => {
             id="category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="mt-1 p-2 border-2 border-black rounded-md w-full"
+            className="mt-1 p-2 border-2 border-black rounded-md w-full "
             required
           >
             <option value="All">전체</option>
@@ -239,6 +277,8 @@ const ReviewForm = () => {
             className="mt-1 p-2 border-2 border-black rounded-md w-full"
             required
           />
+        </div>
+        <div>
           <label
             htmlFor="good"
             className="block text-lg font-medium text-gray-700"
