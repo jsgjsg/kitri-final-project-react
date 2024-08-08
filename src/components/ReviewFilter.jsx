@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaPaw, FaBone, FaCandyCane, FaFutbol, FaPills } from "react-icons/fa";
 
@@ -31,6 +31,10 @@ const ReviewFilter = ({ setKeyword, setAnimalFilter, setCategoryFilter }) => {
       handleSearch();
     }
   };
+
+  useEffect(() => {
+    handleSearch();
+  }, [animalFilter, categoryFilter]);
 
   const getCategoryIcon = () => {
     switch (categoryFilter) {

@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import ReviewFilter from "./ReviewFilter";
 import ReviewList from "./ReviewList";
 import api from "../api/api";
+import exampleImage from "../assets/images/example.jpg";
 import { FaPlus, FaUser, FaArrowUp, FaSyncAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
-import exampleImage from "../assets/images/example.jpg";
 
 const Review = () => {
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
@@ -34,7 +33,6 @@ const Review = () => {
         setReviews(response.data);
         console.log(response.data);
       })
-
       .catch((error) => {
         console.error("Error: ", error);
       });
@@ -52,10 +50,6 @@ const Review = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const handleAddReview = () => {
-    navigate("/review/form");
-  };
 
   useEffect(() => {
     api
@@ -80,6 +74,10 @@ const Review = () => {
     window.location.reload();
   };
 
+  const handleAddFeed = () => {
+    navigate("/review/form");
+  };
+
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-3xl p-4 bg-white shadow-lg rounded-lg border border-gray-300">
       <div className="fixed top-0 left-0 right-0 bg-white z-10 shadow-md p-4">
@@ -89,22 +87,23 @@ const Review = () => {
             alt="Example"
             className="w-100 h-20 object-cover mb-2 rounded"
           />
-
-          <ReviewFilter
-            setKeyword={setKeyword}
-            setAnimalFilter={setAnimalFilter}
-            setCategoryFilter={setCategoryFilter}
-          />
+          <div className="flex items-center space-x-4">
+            <ReviewFilter
+              setKeyword={setKeyword}
+              setAnimalFilter={setAnimalFilter}
+              setCategoryFilter={setCategoryFilter}
+            />
+          </div>
         </div>
-        <div className="flex justify-center space-x-4 mb-4">
+        <div className="flex justify-center space-x-8 mb-4">
           <button
-            onClick={handleAddReview}
+            onClick={handleAddFeed}
             className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
           >
-            <FaPlus className="mr-2" /> Add reviews
+            <FaPlus className="mr-2" /> Add Feed
           </button>
           <button className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
-            <FaUser className="mr-2" /> My Reviews
+            <FaUser className="mr-2" /> My Feeds
           </button>
           <button
             className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
