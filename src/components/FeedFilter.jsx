@@ -17,6 +17,12 @@ const FeedFilter = ({ setKeyword, filter, setFilter }) => {
     setKeyword(searchTerm);
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   const getIcon = () => {
     switch (filter) {
       case "cat":
@@ -36,6 +42,7 @@ const FeedFilter = ({ setKeyword, filter, setFilter }) => {
         value={searchTerm}
         onChange={handleSearchChange}
         className="p-2 border border-gray-300 rounded"
+        onKeyPress={handleKeyPress}
       />
       <button
         onClick={handleSearch}
