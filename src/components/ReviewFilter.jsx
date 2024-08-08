@@ -26,6 +26,12 @@ const ReviewFilter = ({ setKeyword, setAnimalFilter, setCategoryFilter }) => {
     setKeyword(searchTerm);
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   const getCategoryIcon = () => {
     switch (categoryFilter) {
       case "food":
@@ -49,6 +55,7 @@ const ReviewFilter = ({ setKeyword, setAnimalFilter, setCategoryFilter }) => {
         value={searchTerm}
         onChange={handleSearchChange}
         className="p-2 border border-gray-300 rounded"
+        onKeyPress={handleKeyPress}
       />
       <button
         onClick={handleSearch}

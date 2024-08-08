@@ -3,7 +3,7 @@ import api from "../api/api";
 import { useNavigate } from "react-router-dom";
 import QnaList from "./QnaList";
 import { AiFillQuestionCircle } from "react-icons/ai";
-import { FaPlus, FaTrashAlt } from "react-icons/fa";
+import { FaPlus, FaTrashAlt, FaSyncAlt } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 
 const QnA = () => {
@@ -45,6 +45,10 @@ const QnA = () => {
     );
   }, [searchTerm, Qnas]);
 
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
   const handleButtonClick = () => {
     navigate("/qna/form"); // QnaForm 페이지로 이동
   };
@@ -73,7 +77,7 @@ const QnA = () => {
         <div className="flex items-center w-full">
           <AiFillQuestionCircle className="text-5xl text-pink-500 mr-2" />
           <h2 className="text-4xl font-bold">Qna 페이지</h2>
-          <div className="ml-auto flex items-center space-x-2">
+          <div className="ml-auto flex items-center space-x-2 ml-20">
             <input
               type="text"
               value={searchTerm}
@@ -81,7 +85,7 @@ const QnA = () => {
               className="p-2 border rounded"
               placeholder="검색어를 입력하세요"
             />
-            <FiSearch className="text-2xl text-gray-700" />
+            <FiSearch className="text-2xl text-gray-70" />
           </div>
           <button
             onClick={() => handleDelete(id)}
@@ -95,6 +99,12 @@ const QnA = () => {
           className="absolute top-4 right-4 bg-pastel-blue text-black p-3 rounded-full border-4 border-black hover:bg-pastel-blue-light transition-colors flex items-center"
         >
           <FaPlus className="text-xl" />
+        </button>
+        <button
+          onClick={handleRefresh}
+          className="absolute top-4 right-20 bg-gray-200 text-black p-3 rounded-full border-4 border-black hover:bg-gray-300 transition-colors flex items-center"
+        >
+          <FaSyncAlt className="text-xl" />
         </button>
         <div className="w-full max-w-3xl h-[650px] overflow-y-auto p-6 border-black rounded-md bg-white font-doodle mt-4 shadow-inner">
           <div className="bg-pastel-pink-light p-4 rounded-md shadow-lg h-full overflow-y-auto">
