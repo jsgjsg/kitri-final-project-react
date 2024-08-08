@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaPaw, FaBone, FaCandyCane, FaFutbol, FaPills } from "react-icons/fa";
 
@@ -26,6 +26,16 @@ const ReviewFilter = ({ setKeyword, setAnimalFilter, setCategoryFilter }) => {
     setKeyword(searchTerm);
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [animalFilter, categoryFilter]);
+
   const getCategoryIcon = () => {
     switch (categoryFilter) {
       case "food":
@@ -49,6 +59,7 @@ const ReviewFilter = ({ setKeyword, setAnimalFilter, setCategoryFilter }) => {
         value={searchTerm}
         onChange={handleSearchChange}
         className="p-2 border border-gray-300 rounded"
+        onKeyPress={handleKeyPress}
       />
       <button
         onClick={handleSearch}

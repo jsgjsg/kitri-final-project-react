@@ -29,6 +29,7 @@ const ReviewItem = ({ user, review }) => {
       state: { reviewWithUser },
     });
   };
+
   if (!isMe && user.id === reviewWithUser.userId) {
     setIsMe(true); // !isMe를 하지 않으면 무한 렌더링
     console.log(isMe);

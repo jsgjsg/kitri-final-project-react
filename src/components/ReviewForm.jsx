@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { FaPlus, FaTimes, FaTrash } from "react-icons/fa";
 import api from "../api/api";
+// import { storage, ref, getDownloadURL, uploadBytes } from "../firebaseConfig";
 
 const ReviewForm = () => {
   const { id } = useParams(); // 수정 시 사용할 리뷰 ID
@@ -10,11 +11,12 @@ const ReviewForm = () => {
   const review = location.state?.reviewWithUser || {};
 
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
-  const [item, setItem] = useState(""); // 사용자 정보 상태변수
+  const [item, setItem] = useState("");
   const [good, setGood] = useState("");
   const [bad, setBad] = useState("");
   const [tip, setTip] = useState("");
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const [repurchase, setRepurchase] = useState("");
   const [satisfaction, setSatisfaction] = useState(5);
   const [animal, setAnimal] = useState("cat");
@@ -39,82 +41,57 @@ const ReviewForm = () => {
       setGood(review.good);
       setBad(review.bad);
       setTip(review.tip);
-      setImage(review.image);
+      setImageUrl(review.image);
       setRepurchase(review.repurchase);
       setSatisfaction(review.satisfaction);
       setAnimal(review.animal);
       setCategory(review.category);
     }
-  }, [id]);
+  }, [id, review]);
 
-  const handleSubmit = (e) => {
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+
+    if (file) {
+      const storageRef = ref(storage, `images/${file.name}`);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      setImageUrl(url);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const review = {
+    const reviewData = {
       userId: user.id,
       item,
       good,
       bad,
       tip,
-      image,
+      image: imageUrl,
       repurchase,
       satisfaction,
       animal,
       category,
     };
-    if (id) {
-      api
-        .put(`/reviews/${id}`, review)
-        .then((response) => {
-          console.log("item:", item);
-          console.log("good:", good);
-          console.log("bad:", bad);
-          console.log("tip:", tip);
-          console.log("image:", image);
-          console.log("repurchase", repurchase);
-          console.log("satisfaction:", satisfaction);
-          console.log("animal :", animal);
-          console.log("category:", category);
-          console.log(response.data);
 
-          alert("글 수정 완료");
-          navigate("/review");
-        })
-        .catch((error) => {
-          console.error("Error: ", error);
-        });
-    } else {
-      console.log("Adding new review");
-
-      api
-        .post(`/reviews`, review)
-        .then((response) => {
-          console.log("item:", item);
-          console.log("good:", good);
-          console.log("bad:", bad);
-          console.log("tip:", tip);
-          console.log("image:", image);
-          console.log("repurchase", repurchase);
-          console.log("satisfaction:", satisfaction);
-          console.log("animal :", animal);
-          console.log("category:", category);
-          console.log(response.data);
-          alert("글 작성 완료");
-          navigate("/review");
-        })
-        .catch((error) => {
-          console.error("Error: ", error);
-        });
+    try {
+      if (id) {
+        await api.put(`/reviews/${id}`, reviewData);
+        alert("글 수정 완료");
+      } else {
+        await api.post(`/reviews`, reviewData);
+        alert("글 작성 완료");
+      }
+      navigate("/review");
+    } catch (error) {
+      console.error("Error: ", error);
     }
   };
 
-  // 폼 취소 처리
   const handleCancel = () => {
     navigate(-1); // 이전 페이지로 이동
-  };
-
-  // 이미지 변경 처리
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
   };
 
   const handleDelete = () => {
@@ -228,7 +205,7 @@ const ReviewForm = () => {
 
         <div>
           <label
-            htmlFor="item"
+            htmlFor="category"
             className="block text-lg font-medium text-gray-700"
           >
             category
@@ -237,7 +214,7 @@ const ReviewForm = () => {
             id="category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="mt-1 p-2 border-2 border-black rounded-md w-full "
+            className="mt-1 p-2 border-2 border-black rounded-md w-full"
             required
           >
             <option value="All">전체</option>

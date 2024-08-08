@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FeedComment from "./FeedComment";
-import { FaComments, FaEdit, FaPlus, FaHeart, FaRegHeart } from "react-icons/fa"; // FaHeart 추가
+import {
+  FaComments,
+  FaEdit,
+  FaPlus,
+  FaHeart,
+  FaRegHeart,
+} from "react-icons/fa"; // FaHeart 추가
 import NoImage from "../assets/images/NoImage.jpg";
 import api from "../api/api";
 
@@ -9,7 +15,12 @@ const FeedItem = ({ user, feed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const [isMe, setIsMe] = useState(false);
-  const { feedWithUser, likeCount: initialLikeCount, liked: initialLiked, feedHashtags } = feed; // initialLiked 추가
+  const {
+    feedWithUser,
+    likeCount: initialLikeCount,
+    liked: initialLiked,
+    feedHashtags,
+  } = feed; // initialLiked 추가
   const [liked, setLiked] = useState(initialLiked); // liked 상태 추가
   const [likeCount, setLikeCount] = useState(initialLikeCount);
 
@@ -24,12 +35,14 @@ const FeedItem = ({ user, feed }) => {
   const handleCreateButton = () => {
     navigate("/feed/form");
   };
-  
+
   const handleUpdateButton = () => {
-    navigate(`/feed/form/${feedWithUser.id}`, { state: { feedWithUser, feedHashtags } });
+    navigate(`/feed/form/${feedWithUser.id}`, {
+      state: { feedWithUser, feedHashtags },
+    });
   };
 
-  if(!isMe && user.id === feedWithUser.userId) {
+  if (!isMe && user.id === feedWithUser.userId) {
     setIsMe(true); // !isMe를 하지 않으면 무한 렌더링
   }
 
@@ -52,11 +65,11 @@ const FeedItem = ({ user, feed }) => {
   };
 
   return (
-    <div className="relative p-4 border border-gray-300 rounded-md mb-4 bg-white shadow-lg w-full max-w-xs h-150">
+    <div className="relative p-2 border border-gray-300 rounded-md mb-4 bg-white shadow-lg w-full max-w-xs h-150">
       {isMe ? (
         <button
           onClick={handleUpdateButton}
-          className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
+          className="absolute top-2 right-1 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
         >
           <FaEdit />
         </button>
@@ -68,7 +81,9 @@ const FeedItem = ({ user, feed }) => {
           <FaPlus />
         </button>
       )}
-      <h3 className="text-lg font-semibold truncate mb-2">{feedWithUser.nickname}</h3>
+      <h3 className="text-lg font-semibold truncate mb-2">
+        {feedWithUser.nickname}
+      </h3>
       <img
         src={feedWithUser.image || NoImage}
         alt={feedWithUser.image ? "Feed Image" : "No Image Available"}
@@ -78,14 +93,19 @@ const FeedItem = ({ user, feed }) => {
       {feedHashtags && feedHashtags.length > 0 && (
         <div className="flex flex-wrap mb-2">
           {feedHashtags.map((tag, index) => (
-            <span key={index} className="mr-2 mb-2 px-2 py-1 bg-gray-200 text-gray-700 rounded-full text-xs">
+            <span
+              key={index}
+              className="mr-2 mb-2 px-2 py-1 bg-gray-200 text-gray-700 rounded-full text-xs"
+            >
               #{tag.hashtag}
             </span>
           ))}
         </div>
       )}
-      
-      <p className="text-gray-700 mb-2 text-sm">category : {feedWithUser.animal}</p>
+
+      <p className="text-gray-700 mb-2 text-sm">
+        category : {feedWithUser.animal}
+      </p>
       <p className="text-gray-700 mb-2 text-sm">{feedWithUser.content}</p>
       <p className="text-gray-500 text-xs mb-2">{feedWithUser.createdAt}</p>
       {/* created_at 필드 추가 */}
@@ -93,9 +113,10 @@ const FeedItem = ({ user, feed }) => {
       <div className="flex justify-end mt-2">
         <button
           onClick={handleLikeToggle}
-          className="flex items-center space-x-1 text-red-500 p-2 rounded transition-colors mr-3 hover:bg-red-200">
-          { liked ? <FaHeart /> : <FaRegHeart /> }
-          { likeCount && <span className="ml-1">{likeCount}</span> }
+          className="flex items-center space-x-1 text-red-500 p-2 rounded transition-colors mr-3 hover:bg-red-200"
+        >
+          {liked ? <FaHeart /> : <FaRegHeart />}
+          {likeCount && <span className="ml-1">{likeCount}</span>}
         </button>
         <button
           onClick={handleOpenModal}
@@ -105,7 +126,11 @@ const FeedItem = ({ user, feed }) => {
         </button>
       </div>
       {isModalOpen && (
-        <FeedComment feedId={feedWithUser.id} isOpen={isModalOpen} onClose={handleCloseModal} />
+        <FeedComment
+          feedId={feedWithUser.id}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
       )}
     </div>
   );
