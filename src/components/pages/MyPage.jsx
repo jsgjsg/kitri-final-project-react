@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
+import ProfileEditForm from "../mypage/ProfileEditForm";
 import {
   FaPenAlt,
   FaCommentDots,
@@ -10,21 +11,21 @@ import {
   FaSignOutAlt,
   FaUserTimes,
   FaUserCircle,
-  FaUserFriends, // 친구 아이콘
-  FaInbox, // 받은 요청 아이콘
-  FaPaperPlane // 한 요청 아이콘
+  FaUserFriends,
+  FaInbox,
+  FaPaperPlane,
+  FaEdit,
 } from "react-icons/fa";
-import { AiFillHeart } from "react-icons/ai"; // 반려동물 아이콘 추가
 
 const MyPage = () => {
   const [profile, setProfile] = useState({});
+  const [editing, setEditing] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     api
       .get("/users/me")
       .then((response) => {
-        console.log(response.data);
         setProfile(response.data);
       })
       .catch((error) => {
@@ -34,9 +35,9 @@ const MyPage = () => {
 
   const handleLogout = () => {
     api.post("/auth/logout").then((response) => {
-      localStorage.removeItem("jwtToken"); // JWT 토큰 삭제
+      localStorage.removeItem("jwtToken");
       alert(response.data);
-      navigate("/login"); // 로그인 페이지로 이동
+      navigate("/login");
     });
   };
 
@@ -44,26 +45,55 @@ const MyPage = () => {
     navigate("/delete-account");
   };
 
+  const handleEditProfile = () => {
+    setEditing(true);
+  };
+
+  const handleProfileUpdate = (updatedProfile) => {
+    setProfile(updatedProfile);
+    setEditing(false);
+  };
+
+  const handleCancelEdit = () => {
+    setEditing(false);
+  };
+
   return (
     <div className="flex flex-col items-center w-full font-doodle relative bg-gray-100">
-      <div className="absolute top-4 right-4 w-12 h-12">
-        <AiFillHeart className="text-4xl text-pink-500" />{" "}
-        {/* 반려동물 아이콘 */}
-      </div>
       <div className="flex flex-col items-center w-full max-w-2xl bg-white border-4 border-black rounded-md p-6 mt-24 mb-20">
         <div className="flex items-center w-full mb-6">
           <div className="flex items-center justify-center w-32 h-32 bg-gray-200 rounded-full border-4 border-black">
-            {/* 프로필 이미지 */}
-            <FaUserCircle className="text-8xl text-gray-500" />
+            <img
+              src={profile.image || "https://via.placeholder.com/150"}
+              alt="Profile"
+              className="w-full h-full object-cover rounded-full"
+            />
           </div>
           <div className="ml-6 flex-grow">
             <h2 className="text-3xl font-bold">{profile.nickname}</h2>
             <p className="text-xl text-gray-500">{profile.introduce}</p>
-          </div>
+          </div>{" "}
+          {editing ? (
+            <ProfileEditForm
+              profile={profile}
+              onSave={handleProfileUpdate}
+              onCancel={handleCancelEdit}
+            />
+          ) : (
+            <button
+              className="flex items-center justify-center w-30 bg-pastel-blue text-black p-4 rounded border-4 border-black hover:bg-pastel-blue-light"
+              onClick={handleEditProfile}
+            >
+              <FaEdit className="mr-2 text-xl" />
+            </button>
+          )}
           <div className="ml-6 flex flex-col space-y-2">
             <button
-            className="flex items-center bg-pastel-blue text-black p-2 rounded border-4 border-black hover:bg-pastel-blue-light"
-            onClick={()=>{navigate("/friends")}}>
+              className="flex items-center bg-pastel-blue text-black p-2 rounded border-4 border-black hover:bg-pastel-blue-light"
+              onClick={() => {
+                navigate("/friends");
+              }}
+            >
               <FaUserFriends className="mr-2 text-2xl" />
               <span>친구</span>
             </button>
@@ -111,7 +141,7 @@ const MyPage = () => {
             onClick={() => navigate("/edit-account")}
           >
             <FaUserEdit className="mr-2 text-2xl" />
-            <span className="text-xl">회원 정보 수정</span>
+            <span className="text-xl">비밀번호 수정</span>
           </button>
           <button
             className="flex items-center justify-center w-full bg-pastel-green text-black p-4 rounded border-4 border-black hover:bg-pastel-green-light"
@@ -122,7 +152,8 @@ const MyPage = () => {
           </button>
           <button
             className="flex items-center justify-center w-full bg-pastel-red text-black p-4 rounded border-4 border-black hover:bg-pastel-red-light"
-            onClick={handleDeleteAccount}>
+            onClick={handleDeleteAccount}
+          >
             <FaUserTimes className="mr-2 text-2xl" />
             <span className="text-xl">회원 탈퇴</span>
           </button>

@@ -44,10 +44,9 @@ const ProfileEditForm = ({ profile, onSave, onCancel }) => {
 
   const handleSaveProfile = async () => {
     const uploadedImageUrl = await handleUpload();
-    const id = profile.id; // profile 객체에서 id를 가져옴
 
     api
-      .put(`/mypages/${id}`, {
+      .put(`/users/me`, {
         nickname,
         introduce,
         image: uploadedImageUrl,
