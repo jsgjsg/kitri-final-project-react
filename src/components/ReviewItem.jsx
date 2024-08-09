@@ -1,17 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReviewComment from "./ReviewComment";
-import { FaComments, FaEdit, FaPlus, FaRegHeart } from "react-icons/fa";
+import {
+  FaComments,
+  FaEdit,
+  FaPlus,
+  FaRegHeart,
+  FaHeart,
+} from "react-icons/fa";
+import api from "../api/api"; // api 객체 추가
 
 const ReviewItem = ({ user, review }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMe, setIsMe] = useState(false);
+  const [liked, setLiked] = useState(review.initialLiked); // liked 상태 추가
+  const [likeCount, setLikeCount] = useState(review.initialLikeCount); // likeCount 상태 추가
   const navigate = useNavigate();
   const {
     reviewWithUser,
     likeCount: initialLikeCount,
     liked: initialLiked,
   } = review;
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -34,6 +44,20 @@ const ReviewItem = ({ user, review }) => {
     setIsMe(true); // !isMe를 하지 않으면 무한 렌더링
     console.log(isMe);
   }
+
+  const handleLikeToggle = () => {
+    const newLiked = !liked;
+
+    api
+      .post(`/feeds/${reviewWithUser.id}/like`, { liked: newLiked })
+      .then((response) => {
+        setLikeCount(response.data);
+        setLiked(newLiked);
+      })
+      .catch((error) => {
+        console.error("Error toggling like: ", error);
+      });
+  };
 
   return (
     <div className="relative p-4 border border-gray-300 rounded-md mb-4 bg-white shadow- w-full max-w-md h-150">
@@ -85,8 +109,12 @@ const ReviewItem = ({ user, review }) => {
       </p>
       <p className="text-gray-500 text-xs mb-2">{reviewWithUser.created_at}</p>
       <div className="flex justify-end mt-2">
-        <button className="flex items-center space-x-1 text-red-500 p-2 rounded transition-colors mr-3 hover:bg-red-200">
-          <FaRegHeart />
+        <button
+          onClick={handleLikeToggle}
+          className="flex items-center space-x-1 text-red-500 p-2 rounded transition-colors mr-3 hover:bg-red-200"
+        >
+          {liked ? <FaHeart /> : <FaRegHeart />}
+          {likeCount && <span className="ml-1">{likeCount}</span>}
         </button>
         <button
           onClick={handleOpenModal}
