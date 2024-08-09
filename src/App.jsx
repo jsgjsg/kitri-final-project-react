@@ -19,7 +19,7 @@ import Login from "./components/pages/LoginPage";
 import Signup from "./components/pages/SignupPage";
 import AccountDeletion from "./components/AccountDeletion";
 import Feed from "./components/pages/FeedPage";
-import Navigation from "./components/Navigation";
+// import Navigation from "./components/Navigation";
 import Review from "./components/pages/ReviewPage";
 import Qna from "./components/pages/QnaPage";
 import ReviewForm from "./components/review/ReviewForm";
