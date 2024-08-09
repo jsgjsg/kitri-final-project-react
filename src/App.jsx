@@ -1,35 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import "./index.css"; // Tailwind CSS 포함
-import Dashboard from "./components/Dashboard";
-import Test from "./components/Test";
-import Feed from "./components/Feed";
-import Navigation from "./components/Navigation";
-import Review from "./components/Review";
-import Qna from "./components/QnA";
-import MyPage from "./components/MyPage";
-import Login from "./components/Login";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   NavLink,
 } from "react-router-dom";
-import ReviewForm from "./components/ReviewForm";
-import FeedForm from "./components/FeedForm";
 import {
-  AiOutlineHome,
-  AiOutlineExperiment,
   AiOutlineAppstore,
   AiOutlineGlobal,
   AiOutlineForm,
   AiOutlineQuestionCircle,
   AiOutlineUser,
 } from "react-icons/ai";
+
+import MyPage from "./components/MyPage";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import AccountDeletion from "./components/AccountDeletion";
+import Feed from "./components/Feed";
+import Navigation from "./components/Navigation";
+import Review from "./components/Review";
+import Qna from "./components/QnA";
+import ReviewForm from "./components/ReviewForm";
+import FeedForm from "./components/FeedForm";
 import QnaForm from "./components/QnaForm";
 import QnaDetail from "./components/QnaDetail";
-import Signup from "./components/Signup";
 
 function App() {
+  const [isNavOpen, setIsNavOpen] = useState(false);
+
+  const toggleNav = () => {
+    setIsNavOpen(!isNavOpen);
+  };
+
   return (
     <Router>
       <div className="flex min-h-screen bg-gray-100">
@@ -37,6 +41,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/delete-account" element={<AccountDeletion />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/feed/form/" element={<FeedForm />} />
             <Route path="/feed/form/:id" element={<FeedForm />} />
@@ -50,7 +55,13 @@ function App() {
             <Route path="/myPage" element={<MyPage />} />
           </Routes>
         </main>
-        <nav className="fixed top-80 right-10 flex flex-col space-y-4 p-4 bg-white shadow-lg rounded-lg">
+
+        {/* 내비게이션 바 */}
+        <nav
+          className={`fixed top-0 right-0 h-full flex flex-col space-y-4 p-4 bg-white shadow-lg rounded-l-lg transform ${
+            isNavOpen ? "translate-x-0" : "translate-x-full"
+          } transition-transform z-40`}
+        >
           <NavLink
             to="/feed"
             className={({ isActive }) =>
@@ -107,6 +118,17 @@ function App() {
             <span className="flex-grow">MyPage</span>
           </NavLink>
         </nav>
+
+        {/* 토글 버튼 */}
+        <button
+          className={`fixed top-80 transform ${
+            isNavOpen ? "right-[11rem]" : "right-1"
+          } bg-gray-800 text-white px-2 py-2 shadow-lg hover:bg-gray-700 transition-all z-50`}
+          onClick={toggleNav}
+        >
+          {/* 토글 상태에 따라 아이콘 변경 */}
+          {isNavOpen ? ">" : "<"}
+        </button>
       </div>
     </Router>
   );

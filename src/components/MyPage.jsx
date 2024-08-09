@@ -37,6 +37,10 @@ const MyPage = () => {
     });
   };
 
+  const handleDeleteAccount = () => {
+    navigate("/delete-account");
+  }
+
   return (
     <div className="flex flex-col items-center w-full font-doodle relative bg-gray-100">
       <div className="absolute top-4 right-4 w-12 h-12">
@@ -94,7 +98,9 @@ const MyPage = () => {
             <FaSignOutAlt className="mr-2 text-2xl" />
             <span className="text-xl">Logout</span>
           </button>
-          <button className="flex items-center justify-center w-full bg-pastel-red text-black p-4 rounded border-4 border-black hover:bg-pastel-red-light">
+          <button
+            className="flex items-center justify-center w-full bg-pastel-red text-black p-4 rounded border-4 border-black hover:bg-pastel-red-light"
+            onClick={handleDeleteAccount}>
             <FaUserTimes className="mr-2 text-2xl" />
             <span className="text-xl">회원 탈퇴</span>
           </button>
