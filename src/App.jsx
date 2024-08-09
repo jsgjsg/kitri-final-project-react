@@ -27,6 +27,7 @@ import FeedForm from "./components/feed/FeedForm";
 import QnaForm from "./components/qna/QnaForm";
 import QnaDetail from "./components/qna/QnaDetail";
 import FriendsPage from "./components/pages/FriendsPage";
+import EditProfilePage from "./components/pages/EditProfilePage";
 
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -43,6 +44,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/delete-account" element={<AccountDeletion />} />
+            <Route path="/edit-account" element={<EditProfilePage />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/feed/form/" element={<FeedForm />} />
             <Route path="/feed/form/:id" element={<FeedForm />} />
