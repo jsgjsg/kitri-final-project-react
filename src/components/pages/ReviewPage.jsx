@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import api from "../api/api";
-import FeedList from "./FeedList";
-import FeedFilter from "./FeedFilter";
-import exampleImage from "../assets/images/example.jpg";
+import ReviewFilter from "../review/ReviewFilter";
+import ReviewList from "../review/ReviewList";
+import api from "../../api/api";
+import exampleImage from "../../assets/images/example.jpg";
 import { FaPlus, FaUser, FaArrowUp, FaSyncAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const Feed = () => {
+const Review = () => {
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
-  const [feeds, setFeeds] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [keyword, setKeyword] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [animalFilter, setAnimalFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [showScrollIcon, setShowScrollIcon] = useState(false);
   const navigate = useNavigate(); // useNavigate 훅 추가
 
@@ -26,16 +27,15 @@ const Feed = () => {
         console.error("Error: ", error);
       });
 
-    // ?query=검색어
     api
-      .get(`/feeds`)
+      .get("http://127.0.0.1:8080/api/reviews")
       .then((response) => {
-        setFeeds(response.data);
+        setReviews(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching feeds: ", error);
+        console.error("Error: ", error);
       });
-
     const handleScroll = () => {
       if (window.pageYOffset > 100) {
         setShowScrollIcon(true);
@@ -51,21 +51,20 @@ const Feed = () => {
     };
   }, []);
 
-  const handleAddFeed = () => {
-    navigate("/feed/form"); // Add Feed 버튼 클릭 시 /feed/form으로 이동
-  };
-
   useEffect(() => {
-    // ?query=검색어
     api
-      .get(`/feeds/search?query=${keyword}&animal=${filter}`)
+      .get(
+        `/reviews/search?query=${keyword}&animal=${animalFilter}&category=${categoryFilter}`
+      )
       .then((response) => {
-        setFeeds(response.data);
+        setReviews(response.data);
+        console.log(`${animalFilter}`);
+        console.log(`${categoryFilter}`);
       })
       .catch((error) => {
-        console.error("Error fetching feeds: ", error);
+        console.error("Error fetching reviews: ", error);
       });
-  }, [keyword, filter]);
+  }, [keyword, animalFilter, categoryFilter]);
 
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -73,6 +72,10 @@ const Feed = () => {
 
   const handleRefresh = () => {
     window.location.reload();
+  };
+
+  const handleAddFeed = () => {
+    navigate("/review/form");
   };
 
   return (
@@ -84,12 +87,13 @@ const Feed = () => {
             alt="Example"
             className="w-100 h-20 object-cover mb-2 rounded"
           />
-
-          <FeedFilter
-            setKeyword={setKeyword}
-            filter={filter}
-            setFilter={setFilter}
-          />
+          <div className="flex items-center space-x-4">
+            <ReviewFilter
+              setKeyword={setKeyword}
+              setAnimalFilter={setAnimalFilter}
+              setCategoryFilter={setCategoryFilter}
+            />
+          </div>
         </div>
         <div className="flex justify-center space-x-8 mb-4">
           <button
@@ -111,10 +115,10 @@ const Feed = () => {
         </div>
       </div>
       <div className="pt-32">
-        <FeedList user={user} feeds={feeds} />
+        <ReviewList user={user} reviews={reviews} />
       </div>
     </div>
   );
 };
 
-export default Feed;
+export default Review;

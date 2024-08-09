@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { FaPlus, FaTimes, FaTrash } from "react-icons/fa";
-import api from "../api/api";
+import api from "../../api/api";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../../firebaseConfig";
+import { storage } from "../../../firebaseConfig";
 
 const ReviewForm = () => {
   const { id } = useParams(); // 수정 시 사용할 리뷰 ID

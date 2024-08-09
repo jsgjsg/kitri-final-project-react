@@ -8,7 +8,7 @@ import {
   FaHeart,
   FaRegHeart,
 } from "react-icons/fa";
-import api from "../api/api";
+import api from "../../api/api";
 
 const FeedItem = ({ user, feed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
