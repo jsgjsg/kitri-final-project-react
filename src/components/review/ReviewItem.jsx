@@ -8,7 +8,7 @@ import {
   FaRegHeart,
   FaHeart,
 } from "react-icons/fa";
-import api from "../api/api"; // api 객체 추가
+import api from "../../api/api"; // api 객체 추가
 
 const ReviewItem = ({ user, review }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
