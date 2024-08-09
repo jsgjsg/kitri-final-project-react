@@ -106,7 +106,10 @@ const MyPage = () => {
         </div>
         <hr className="w-full mb-6 border-2 border-gray" />
         <div className="w-full space-y-4">
-          <button className="flex items-center justify-center w-full bg-pastel-blue text-black p-4 rounded border-4 border-black hover:bg-pastel-blue-light">
+          <button
+            className="flex items-center justify-center w-full bg-pastel-blue text-black p-4 rounded border-4 border-black hover:bg-pastel-blue-light"
+            onClick={() => navigate("/edit-account")}
+          >
             <FaUserEdit className="mr-2 text-2xl" />
             <span className="text-xl">회원 정보 수정</span>
           </button>
