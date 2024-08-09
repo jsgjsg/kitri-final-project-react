@@ -13,6 +13,7 @@ const Review = () => {
   const [animalFilter, setAnimalFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [showScrollIcon, setShowScrollIcon] = useState(false);
+  const [showMyFeeds, setShowMyFeeds] = useState(false); // My Feeds 상태
   const navigate = useNavigate(); // useNavigate 훅 추가
 
   useEffect(() => {
@@ -27,15 +28,8 @@ const Review = () => {
         console.error("Error: ", error);
       });
 
-    api
-      .get("http://127.0.0.1:8080/api/reviews")
-      .then((response) => {
-        setReviews(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error: ", error);
-      });
+    fetchReviews();
+
     const handleScroll = () => {
       if (window.pageYOffset > 100) {
         setShowScrollIcon(true);
@@ -50,6 +44,45 @@ const Review = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const fetchReviews = () => {
+    api
+      .get("http://127.0.0.1:8080/api/reviews")
+      .then((response) => {
+        setReviews(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+  };
+
+  const fetchMyReviews = () => {
+    api
+      .get("http://127.0.0.1:8080/api/reviews")
+      .then((response) => {
+        const myReviews = response.data.filter(
+          (review) => review.reviewWithUser.userId === user.id
+        );
+        setReviews(myReviews);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+  };
+
+  const handleAddFeed = () => {
+    navigate("/review/form");
+  };
+
+  const handleMyFeeds = () => {
+    setShowMyFeeds(!showMyFeeds);
+    if (!showMyFeeds) {
+      fetchMyReviews();
+    } else {
+      fetchReviews();
+    }
+  };
 
   useEffect(() => {
     api
@@ -72,10 +105,6 @@ const Review = () => {
 
   const handleRefresh = () => {
     window.location.reload();
-  };
-
-  const handleAddFeed = () => {
-    navigate("/review/form");
   };
 
   return (
@@ -102,8 +131,11 @@ const Review = () => {
           >
             <FaPlus className="mr-2" /> Add Feed
           </button>
-          <button className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
-            <FaUser className="mr-2" /> My Feeds
+          <button
+            onClick={handleMyFeeds}
+            className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+          >
+            <FaUser className="mr-2" /> {showMyFeeds ? "All Feeds" : "My Feeds"}
           </button>
           <button
             className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
