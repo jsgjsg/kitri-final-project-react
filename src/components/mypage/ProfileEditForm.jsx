@@ -3,10 +3,12 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebaseConfig";
 import api from "../../api/api";
 import { FaUserEdit, FaUserTimes } from "react-icons/fa";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const ProfileEditForm = ({ profile, onSave, onCancel }) => {
   const [nickname, setNickname] = useState(profile.nickname);
   const [introduce, setIntroduce] = useState(profile.introduce);
+  const [location, setLocation] = useState(profile.location);
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(profile.image);
 
@@ -50,9 +52,11 @@ const ProfileEditForm = ({ profile, onSave, onCancel }) => {
         nickname,
         introduce,
         image: uploadedImageUrl,
+        location,
       })
       .then((response) => {
         onSave(response.data);
+        window.location.reload(); // 프로필 업데이트 후 새로고침
       })
       .catch((error) => {
         console.error("Error updating profile: ", error);
@@ -61,19 +65,41 @@ const ProfileEditForm = ({ profile, onSave, onCancel }) => {
 
   return (
     <div className="w-full space-y-4">
-      <div className="flex items-center justify-center w-32 h-32 bg-gray-200 rounded-full border-4 border-black mx-auto">
-        <input type="file" onChange={handleImageChange} />
+      <div className="relative flex items-center justify-center w-32 h-32 bg-gray-200 rounded-full border-4 border-black mx-auto">
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="Profile"
+            className="w-full h-full object-cover rounded-full"
+          />
+        ) : (
+          <div className="flex items-center justify-center w-full h-full">
+            <AiOutlinePlus className="text-6xl text-gray-400" />
+          </div>
+        )}
+        <input
+          type="file"
+          onChange={handleImageChange}
+          className="absolute opacity-0 w-full h-full cursor-pointer"
+        />
       </div>
+      <p className="text-3xl font-bold w-full mr-60">{nickname}</p>
+      <label className="block text-lg font-medium text-gray-700">
+        상태 메시지 :
+      </label>
       <input
-        type="text"
-        value={nickname}
-        onChange={(e) => setNickname(e.target.value)}
-        className="text-3xl font-bold w-full"
-      />
-      <textarea
         value={introduce}
         onChange={(e) => setIntroduce(e.target.value)}
-        className="text-xl text-gray-500 w-full"
+        className="text-lg text-gray-500 w-full border border-gray-300 rounded p-2"
+      />
+      <label className="block text-lg font-medium text-gray-700">
+        사는 곳을 입력해주세요 :
+      </label>
+      <input
+        type="text"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+        className="text-lg text-gray-500 w-full border border-gray-300 rounded p-2"
       />
       <button
         className="flex items-center justify-center w-full bg-pastel-blue text-black p-4 rounded border-4 border-black hover:bg-pastel-blue-light"

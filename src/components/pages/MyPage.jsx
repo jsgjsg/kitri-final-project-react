@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
 import ProfileEditForm from "../mypage/ProfileEditForm";
+import Modal from "react-modal";
 import {
   FaPenAlt,
   FaCommentDots,
@@ -17,6 +18,8 @@ import {
   FaEdit,
 } from "react-icons/fa";
 
+Modal.setAppElement("#root"); // root 엘리먼트를 모달의 루트로 설정
+
 const MyPage = () => {
   const [profile, setProfile] = useState({});
   const [editing, setEditing] = useState(false);
@@ -27,10 +30,14 @@ const MyPage = () => {
       .get("/users/me")
       .then((response) => {
         setProfile(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching profile: ", error);
       });
+
+    // 쿠키 설정
+    document.cookie = "key=value; SameSite=None; Secure";
   }, []);
 
   const handleLogout = () => {
@@ -57,36 +64,32 @@ const MyPage = () => {
   const handleCancelEdit = () => {
     setEditing(false);
   };
-
+  console.log(profile.location);
   return (
     <div className="flex flex-col items-center w-full font-doodle relative bg-gray-100">
       <div className="flex flex-col items-center w-full max-w-2xl bg-white border-4 border-black rounded-md p-6 mt-24 mb-20">
         <div className="flex items-center w-full mb-6">
           <div className="flex items-center justify-center w-32 h-32 bg-gray-200 rounded-full border-4 border-black">
-            <img
-              src={profile.image || "https://via.placeholder.com/150"}
-              alt="Profile"
-              className="w-full h-full object-cover rounded-full"
-            />
+            {profile.image ? (
+              <img
+                src={profile.image}
+                alt="Profile"
+                className="w-full h-full object-cover rounded-full"
+              />
+            ) : (
+              <FaUserCircle className="w-full h-full text-gray-500" />
+            )}
           </div>
           <div className="ml-6 flex-grow">
-            <h2 className="text-3xl font-bold">{profile.nickname}</h2>
-            <p className="text-xl text-gray-500">{profile.introduce}</p>
+            <h2 className="text-3xl font-bold mt-5">{profile.nickname}</h2>
+            <p className="text-2xl text-gray-500 mt-10">{profile.introduce}</p>
           </div>{" "}
-          {editing ? (
-            <ProfileEditForm
-              profile={profile}
-              onSave={handleProfileUpdate}
-              onCancel={handleCancelEdit}
-            />
-          ) : (
-            <button
-              className="flex items-center justify-center w-30 bg-pastel-blue text-black p-4 rounded border-4 border-black hover:bg-pastel-blue-light"
-              onClick={handleEditProfile}
-            >
-              <FaEdit className="mr-2 text-xl" />
-            </button>
-          )}
+          <button
+            className="flex items-center justify-center w-30 text-black p-4 rounded hover:bg-pastel-blue-light"
+            onClick={handleEditProfile}
+          >
+            <FaEdit className="mr-2 text-xl" />
+          </button>
           <div className="ml-6 flex flex-col space-y-2">
             <button
               className="flex items-center bg-pastel-blue text-black p-2 rounded border-4 border-black hover:bg-pastel-blue-light"
@@ -158,6 +161,19 @@ const MyPage = () => {
             <span className="text-xl">회원 탈퇴</span>
           </button>
         </div>
+        <Modal
+          isOpen={editing}
+          onRequestClose={handleCancelEdit}
+          contentLabel="Profile Edit Modal"
+          className="bg-white p-8 rounded-lg shadow-lg border-2 border-gray-300 max-w-lg mx-auto mt-20"
+          overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+        >
+          <ProfileEditForm
+            profile={profile}
+            onSave={handleProfileUpdate}
+            onCancel={handleCancelEdit}
+          />
+        </Modal>
       </div>
     </div>
   );
