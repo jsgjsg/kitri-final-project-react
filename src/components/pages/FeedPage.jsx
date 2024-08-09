@@ -12,6 +12,7 @@ const Feed = () => {
   const [keyword, setKeyword] = useState("");
   const [filter, setFilter] = useState("all");
   const [showScrollIcon, setShowScrollIcon] = useState(false);
+  const [showMyFeeds, setShowMyFeeds] = useState(false); // My Feeds 상태
   const navigate = useNavigate(); // useNavigate 훅 추가
 
   useEffect(() => {
@@ -26,7 +27,11 @@ const Feed = () => {
         console.error("Error: ", error);
       });
 
-    // ?query=검색어
+    // 피드 가져오기
+    fetchFeeds();
+  }, []);
+
+  const fetchFeeds = () => {
     api
       .get(`/feeds`)
       .then((response) => {
@@ -35,24 +40,33 @@ const Feed = () => {
       .catch((error) => {
         console.error("Error fetching feeds: ", error);
       });
+  };
 
-    const handleScroll = () => {
-      if (window.pageYOffset > 100) {
-        setShowScrollIcon(true);
-      } else {
-        setShowScrollIcon(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const fetchMyFeeds = () => {
+    api
+      .get(`/feeds`)
+      .then((response) => {
+        const myFeeds = response.data.filter(
+          (feeds) => feeds.feedWithUser.userId === user.id
+        );
+        setFeeds(myFeeds);
+      })
+      .catch((error) => {
+        console.error("Error fetching feeds: ", error);
+      });
+  };
 
   const handleAddFeed = () => {
     navigate("/feed/form"); // Add Feed 버튼 클릭 시 /feed/form으로 이동
+  };
+
+  const handleMyFeeds = () => {
+    setShowMyFeeds(!showMyFeeds);
+    if (!showMyFeeds) {
+      fetchMyFeeds();
+    } else {
+      fetchFeeds();
+    }
   };
 
   useEffect(() => {
@@ -98,8 +112,11 @@ const Feed = () => {
           >
             <FaPlus className="mr-2" /> Add Feed
           </button>
-          <button className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
-            <FaUser className="mr-2" /> My Feeds
+          <button
+            onClick={handleMyFeeds}
+            className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+          >
+            <FaUser className="mr-2" /> {showMyFeeds ? "All Feeds" : "My Feeds"}
           </button>
           <button
             className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
