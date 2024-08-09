@@ -14,18 +14,19 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 
-import MyPage from "./components/MyPage";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
+import MyPage from "./components/pages/MyPage";
+import Login from "./components/pages/LoginPage";
+import Signup from "./components/pages/SignupPage";
 import AccountDeletion from "./components/AccountDeletion";
-import Feed from "./components/Feed";
+import Feed from "./components/pages/FeedPage";
 import Navigation from "./components/Navigation";
-import Review from "./components/Review";
-import Qna from "./components/QnA";
-import ReviewForm from "./components/ReviewForm";
-import FeedForm from "./components/FeedForm";
-import QnaForm from "./components/QnaForm";
-import QnaDetail from "./components/QnaDetail";
+import Review from "./components/pages/ReviewPage";
+import Qna from "./components/pages/QnaPage";
+import ReviewForm from "./components/review/ReviewForm";
+import FeedForm from "./components/feed/FeedForm";
+import QnaForm from "./components/qna/QnaForm";
+import QnaDetail from "./components/qna/QnaDetail";
+import FriendsPage from "./components/pages/FriendsPage";
 
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -53,6 +54,7 @@ function App() {
             <Route path="/qna/form" element={<QnaForm />} />
             <Route path="/qna/detail/:qaId" element={<QnaDetail />} />
             <Route path="/myPage" element={<MyPage />} />
+            <Route path="/friends" element={<FriendsPage />} />
           </Routes>
         </main>
 

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { FaPlus, FaTimes, FaTrash } from "react-icons/fa";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import api from "../api/api";
-import { storage } from "../../firebaseConfig";
+import api from "../../api/api";
+import { storage } from "../../../firebaseConfig";
 
 const FeedForm = () => {
   const { id } = useParams();

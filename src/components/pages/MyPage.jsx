@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/api";
+import api from "../../api/api";
 import {
   FaPenAlt,
   FaCommentDots,
@@ -10,6 +10,9 @@ import {
   FaSignOutAlt,
   FaUserTimes,
   FaUserCircle,
+  FaUserFriends, // 친구 아이콘
+  FaInbox, // 받은 요청 아이콘
+  FaPaperPlane // 한 요청 아이콘
 } from "react-icons/fa";
 import { AiFillHeart } from "react-icons/ai"; // 반려동물 아이콘 추가
 
@@ -39,7 +42,7 @@ const MyPage = () => {
 
   const handleDeleteAccount = () => {
     navigate("/delete-account");
-  }
+  };
 
   return (
     <div className="flex flex-col items-center w-full font-doodle relative bg-gray-100">
@@ -53,12 +56,28 @@ const MyPage = () => {
             {/* 프로필 이미지 */}
             <FaUserCircle className="text-8xl text-gray-500" />
           </div>
-          <div className="ml-6">
+          <div className="ml-6 flex-grow">
             <h2 className="text-3xl font-bold">{profile.nickname}</h2>
-            <p className="text-xl text-gray-500">{profile.email}</p>
+            <p className="text-xl text-gray-500">{profile.introduce}</p>
+          </div>
+          <div className="ml-6 flex flex-col space-y-2">
+            <button
+            className="flex items-center bg-pastel-blue text-black p-2 rounded border-4 border-black hover:bg-pastel-blue-light"
+            onClick={()=>{navigate("/friends")}}>
+              <FaUserFriends className="mr-2 text-2xl" />
+              <span>친구</span>
+            </button>
+            <button className="flex items-center bg-pastel-green text-black p-2 rounded border-4 border-black hover:bg-pastel-green-light">
+              <FaInbox className="mr-2 text-2xl" />
+              <span>받은 요청</span>
+            </button>
+            <button className="flex items-center bg-pastel-yellow text-black p-2 rounded border-4 border-black hover:bg-pastel-yellow-light">
+              <FaPaperPlane className="mr-2 text-2xl" />
+              <span>한 요청</span>
+            </button>
           </div>
         </div>
-        <hr className="w-full mb-6 border-2 border-glay" />
+        <hr className="w-full mb-6 border-2 border-gray" />
         <div className="flex w-full mb-6 space-x-4">
           <button className="flex-1 bg-pastel-blue text-black p-4 rounded border-4 border-black shadow hover:bg-pastel-blue-light">
             <div className="flex flex-col items-center">
@@ -85,7 +104,7 @@ const MyPage = () => {
             </div>
           </button>
         </div>
-        <hr className="w-full mb-6 border-2 border-glay" />
+        <hr className="w-full mb-6 border-2 border-gray" />
         <div className="w-full space-y-4">
           <button className="flex items-center justify-center w-full bg-pastel-blue text-black p-4 rounded border-4 border-black hover:bg-pastel-blue-light">
             <FaUserEdit className="mr-2 text-2xl" />

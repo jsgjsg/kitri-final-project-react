@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import api from "../api/api";
+import api from "../../api/api";
 import { useNavigate } from "react-router-dom";
-import QnaList from "./QnaList";
+import QnaList from "../qna/QnaList";
 import { AiFillQuestionCircle } from "react-icons/ai";
 import { FaPlus, FaTrashAlt, FaSyncAlt } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";

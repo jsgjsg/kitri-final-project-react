@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AiFillQuestionCircle } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../api/api"; // api 모듈을 import
+import api from "../../api/api"; // api 모듈을 import
 import QnaDetailList from "./QnaDetailList";
 
 // 답변이랑 질문 배열에 전부 가져오기

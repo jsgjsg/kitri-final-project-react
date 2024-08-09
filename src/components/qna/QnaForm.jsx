@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPenAlt, FaTimes } from "react-icons/fa";
 import { AiFillQuestionCircle } from "react-icons/ai";
-import api from "../api/api";
+import api from "../../api/api";
 
 const QnaForm = () => {
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
