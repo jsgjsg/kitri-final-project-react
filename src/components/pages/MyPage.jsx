@@ -117,6 +117,10 @@ const MyPage = () => {
     window.location.reload(); // 프로필 업데이트 후 새로고침
   };
 
+  const handleNavigateToFriends = () => {
+    navigate("/friends");
+  };
+
   return (
     <div className="flex flex-col items-center w-full font-doodle relative bg-gray-100">
       <div className="flex flex-col items-center w-full max-w-2xl bg-white border-4 border-black rounded-md p-6 mt-24 mb-20">
@@ -135,7 +139,7 @@ const MyPage = () => {
           <div className="ml-6 flex-grow">
             <h2 className="text-3xl font-bold mt-5">{profile.nickname}</h2>
             <p className="text-2xl text-gray-500 mt-10">{profile.introduce}</p>
-          </div>{" "}
+          </div>
           <button
             className="flex items-center justify-center w-30 text-black p-4 rounded hover:bg-pastel-blue-light"
             onClick={handleEditProfile}
@@ -143,6 +147,16 @@ const MyPage = () => {
             <FaEdit className="mr-2 text-xl" />
           </button>
         </div>
+        
+        {/* 친구 페이지로 이동하는 버튼 추가 */}
+        <button
+          className="flex items-center justify-center w-40 bg-pastel-yellow text-black p-3 rounded-full border-4 border-black hover:bg-pastel-yellow-light"
+          onClick={handleNavigateToFriends}
+        >
+          <FaUserFriends className="mr-2 text-2xl" />
+          <span className="text-lg">친구 목록</span>
+        </button>
+        
         <hr className="w-full mb-6 border-2 border-gray" />
         <div className="w-full space-y-4">
           <div className="flex justify-between items-center w-full mb-4">
