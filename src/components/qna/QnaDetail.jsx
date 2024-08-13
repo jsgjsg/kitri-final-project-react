@@ -3,9 +3,8 @@ import { AiFillQuestionCircle } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/api"; // api 모듈을 import
-import QnaDetailList from "./QnaDetailList";
+import { FaTrashAlt } from "react-icons/fa";
 
-// 답변이랑 질문 배열에 전부 가져오기
 const QnaDetail = () => {
   const { qaId } = useParams();
   const navigate = useNavigate();
@@ -13,20 +12,21 @@ const QnaDetail = () => {
   const [user, setUser] = useState({}); // 사용자 정보 상태변수
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [newQuestion, setNewQuestion] = useState("");
+  const [newAnswer, setNewAnswer] = useState({});
 
   useEffect(() => {
-    const token = localStorage.getItem("jwtToken");
-    if (!token) {
-      navigate("/login"); // 토큰이 없으면 로그인 페이지로 이동
-      return;
-    }
+    // const token = localStorage.getItem("jwtToken");
+    // if (!token) {
+    //   navigate("/login"); // 토큰이 없으면 로그인 페이지로 이동
+    //   return;
+    // }
 
     // 접속중인 사용자 정보 가져오기
     api
       .get("/users/me")
       .then((response) => {
         setUser(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error: ", error);
@@ -38,6 +38,7 @@ const QnaDetail = () => {
       .get(`/qa/${qaId}/questions`)
       .then((response) => {
         setQuestions(response.data);
+        console.log(response);
       })
       .catch((error) => {
         console.error("Error fetching questions: ", error);
@@ -46,52 +47,59 @@ const QnaDetail = () => {
     api
       .get(`/qa/${qaId}/answers`)
       .then((response) => {
-        setAnswers(response.data);
+        setAnswers(response.data || []);
+        console.log("Answers: ", response.data);
       })
       .catch((error) => {
         console.error("Error fetching answers: ", error);
       });
   }, []);
 
-
-  const handleDelete = (questionId) => {
-    if (window.confirm("정말로 이 질문을 삭제하시겠습니까?")) {
+  const handleDeleteAnswer = (answerId) => {
+    if (window.confirm("정말로 이 답변을 삭제하시겠습니까?")) {
       api
-        .delete(`/qa/${qaId}/questions/${questionId}`)
+        .delete(`/qa/${qaId}/answers/${answerId}/delete`)
         .then(() => {
-          setQuestions(questions.filter((q) => q.id !== questionId));
+          setAnswers(answers.filter((a) => a.id !== answerId));
+          console.log(`Deleted answer with ID: ${answerId}`);
         })
         .catch((error) => {
-          console.error("Error deleting question: ", error);
+          console.error("Error deleting answer: ", error);
         });
     }
   };
 
-  const handleInputChange = (e) => {
-    setNewQuestion(e.target.value);
+  const handleAnswerChange = (questionId, value) => {
+    setNewAnswer((prev) => ({ ...prev, [questionId]: value }));
   };
 
-  const handleSubmit = () => {
-    // 질문 제출 로직
-    if (newQuestion.trim()) {
+  const handleSubmitAnswer = (questionId) => {
+    if (newAnswer[questionId]?.trim()) {
       api
-        .post(`/qa/${qaId}/questions`, { question: newQuestion })
+        .post(`/qa/${qaId}/answers/create`, {
+          answer: newAnswer[questionId],
+          questionId,
+        })
         .then((response) => {
-          console.log(response.data);
-          setQuestions([
-            ...questions,
-            { id: response.data.id, userId: user.id, question: newQuestion },
+          setAnswers([
+            ...answers,
+            {
+              id: response.data.id,
+              userId: user.id,
+              answer: newAnswer[questionId],
+              questionId,
+            },
           ]);
-          setNewQuestion("");
+          setNewAnswer((prev) => ({ ...prev, [questionId]: "" }));
+          console.log("Posted new answer: ", response.data);
         })
         .catch((error) => {
-          console.error("Error posting question: ", error);
+          console.error("Error posting answer: ", error.message); // 에러 메시지 출력
         });
     }
   };
 
   const handleEndChat = () => {
-    // 대화 종료 로직
     navigate(-1); // 뒤로가기
   };
 
@@ -102,28 +110,55 @@ const QnaDetail = () => {
         <h2 className="text-3xl font-bold">QnaDetail 페이지</h2>
       </div>
 
-      {user.id === questions[0]?.userId && (
+      {questions.length > 0 && (
         <div className="mt-6 flex flex-col flex-grow">
           <div className="overflow-y-auto max-h-80 mb-4">
-            <QnaDetailList
-              user={user}
-              questions={questions}
-              handleDelete={handleDelete}
-            />
+            {questions[0] && (
+              <div key={questions[0].id} className="relative mb-4 group">
+                <div className="relative flex-1 ml-4 bg-white rounded-lg p-3 shadow-lg mt-10 mr-4 border-2 border-black">
+                  <button className="text-pink-600 w-full hover:underline text-left">
+                    {questions[0].question}
+                  </button>
+                  <div className="absolute top-1/2 transform -translate-y-1/2 right-[-10px] w-0 h-0 border-t-[12px] border-t-transparent border-l-[23px] border-l-white border-b-[12px] border-b-transparent"></div>
+                </div>
+              </div>
+            )}
+
+            {answers.map((answer) => (
+              <div key={answer.id} className="ml-12 mt-2">
+                <div className="relative flex-1 bg-gray-100 rounded-lg p-3 shadow-lg border-2 border-black">
+                  <button className="text-black w-full hover:underline text-left">
+                    {answer.answer}
+                  </button>
+                  {user.id === answer.userId && (
+                    <button
+                      onClick={() => handleDeleteAnswer(answer.id)}
+                      className="absolute top-3 right-3 p-1 text-red-500 rounded-full transition-opacity duration-200"
+                      style={{ opacity: 1 }}
+                    >
+                      <FaTrashAlt className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
+
           <div className="flex">
             <input
               type="text"
-              value={newQuestion}
-              onChange={handleInputChange}
+              value={newAnswer[questions[0].id] || ""}
+              onChange={(e) =>
+                handleAnswerChange(questions[0].id, e.target.value)
+              }
               className="w-full p-2 border rounded"
-              placeholder="새 질문을 입력하세요"
+              placeholder="답변을 입력하세요"
             />
             <button
-              onClick={handleSubmit}
-              className="ml-2 p-2 bg-pink-500 text-white rounded flex-shrink-0"
+              onClick={() => handleSubmitAnswer(questions[0].id)}
+              className="ml-2 p-2 bg-blue-500 text-white rounded flex-shrink-0"
             >
-              질문하기
+              답변하기
             </button>
             <button
               onClick={handleEndChat}

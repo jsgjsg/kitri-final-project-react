@@ -1,16 +1,30 @@
+import React from "react";
 import QnaDetailItem from "./QnaDetailItem";
-// 받은 데이터를 map으로 출력
-// 데이터 키의 answer이 존재하면!! 다르게 나타내기
-const QnaDetailList = ({ user, questions, handleDelete }) => {
+
+// QnA 리스트 컴포넌트
+const QnaDetailList = ({
+  user,
+  questions,
+  answers,
+  handleDeleteQuestion,
+  handleDeleteAnswer,
+  handleSubmitAnswer,
+  newAnswer,
+  handleAnswerChange,
+}) => {
   return (
     <div className="">
       {questions.map((question) => (
-        <div>
+        <div key={question.id}>
           <QnaDetailItem
-            key={question.id}
             question={question}
+            answers={answers}
             user={user}
-            handleDelete={handleDelete}
+            handleDeleteQuestion={handleDeleteQuestion}
+            handleDeleteAnswer={handleDeleteAnswer}
+            handleSubmitAnswer={handleSubmitAnswer}
+            newAnswer={newAnswer}
+            handleAnswerChange={handleAnswerChange}
           />
         </div>
       ))}
