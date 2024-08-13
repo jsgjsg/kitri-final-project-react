@@ -13,15 +13,30 @@ const FriendsPage = () => {
   const [sentRequests, setSentRequests] = useState([]);
 
   useEffect(() => {
+    getFriends(); // 친구 목록 가져오기
+    getReceived(); // 받은 요청 가져오기
+    getSent(); // 보낸 요청 가져오기
+  }, []);
+
+  useEffect(() => {
+    if(activeTab == "addFriend") return;
+    if(activeTab == "friendsList") return getFriends();
+    if(activeTab == "requests") return getReceived();
+    if(activeTab == "sentRequests") return getSent();
+  }, [activeTab])
+
+  const getFriends = () => {
     // 친구 목록 가져오기
     api.get("/friends")
-      .then(response => {
-        setFriends(response.data);
-      })
-      .catch((error) => {
-        console.error("Error: ", error);
-      });
-    
+    .then(response => {
+      setFriends(response.data);
+    })
+    .catch((error) => {
+      console.error("Error: ", error);
+    });
+  }
+
+  const getReceived = () => {
     // 받은 요청 가져오기
     api.get("/friends/requests/received")
       .then(response => {
@@ -30,32 +45,90 @@ const FriendsPage = () => {
       .catch((error) => {
         console.error("Error: ", error);
       });
+  }
 
+  const getSent = () => {
     // 보낸 요청 가져오기
     api.get("/friends/requests/sent")
       .then(response => {
         setSentRequests(response.data);
+        console.log(sentRequests);
       })
       .catch((error) => {
         console.error("Error: ", error);
       });
-
-  }, []);
+  }
 
   const renderContent = () => {
     switch (activeTab) {
       case "friendsList":
-        return <FriendsList friends={friends} />;
+        return <FriendsList friends={friends} handleDeleteFriend={handleDeleteFriend}/>;
       case "addFriend":
         return <SearchFriends />;
       case "requests":
-        return <ReceivedRequestsList receiveRequests={receiveRequests} />;
+        return <ReceivedRequestsList
+          receiveRequests={receiveRequests}
+          handleAcceptRequest={handleAcceptRequest}
+          handleRejectRequest={handleRejectRequest}
+        />;
       case "sentRequests":
-        return <SentRequestsList sentRequests={sentRequests} />;
+        return <SentRequestsList sentRequests={sentRequests} handleCancelRequest={handleCancelRequest}/>;
       default:
         return <p>버튼을 눌러서 해당 내용을 확인하세요.</p>;
     }
   };
+
+  // 친구 요청 취소
+  const handleCancelRequest = (requestId) => {
+    api.delete(`/friends/requests/sent/${requestId}`)
+    .then(response => {
+      setSentRequests(sentRequests.filter(request => request.id !== requestId))
+      console.log(response.data);
+      alert("요청 취소 완료");
+    })
+    .catch((error) => {
+      console.error("검색 중 오류 발생:", error);
+    });
+  }
+
+  // 요청 수락
+  const handleAcceptRequest = (requestId) => {
+    api.post(`/friends/requests/received/${requestId}/accept`)
+    .then(response => {
+      console.log(response.data);
+      alert("친구가 추가되었습니다.")
+      setReceiveRequests(receiveRequests.filter(receiveReq => receiveReq.id !== requestId));
+    })
+    .catch((error) => {
+      console.error("Error: ", error);
+    });
+  }
+
+  // 요청 거절
+  const handleRejectRequest = (requestId) => {
+    api.delete(`/friends/requests/received/${requestId}/reject`)
+    .then(response => {
+      console.log(response.data);
+      alert("거절되었습니다.");
+      setReceiveRequests(receiveRequests.filter(receiveReq => receiveReq.id !== requestId));
+    })
+    .catch((error) => {
+      console.error("Error: ", error);
+    });
+  }
+
+  // 친구 삭제
+  const handleDeleteFriend = (friendId) => {
+    api.delete(`/friends/${friendId}/delete`)
+    .then(response => {
+      console.log(response.data);
+      alert("친구 삭제 되었습니다.");
+      setFriends(friends.filter(friend => friend.id !== friendId));
+    })
+    .catch((error) => {
+      console.error("Error: ", error);
+    });
+  }
 
   return (
     <div className="flex flex-col items-center w-full font-doodle relative bg-gray-100 p-6">
