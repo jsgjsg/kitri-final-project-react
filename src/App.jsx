@@ -28,6 +28,8 @@ import QnaForm from "./components/qna/QnaForm";
 import QnaDetail from "./components/qna/QnaDetail";
 import FriendsPage from "./components/pages/FriendsPage";
 import EditProfilePage from "./components/pages/EditProfilePage";
+import InquiryList from "./components/inquiry/IncuiryList";
+import InquiryDetail from "./components/inquiry/IncuiryDetail";
 
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -57,6 +59,8 @@ function App() {
             <Route path="/qna/detail/:qaId" element={<QnaDetail />} />
             <Route path="/myPage" element={<MyPage />} />
             <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/inquiry" element={<InquiryList />} />
+            <Route path="/inquiry/:id" element={<InquiryDetail />} />
           </Routes>
         </main>
 
