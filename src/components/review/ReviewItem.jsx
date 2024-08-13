@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ReviewComment from "./ReviewComment";
 import {
@@ -13,14 +13,15 @@ import api from "../../api/api"; // api 객체 추가
 const ReviewItem = ({ user, review }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMe, setIsMe] = useState(false);
-  const [liked, setLiked] = useState(review.initialLiked); // liked 상태 추가
-  const [likeCount, setLikeCount] = useState(review.initialLikeCount); // likeCount 상태 추가
+  const [liked, setLiked] = useState(false); // liked 상태 추가
+  const [likeCount, setLikeCount] = useState(0); // likeCount 상태 추가
   const navigate = useNavigate();
-  const {
-    reviewWithUser,
-    likeCount: initialLikeCount,
-    liked: initialLiked,
-  } = review;
+  const { reviewWithUser } = review;
+
+  useEffect(() => {
+    setLiked(review.liked);
+    setLikeCount(review.likeCount);
+  }, [review]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -40,16 +41,17 @@ const ReviewItem = ({ user, review }) => {
     });
   };
 
-  if (!isMe && user.id === reviewWithUser.userId) {
-    setIsMe(true); // !isMe를 하지 않으면 무한 렌더링
-    console.log(isMe);
-  }
+  useEffect(() => {
+    if (!isMe && user.id === reviewWithUser.userId) {
+      setIsMe(true);
+    }
+  }, [user.id, reviewWithUser.userId, isMe]);
 
   const handleLikeToggle = () => {
     const newLiked = !liked;
 
     api
-      .post(`/feeds/${reviewWithUser.id}/like`, { liked: newLiked })
+      .post(`/reviews/${reviewWithUser.id}/like`)
       .then((response) => {
         setLikeCount(response.data);
         setLiked(newLiked);
@@ -114,7 +116,7 @@ const ReviewItem = ({ user, review }) => {
           className="flex items-center space-x-1 text-red-500 p-2 rounded transition-colors mr-3 hover:bg-red-200"
         >
           {liked ? <FaHeart /> : <FaRegHeart />}
-          {likeCount && <span className="ml-1">{likeCount}</span>}
+          <span className="ml-1">{likeCount}</span>
         </button>
         <button
           onClick={handleOpenModal}
