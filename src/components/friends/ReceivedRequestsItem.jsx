@@ -1,6 +1,6 @@
 import React from "react";
 
-const ReceivedRequestsItem = ({ request }) => {
+const ReceivedRequestsItem = ({ request, handleAcceptRequest, handleRejectRequest }) => {
   return (
     <li className="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-md">
       <div className="flex items-center">
@@ -17,10 +17,16 @@ const ReceivedRequestsItem = ({ request }) => {
         </div>
       </div>
       <div>
-        <button className="bg-green-500 text-white p-2 rounded mr-2 hover:bg-green-600">
+        <button
+          className="bg-green-500 text-white p-2 rounded mr-2 hover:bg-green-600"
+          onClick={() => handleAcceptRequest(request.id)}
+        >
           수락
         </button>
-        <button className="bg-red-500 text-white p-2 rounded hover:bg-red-600">
+        <button
+          className="bg-red-500 text-white p-2 rounded hover:bg-red-600"
+          onClick={() => handleRejectRequest(request.id)}
+        >
           거절
         </button>
       </div>

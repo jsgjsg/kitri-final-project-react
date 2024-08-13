@@ -1,4 +1,4 @@
-const FriendsItem = ({ friend }) => {
+const FriendsItem = ({ friend, handleDeleteFriend }) => {
   return (
     <li className="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-md">
       <div className="flex items-center">
@@ -15,7 +15,10 @@ const FriendsItem = ({ friend }) => {
         </div>
       </div>
       {/* 추가적인 작업을 위한 버튼 (예: 친구 삭제) */}
-      <button className="text-red-500 hover:text-red-700">
+      <button
+        className="text-red-500 hover:text-red-700"
+        onClick={() => handleDeleteFriend(friend.id)}
+      >
         삭제
       </button>
     </li>

@@ -9,6 +9,7 @@ const SearchFriends = () => {
     api
       .post("/friends/search-nickname", searchTerm) // 검색어를 API 요청에 사용
       .then((response) => {
+        console.log(response.data);
         response.data.nickname != null
           ? setSearchResult(response.data)
           : setSearchResult(null); // 응답 데이터를 상태에 저장
@@ -18,12 +19,16 @@ const SearchFriends = () => {
       });
   };
 
+  // 친구 요청
   const handleAddFriend = (friendId) => {
     api
-      .post("/friends/requests", { friendId }) // 친구 요청 API 호출
+      .post("/friends/requests", friendId) // 친구 요청 API 호출
       .then((response) => {
         console.log(response.data);
-        alert(response.data.message); // 요청이 성공하면 알림 표시
+        alert("친구 요청 완료"); // 요청이 성공하면 알림 표시
+        
+        setSearchTerm("");
+        setSearchResult({...searchResult, relationship: "Sent"});
         // 친구 요청 후 검색 결과를 초기화하거나 업데이트할 수 있습니다.
       })
       .catch((error) => {
@@ -36,6 +41,8 @@ const SearchFriends = () => {
     switch (relationship) {
       case "Friend":
         return "친구";
+      case "Me":
+        return "나";
       case "Sent":
         return "요청 보냄";
       case "Received":
@@ -90,7 +97,7 @@ const SearchFriends = () => {
                 </div>
                 <button
                   className={`${
-                    searchResult.relationship === "Friend"
+                    searchResult.relationship === "Friend" || searchResult.relationship === "Me"
                       ? "text-gray-500"
                       : searchResult.relationship === "Sent"
                       ? "text-yellow-500"
@@ -99,7 +106,7 @@ const SearchFriends = () => {
                       : "text-blue-500"
                   } hover:text-blue-700`}
                   onClick={() => {
-                    if (searchResult.relationship === "Friend") {
+                    if (searchResult.relationship !== "Nothing") {
                       return;
                     }
                     handleAddFriend(searchResult.id);

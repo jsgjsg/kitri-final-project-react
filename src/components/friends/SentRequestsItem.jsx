@@ -1,6 +1,6 @@
 import React from "react";
 
-const SentRequestsItem = ({ request }) => {
+const SentRequestsItem = ({ request, handleCancelRequest }) => {
   return (
     <li className="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-md">
       <div className="flex items-center">
@@ -16,7 +16,12 @@ const SentRequestsItem = ({ request }) => {
           <p className="text-gray-500">"{request.introduce}"</p>
         </div>
       </div>
-      <span className="text-blue-500">요청 보냄</span>
+      <button
+        onClick={() => handleCancelRequest(request.id)} // 요청 ID를 전달
+        className="text-red-500 hover:text-red-700"
+      >
+        요청 취소
+      </button>
     </li>
   );
 };
