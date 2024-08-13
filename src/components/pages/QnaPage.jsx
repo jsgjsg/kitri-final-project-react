@@ -93,7 +93,7 @@ const QnA = () => {
     if (!showMyQnas) {
       fetchMyQnas();
     } else {
-      fetchQnas();
+      window.location.reload();
     }
   };
 
