@@ -28,6 +28,7 @@ import QnaForm from "./components/qna/QnaForm";
 import QnaDetail from "./components/qna/QnaDetail";
 import FriendsPage from "./components/pages/FriendsPage";
 import EditProfilePage from "./components/pages/EditProfilePage";
+import SocketTest from "./components/SocketTest";
 
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -57,6 +58,7 @@ function App() {
             <Route path="/qna/detail/:qaId" element={<QnaDetail />} />
             <Route path="/myPage" element={<MyPage />} />
             <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/scTest" element={<SocketTest />} />
           </Routes>
         </main>
 
@@ -66,6 +68,17 @@ function App() {
             isNavOpen ? "translate-x-0" : "translate-x-full"
           } transition-transform z-40`}
         >
+          <NavLink
+            to="/scTest"
+            className={({ isActive }) =>
+              isActive
+                ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
+                : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
+            }
+          >
+            <AiOutlineAppstore className="text-2xl mr-2" />
+            <span className="flex-grow">채팅 Test</span>
+          </NavLink>
           <NavLink
             to="/feed"
             className={({ isActive }) =>
