@@ -208,20 +208,22 @@ const EditAnimalForm = ({ animal, onSave, onDelete, onCancel }) => {
         />
         <span className="ml-2 text-xl text-gray-500">kg</span>
       </div>
-      <button
-        className="flex items-center justify-center w-full bg-pastel-blue text-black p-4 rounded border-4 border-black hover:bg-pastel-blue-light"
-        onClick={handleSaveAnimal}
-      >
-        <FaUserEdit className="mr-2 text-2xl" />
-        <span className="text-xl">저장</span>
-      </button>
-      <button
-        className="flex items-center justify-center w-full bg-red-500 text-white p-4 rounded border-4 border-black hover:bg-red-700"
-        onClick={handleDeleteAnimal}
-      >
-        <FaTrashAlt className="mr-2 text-2xl" />
-        <span className="text-xl">삭제</span>
-      </button>
+      <div className="flex justify-between space-x-2">
+        <button
+          className="flex items-center justify-center w-1/2 bg-pastel-blue text-black p-4 rounded border-4 border-black hover:bg-pastel-blue-light"
+          onClick={handleSaveAnimal}
+        >
+          <FaUserEdit className="mr-2 text-2xl" />
+          <span className="text-xl">저장</span>
+        </button>
+        <button
+          className="flex items-center justify-center w-1/2 bg-red-500 text-white p-4 rounded border-4 border-black hover:bg-red-700"
+          onClick={handleDeleteAnimal}
+        >
+          <FaTrashAlt className="mr-2 text-2xl" />
+          <span className="text-xl">삭제</span>
+        </button>
+      </div>
       <button
         className="flex items-center justify-center w-full bg-gray-300 text-black p-4 rounded border-4 border-black hover:bg-gray-400"
         onClick={onCancel}
