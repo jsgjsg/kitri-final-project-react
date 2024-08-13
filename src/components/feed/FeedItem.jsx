@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import FeedComment from "./FeedComment";
 import {
@@ -23,6 +23,11 @@ const FeedItem = ({ user, feed }) => {
   const [liked, setLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
 
+  useEffect(() => {
+    setLiked(initialLiked);
+    setLikeCount(initialLikeCount);
+  }, [initialLiked, initialLikeCount]);
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -41,9 +46,11 @@ const FeedItem = ({ user, feed }) => {
     });
   };
 
-  if (!isMe && user.id === feedWithUser.userId) {
-    setIsMe(true); // !isMe를 하지 않으면 무한 렌더링
-  }
+  useEffect(() => {
+    if (!isMe && user.id === feedWithUser.userId) {
+      setIsMe(true);
+    }
+  }, [user.id, feedWithUser.userId, isMe]);
 
   const handleLikeToggle = () => {
     const newLiked = !liked;
@@ -109,7 +116,7 @@ const FeedItem = ({ user, feed }) => {
           className="flex items-center space-x-1 text-red-500 p-2 rounded transition-colors mr-3 hover:bg-red-200"
         >
           {liked ? <FaHeart /> : <FaRegHeart />}
-          {likeCount && <span className="ml-1">{likeCount}</span>}
+          <span className="ml-1">{likeCount}</span>
         </button>
         <button
           onClick={handleOpenModal}
