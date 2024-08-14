@@ -1,16 +1,17 @@
-// src/components/AnswerList.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../../api/api";
 
 function InquiryAnswerList({ answers, setAnswers }) {
   const [editAnswerId, setEditAnswerId] = useState(null);
   const [editAnswerText, setEditAnswerText] = useState("");
 
+  useEffect(() => {
+    setEditAnswerId(null);
+    setEditAnswerText("");
+  }, [answers]);
+
   const handleEditAnswer = async (answerId) => {
-    if (!answerId) {
-      console.error("Error: answerId is null or undefined");
-      return;
-    }
+    if (!answerId || !editAnswerText.trim()) return;
 
     try {
       await api.put(`/inquiry/answer/${answerId}/update`, {
@@ -27,13 +28,15 @@ function InquiryAnswerList({ answers, setAnswers }) {
       setEditAnswerText("");
     } catch (error) {
       console.error(
-        "Error updating answer:",
+        "답변 업데이트 중 오류 발생:",
         error.response ? error.response.data : error.message
       );
     }
   };
 
   const handleDeleteAnswer = async (answerId) => {
+    if (!answerId) return;
+
     try {
       await api.delete(`/inquiry/answer/${answerId}/delete`);
       setAnswers((prevAnswers) =>
@@ -41,7 +44,7 @@ function InquiryAnswerList({ answers, setAnswers }) {
       );
     } catch (error) {
       console.error(
-        "Error deleting answer:",
+        "답변 삭제 중 오류 발생:",
         error.response ? error.response.data : error.message
       );
     }
@@ -49,7 +52,7 @@ function InquiryAnswerList({ answers, setAnswers }) {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-2">문의답변</h2>
+      <h2 className="text-xl font-semibold mb-2">문의 답변</h2>
       <ul className="space-y-4 mb-4">
         {answers.map((answer) => (
           <li
@@ -66,9 +69,9 @@ function InquiryAnswerList({ answers, setAnswers }) {
                   />
                   <button
                     onClick={() => handleEditAnswer(answer.id)}
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                    className="px-4 py-2 bg-gradient-to-b from-purple-300 to-purple-100 text-white rounded-lg hover:from-purple-200 hover:to-purple-50 transition duration-300"
                   >
-                    Save
+                    저장
                   </button>
                 </div>
               ) : (
@@ -86,7 +89,7 @@ function InquiryAnswerList({ answers, setAnswers }) {
                   onClick={() => setEditAnswerId(null)}
                   className="text-gray-600 text-sm hover:underline"
                 >
-                  Cancel
+                  취소
                 </button>
               ) : (
                 <button
@@ -96,14 +99,14 @@ function InquiryAnswerList({ answers, setAnswers }) {
                   }}
                   className="text-blue-600 text-sm hover:underline"
                 >
-                  Edit
+                  수정
                 </button>
               )}
               <button
                 onClick={() => handleDeleteAnswer(answer.id)}
                 className="text-red-600 text-sm hover:underline"
               >
-                Delete
+                삭제
               </button>
             </div>
           </li>

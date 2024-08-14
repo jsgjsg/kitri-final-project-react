@@ -1,150 +1,221 @@
-// EditInquiry.js
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../../api/api"; // 설정한 axios 인스턴스
-import { storage } from "../../../firebaseConfig";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import api from "../../api/api";
+import InquiryAnswerList from "./InquiryAnswerList";
 
-function EditInquiry() {
+function InquiryDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [inquiry, setInquiry] = useState("");
-  const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
-  const [currentImageUrl, setCurrentImageUrl] = useState("");
+  const [inquiry, setInquiry] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [newAnswer, setNewAnswer] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState("");
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [editingAnswerId, setEditingAnswerId] = useState(null);
+  const [editedAnswer, setEditedAnswer] = useState("");
 
   useEffect(() => {
     const fetchInquiry = async () => {
       try {
         const response = await api.get(`/inquiry/${id}`);
-        setTitle(response.data.title);
-        setInquiry(response.data.inquiry);
-        setCurrentImageUrl(response.data.image);
-        setImageUrl(response.data.image);
+        setInquiry(response.data);
       } catch (error) {
-        console.error("Error fetching inquiry:", error);
+        console.error(
+          "Error fetching inquiry:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    };
+
+    const fetchAnswers = async () => {
+      try {
+        const response = await api.get(`/inquiry/answer/${id}`);
+        setAnswers(response.data);
+      } catch (error) {
+        console.error(
+          "Error fetching answers:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    };
+
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await api.get("/users/me");
+        setCurrentUserId(response.data.id);
+      } catch (error) {
+        console.error(
+          "Error fetching current user data:",
+          error.response ? error.response.data : error.message
+        );
       }
     };
 
     fetchInquiry();
+    fetchAnswers();
+    fetchCurrentUser();
   }, [id]);
 
-  const handleImageChange = (e) => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
-  };
-
-  const handleUpload = () => {
-    return new Promise((resolve, reject) => {
-      if (image) {
-        const storageRef = ref(storage, `images/${image.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, image);
-
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            // Progress function (optional)
-            console.log("Upload is in progress...");
-          },
-          (error) => {
-            console.error("Upload error:", error);
-            reject(error);
-          },
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setImageUrl(downloadURL);
-              resolve(downloadURL);
-            });
-          }
-        );
-      } else {
-        resolve(imageUrl);
-      }
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let uploadedImageUrl = imageUrl;
-
-    if (image) {
-      try {
-        uploadedImageUrl = await handleUpload();
-      } catch (error) {
-        console.error("Image upload failed:", error);
-        alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
-        return;
-      }
-    }
-
+  const handleAddAnswer = async () => {
     try {
-      await api.put(`/inquiry/${id}/update`, {
-        title,
-        inquiry,
-        image: uploadedImageUrl,
+      const response = await api.post(`/inquiry/answer/${id}/create`, {
+        inquiryAnswer: newAnswer,
       });
-      navigate(`/inquiry/${id}`); // Redirect back to the inquiry detail page
+      setAnswers([...answers, response.data]);
+      setNewAnswer("");
     } catch (error) {
-      console.error("Error updating inquiry:", error);
-      alert("문의 수정에 실패했습니다. 다시 시도해주세요.");
+      console.error(
+        "Error adding answer:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+  const handleEditAnswer = async (answerId) => {
+    try {
+      const response = await api.put(`/inquiry/answer/${answerId}/update`, {
+        inquiryAnswer: editedAnswer,
+      });
+      setAnswers(
+        answers.map((answer) =>
+          answer.id === answerId ? response.data : answer
+        )
+      );
+      setEditingAnswerId(null);
+      setEditedAnswer("");
+    } catch (error) {
+      console.error(
+        "Error editing answer:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+  const openModal = (imageUrl) => {
+    setModalImageUrl(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalImageUrl("");
+  };
+
+  const handleDeleteInquiry = async () => {
+    if (window.confirm("정말 삭제하시겠어요?")) {
+      try {
+        await api.delete(`/inquiry/${id}/delete`);
+        navigate("/inquiry"); // Redirect after deletion
+      } catch (error) {
+        console.error(
+          "Error deleting inquiry:",
+          error.response ? error.response.data : error.message
+        );
+      }
     }
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Edit Inquiry</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="container mx-auto p-6 max-w-3xl bg-white shadow-lg rounded-lg relative">
+      {inquiry ? (
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Title
-          </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
+              {inquiry.title}
+            </h1>
+            <div className="flex space-x-4">
+              {currentUserId === inquiry.userId && (
+                <>
+                  <button
+                    onClick={handleDeleteInquiry}
+                    className="text-red-600 text-sm font-medium hover:underline"
+                  >
+                    삭제
+                  </button>
+                  <button
+                    onClick={() => navigate(`/inquiry/${id}/edit`)}
+                    className="text-blue-600 text-sm font-medium hover:underline"
+                  >
+                    수정
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+          <div className="border-t border-gray-200 pt-6 mb-6">
+            <p className="text-lg text-gray-700">{inquiry.inquiry}</p>
+            {inquiry.image && (
+              <img
+                src={inquiry.image}
+                alt="inquiry"
+                className="w-full max-w-md h-auto mb-6 rounded-lg shadow-md cursor-pointer transition-transform duration-300 transform hover:scale-95"
+                onClick={() => openModal(inquiry.image)}
+              />
+            )}
+          </div>
+          <p className="text-sm text-gray-500 mb-6">
+            <strong>게시일:</strong>{" "}
+            {new Date(inquiry.createdAt).toLocaleDateString()}
+          </p>
+          <hr className="my-6 border-gray-200" />
+          <InquiryAnswerList
+            answers={answers}
+            setAnswers={setAnswers}
+            setEditingAnswerId={setEditingAnswerId}
+            setEditedAnswer={setEditedAnswer}
+            handleEditAnswer={handleEditAnswer}
+            editingAnswerId={editingAnswerId}
+            editedAnswer={editedAnswer}
           />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Inquiry
-          </label>
-          <textarea
-            value={inquiry}
-            onChange={(e) => setInquiry(e.target.value)}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Image
-          </label>
-          <input
-            type="file"
-            onChange={handleImageChange}
-            className="mt-1 block w-full text-sm text-gray-700"
-          />
-          {currentImageUrl && (
-            <img
-              src={currentImageUrl}
-              alt="Current"
-              className="mt-2 w-32 h-auto object-cover"
+          <div className="mt-8">
+            <h3 className="text-xl font-semibold mb-4">답변 작성</h3>
+            <textarea
+              value={newAnswer}
+              onChange={(e) => setNewAnswer(e.target.value)}
+              placeholder="관리자만 기입 가능합니다. 추가 질문 있을 시 새로 작성해주세요."
+              className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <button
+              onClick={handleAddAnswer}
+              className="mt-4 px-4 py-2 text-white rounded-lg transition-transform transform hover:scale-105"
+              style={{
+                background: "linear-gradient(to bottom, #e9d7f0, #c6a9e0)",
+              }}
+            >
+              답변 추가
+            </button>
+          </div>
+          {isModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+              <div className="relative bg-white rounded-lg p-6 max-w-3xl mx-auto">
+                <img
+                  src={modalImageUrl}
+                  alt="Full Size"
+                  className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+                />
+                <button
+                  onClick={closeModal}
+                  className="absolute top-4 right-4 text-gray-800 text-3xl bg-white p-2 rounded-full hover:bg-gray-200"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
           )}
+          {/* Go Back Button */}
+          <button
+            onClick={() => navigate(-1)}
+            className="fixed bottom-6 right-6 bg-gradient-to-b from-purple-400 to-purple-100 text-white px-4 py-2 rounded-lg shadow-md hover:from-purple-300 hover:to-purple-50 transition duration-300"
+          >
+            돌아가기
+          </button>
         </div>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Update Inquiry
-        </button>
-      </form>
+      ) : (
+        <p className="text-center text-gray-500">Loading...</p>
+      )}
     </div>
   );
 }
 
-export default EditInquiry;
+export default InquiryDetail;
