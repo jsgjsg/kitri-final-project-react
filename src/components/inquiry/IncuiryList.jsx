@@ -21,7 +21,15 @@ function InquiryList() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Inquiries</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">문의</h1>
+        <Link
+          to="/create-inquiry"
+          className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        >
+          작성
+        </Link>
+      </div>
       <ul className="space-y-4">
         {inquiries.map((inquiry) => (
           <li
