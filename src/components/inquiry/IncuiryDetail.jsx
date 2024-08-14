@@ -12,6 +12,8 @@ function InquiryDetail() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [editingAnswerId, setEditingAnswerId] = useState(null);
+  const [editedAnswer, setEditedAnswer] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -21,7 +23,10 @@ function InquiryDetail() {
         setInquiry(response.data);
       } catch (error) {
         setErrorMessage("문의 정보를 가져오는 중 오류가 발생했습니다.");
-        console.error(error);
+        console.error(
+          "Error fetching inquiry:",
+          error.response ? error.response.data : error.message
+        );
       }
     };
 
@@ -31,7 +36,10 @@ function InquiryDetail() {
         setAnswers(response.data);
       } catch (error) {
         setErrorMessage("답변을 가져오는 중 오류가 발생했습니다.");
-        console.error(error);
+        console.error(
+          "Error fetching answers:",
+          error.response ? error.response.data : error.message
+        );
       }
     };
 
@@ -41,7 +49,10 @@ function InquiryDetail() {
         setCurrentUserId(response.data.id);
       } catch (error) {
         setErrorMessage("사용자 정보를 가져오는 중 오류가 발생했습니다.");
-        console.error(error);
+        console.error(
+          "Error fetching current user data:",
+          error.response ? error.response.data : error.message
+        );
       }
     };
 
@@ -65,7 +76,36 @@ function InquiryDetail() {
       setErrorMessage("");
     } catch (error) {
       setErrorMessage("답변 추가 중 오류가 발생했습니다.");
-      console.error(error);
+      console.error(
+        "Error adding answer:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+  const handleEditAnswer = async (answerId) => {
+    if (!editedAnswer.trim()) {
+      setErrorMessage("답변을 입력해주세요.");
+      return;
+    }
+
+    try {
+      const response = await api.put(`/inquiry/answer/${answerId}/update`, {
+        inquiryAnswer: editedAnswer,
+      });
+      setAnswers((prevAnswers) =>
+        prevAnswers.map((answer) =>
+          answer.id === answerId ? response.data : answer
+        )
+      );
+      setEditingAnswerId(null);
+      setEditedAnswer("");
+    } catch (error) {
+      setErrorMessage("답변 수정 중 오류가 발생했습니다.");
+      console.error(
+        "Error editing answer:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -86,7 +126,10 @@ function InquiryDetail() {
         navigate("/inquiry");
       } catch (error) {
         setErrorMessage("문의 삭제 중 오류가 발생했습니다.");
-        console.error(error);
+        console.error(
+          "Error deleting inquiry:",
+          error.response ? error.response.data : error.message
+        );
       }
     }
   };
@@ -139,7 +182,15 @@ function InquiryDetail() {
             {new Date(inquiry.createdAt).toLocaleDateString()}
           </p>
           <hr className="my-6 border-gray-200" />
-          <InquiryAnswerList answers={answers} setAnswers={setAnswers} />
+          <InquiryAnswerList
+            answers={answers}
+            setAnswers={setAnswers}
+            setEditingAnswerId={setEditingAnswerId}
+            setEditedAnswer={setEditedAnswer}
+            handleEditAnswer={handleEditAnswer}
+            editingAnswerId={editingAnswerId}
+            editedAnswer={editedAnswer}
+          />
           <div className="mt-8">
             <h3 className="text-xl font-semibold mb-4">답변 작성</h3>
             <textarea
@@ -152,7 +203,7 @@ function InquiryDetail() {
               onClick={handleAddAnswer}
               className="mt-4 px-4 py-2 text-white rounded-lg transition-transform transform hover:scale-105"
               style={{
-                background: "linear-gradient(to bottom, #c6a9e0, #e9d7f0)",
+                background: "linear-gradient(to bottom, #e9d7f0, #c6a9e0)",
               }}
             >
               답변 추가
