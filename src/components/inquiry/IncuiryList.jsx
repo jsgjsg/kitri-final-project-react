@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/api"; // 설정한 axios 인스턴스
 
 function InquiryList() {
@@ -7,6 +7,7 @@ function InquiryList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalInquiries, setTotalInquiries] = useState(0);
   const [pageSize, setPageSize] = useState(10); // Default page size
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchInquiries = async () => {
@@ -42,6 +43,10 @@ function InquiryList() {
     }
   };
 
+  const handleInquiryClick = (id) => {
+    navigate(`/inquiry/${id}`);
+  };
+
   return (
     <div className="container mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-lg">
       <div className="flex items-center justify-between mb-6 bg-white p-4 rounded-lg">
@@ -60,14 +65,12 @@ function InquiryList() {
         {inquiries.map((inquiry) => (
           <li
             key={inquiry.id}
-            className="border border-gray-300 p-4 rounded-lg bg-white shadow-sm hover:shadow-md transition duration-300 ease-in-out"
+            onClick={() => handleInquiryClick(inquiry.id)}
+            className="border border-gray-300 p-4 rounded-lg bg-white shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer"
           >
-            <Link
-              to={`/inquiry/${inquiry.id}`}
-              className="text-lg font-semibold text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out"
-            >
+            <h2 className="text-lg font-semibold text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">
               {inquiry.title}
-            </Link>
+            </h2>
             <p className="text-sm text-gray-500 mt-2">
               {new Date(inquiry.createdAt).toLocaleDateString()}
             </p>
