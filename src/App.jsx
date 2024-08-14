@@ -30,6 +30,8 @@ import FriendsPage from "./components/pages/FriendsPage";
 import EditProfilePage from "./components/pages/EditProfilePage";
 import InquiryList from "./components/inquiry/IncuiryList";
 import InquiryDetail from "./components/inquiry/IncuiryDetail";
+import CreateInquiry from "./components/inquiry/createIncuiry";
+import EditInquiry from "./components/inquiry/EditInquiry";
 import SocketTest from "./components/SocketTest";
 
 function App() {
@@ -62,6 +64,8 @@ function App() {
             <Route path="/friends" element={<FriendsPage />} />
             <Route path="/inquiry" element={<InquiryList />} />
             <Route path="/inquiry/:id" element={<InquiryDetail />} />
+            <Route path="/create-inquiry" element={<CreateInquiry />} />
+            <Route path="/inquiry/:id/edit" element={<EditInquiry />} />
             <Route path="/scTest" element={<SocketTest />} />
           </Routes>
         </main>
