@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import ReviewFilter from "../review/ReviewFilter";
 import ReviewList from "../review/ReviewList";
 import api from "../../api/api";
+import Modal from "react-modal";
+import ReviewForm from "../review/ReviewForm";
 import {
   FaPlus,
   FaUser,
@@ -26,6 +28,7 @@ const Review = () => {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [showMyreviews, setShowMyreviews] = useState(false);
   const [columns, setColumns] = useState(3); // 기본적으로 3줄 보기로 설정
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,9 +69,17 @@ const Review = () => {
       });
   };
 
-  const handleAddreview = () => {
-    navigate("/review/form");
+  const handleAddReview = () => {
+    setIsModalOpen(true); // 모달 열기
   };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // 모달 닫기
+  };
+
+  // const handleAddReview = () => {
+  //   navigate("/review/form");
+  // };
 
   const handleMyreviews = () => {
     setShowMyreviews(!showMyreviews);
@@ -168,9 +179,10 @@ const Review = () => {
         </button>
         <button
           className="bg-blue-500 text-white px-4 py-2 text-lg rounded-lg hover:bg-blue-600 transition-colors flex items-center"
-          onClick={handleAddreview}
+          onClick={handleAddReview}
         >
           <FaPlus className="mr-2" />
+          <span>추가하기</span>
         </button>
       </div>
       {/* Refresh Button */}
@@ -260,6 +272,16 @@ const Review = () => {
           <ReviewList user={user} reviews={reviews} columns={columns} />
         )}
       </div>
+      {/* 모달 */}
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Review Form"
+        className="w-96 mx-auto my-16 p-8 rounded-lg shadow-lg border-none"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+      >
+        <ReviewForm onClose={closeModal} />
+      </Modal>
     </div>
   );
 };
