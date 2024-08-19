@@ -1,18 +1,16 @@
-// EditInquiry.js
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import api from "../../api/api"; // 설정한 axios 인스턴스
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import api from "../../api/api";
 import { storage } from "../../../firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 function EditInquiry() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [inquiry, setInquiry] = useState("");
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-  const [currentImageUrl, setCurrentImageUrl] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchInquiry = async () => {
@@ -20,10 +18,9 @@ function EditInquiry() {
         const response = await api.get(`/inquiry/${id}`);
         setTitle(response.data.title);
         setInquiry(response.data.inquiry);
-        setCurrentImageUrl(response.data.image);
         setImageUrl(response.data.image);
       } catch (error) {
-        console.error("Error fetching inquiry:", error);
+        console.error("Failed to fetch inquiry:", error);
       }
     };
 
@@ -45,7 +42,6 @@ function EditInquiry() {
         uploadTask.on(
           "state_changed",
           (snapshot) => {
-            // Progress function (optional)
             console.log("Upload is in progress...");
           },
           (error) => {
@@ -54,7 +50,6 @@ function EditInquiry() {
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setImageUrl(downloadURL);
               resolve(downloadURL);
             });
           }
@@ -73,7 +68,7 @@ function EditInquiry() {
       try {
         uploadedImageUrl = await handleUpload();
       } catch (error) {
-        console.error("Image upload failed:", error);
+        console.error("Image upload failed:", error.message);
         alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
         return;
       }
@@ -85,63 +80,77 @@ function EditInquiry() {
         inquiry,
         image: uploadedImageUrl,
       });
-      navigate(`/inquiry/${id}`); // Redirect back to the inquiry detail page
+      navigate("/inquiry");
     } catch (error) {
-      console.error("Error updating inquiry:", error);
+      console.error("Error updating inquiry:", error.message);
       alert("문의 수정에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Edit Inquiry</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="container mx-auto p-8 max-w-xl bg-gray-50 shadow-lg rounded-2xl relative">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">문의 수정</h1>
+      <form onSubmit={handleSubmit} className="space-y-6 flex flex-col">
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Title
+          <label
+            className="block text-base font-medium text-gray-700 mb-2"
+            htmlFor="title"
+          >
+            제목
           </label>
           <input
             type="text"
+            id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className="block w-full border border-gray-300 rounded-lg shadow-sm focus:border-gray-400 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-3 text-base"
             required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Inquiry
+          <label
+            className="block text-base font-medium text-gray-700 mb-2"
+            htmlFor="inquiry"
+          >
+            문의 내용
           </label>
           <textarea
+            id="inquiry"
             value={inquiry}
             onChange={(e) => setInquiry(e.target.value)}
+            className="block w-full border border-gray-300 rounded-lg shadow-sm focus:border-gray-400 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-3 text-base h-60"
             required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Image
+          <label
+            className="block text-base font-medium text-gray-700 mb-2"
+            htmlFor="image"
+          >
+            이미지
           </label>
           <input
             type="file"
+            id="image"
             onChange={handleImageChange}
-            className="mt-1 block w-full text-sm text-gray-700"
+            className="block w-full text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:border-gray-400 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-3 text-base"
           />
-          {currentImageUrl && (
-            <img
-              src={currentImageUrl}
-              alt="Current"
-              className="mt-2 w-32 h-auto object-cover"
-            />
-          )}
         </div>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Update Inquiry
-        </button>
+        <div className="flex justify-between mt-6 space-x-4">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300 ease-in-out text-base"
+          >
+            수정
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/inquiry")}
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300 ease-in-out text-base"
+          >
+            목록
+          </button>
+        </div>
       </form>
     </div>
   );

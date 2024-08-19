@@ -1,4 +1,3 @@
-// CreateInquiry.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
@@ -27,7 +26,6 @@ function CreateInquiry() {
         uploadTask.on(
           "state_changed",
           (snapshot) => {
-            // Progress function (optional)
             console.log("Upload is in progress...");
           },
           (error) => {
@@ -55,8 +53,11 @@ function CreateInquiry() {
       try {
         uploadedImageUrl = await handleUpload();
       } catch (error) {
-        console.error("Image upload failed:", error);
-        alert("Image upload failed. Please try again.");
+        console.error(
+          "Image upload failed:",
+          error.response ? error.response.data : error.message
+        );
+        alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
         return;
       }
     }
@@ -67,68 +68,80 @@ function CreateInquiry() {
         inquiry,
         image: uploadedImageUrl,
       });
-      navigate("/inquiry"); // Navigate back to the list or another page
+      navigate("/inquiry");
     } catch (error) {
-      console.error("Error creating inquiry:", error);
-      alert("Failed to create inquiry. Please try again.");
+      console.error(
+        "Error creating inquiry:",
+        error.response ? error.response.data : error.message
+      );
+      alert("문의 작성에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Create New Inquiry</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="container mx-auto p-8 max-w-xl bg-gray-50 shadow-lg rounded-2xl relative">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">문의 작성</h1>
+      <form onSubmit={handleSubmit} className="space-y-6 flex flex-col">
         <div>
           <label
-            className="block text-sm font-medium text-gray-700"
+            className="block text-base font-medium text-gray-700 mb-2"
             htmlFor="title"
           >
-            Title
+            제목
           </label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+            className="block w-full border border-gray-300 rounded-lg shadow-sm focus:border-gray-400 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-3 text-base"
             required
           />
         </div>
         <div>
           <label
-            className="block text-sm font-medium text-gray-700"
+            className="block text-base font-medium text-gray-700 mb-2"
             htmlFor="inquiry"
           >
-            Inquiry
+            문의 내용
           </label>
           <textarea
             id="inquiry"
             value={inquiry}
             onChange={(e) => setInquiry(e.target.value)}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+            className="block w-full border border-gray-300 rounded-lg shadow-sm focus:border-gray-400 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-3 text-base h-60"
             required
           />
         </div>
         <div>
           <label
-            className="block text-sm font-medium text-gray-700"
+            className="block text-base font-medium text-gray-700 mb-2"
             htmlFor="image"
           >
-            Image
+            이미지
           </label>
           <input
             type="file"
             id="image"
             onChange={handleImageChange}
-            className="mt-1 block w-full"
+            className="block w-full text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:border-gray-400 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-3 text-base"
           />
         </div>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Submit
-        </button>
+        <div className="flex justify-between mt-6 space-x-4">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300 ease-in-out text-base"
+          >
+            제출
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/inquiry")}
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300 ease-in-out text-base"
+          >
+            목록
+          </button>
+        </div>
       </form>
     </div>
   );
