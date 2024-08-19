@@ -4,6 +4,7 @@ import { FiLogOut } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/api"; // api 모듈을 import
 import { FaTrashAlt } from "react-icons/fa";
+import exampleImage from "../../assets/images/example.jpg";
 
 const QnaDetail = () => {
   const { qaId } = useParams();
@@ -20,7 +21,6 @@ const QnaDetail = () => {
       .get("/users/me")
       .then((response) => {
         setUser(response.data);
-        console.log(response.data);
 
         // QnA 데이터 가져오기
         Promise.all([
@@ -44,7 +44,6 @@ const QnaDetail = () => {
             });
             setQnaItems(combined);
             setLoading(false); // 데이터 로딩 완료
-            console.log(combined);
           })
           .catch((error) => {
             console.error("Error fetching QnA data: ", error);
@@ -79,7 +78,6 @@ const QnaDetail = () => {
         .delete(deleteEndpoint)
         .then(() => {
           setQnaItems(qnaItems.filter((item) => item.id !== itemId));
-          console.log(`Deleted ${itemType} with ID: ${itemId}`);
         })
         .catch((error) => {
           console.error(`Error deleting ${itemType}: `, error);
@@ -112,7 +110,6 @@ const QnaDetail = () => {
           };
           setQnaItems([...qnaItems, newAnswerItem]);
           setNewAnswer("");
-          console.log("Posted new answer: ", response.data);
         })
         .catch((error) => {
           alert("의사 계정이 아닙니다");
@@ -134,7 +131,6 @@ const QnaDetail = () => {
           };
           setQnaItems([...qnaItems, newQuestionItem]);
           setNewQuestion("");
-          console.log("Posted new question: ", response.data);
         })
         .catch((error) => {
           console.error("Error posting question: ", error.message); // 에러 메시지 출력
@@ -145,9 +141,10 @@ const QnaDetail = () => {
   const handleEndChat = () => {
     navigate(-1); // 뒤로가기
   };
-
+  console.log(qnaItems);
+  console.log(user);
   return (
-    <div className="p-6 border-black rounded-md bg-white font-doodle max-w-3xl mx-auto mt-1 h-[600px] flex flex-col">
+    <div className="p-6 bg-white rounded-md max-w-3xl mx-auto mt-4 h-[600px] flex flex-col">
       <div className="flex items-center mb-4">
         <AiFillQuestionCircle className="text-4xl text-pink-500 mr-2" />
         <h2 className="text-3xl font-bold">QnaDetail 페이지</h2>
@@ -160,29 +157,35 @@ const QnaDetail = () => {
             ref={scrollContainerRef}
           >
             {qnaItems.map((item) => (
-              <div key={item.id} className="relative mb-4 group">
-                <div
-                  className={`relative flex-1 ml-4 bg-${
-                    item.type === "question" ? "white" : "gray-100"
-                  } rounded-lg p-3 shadow-lg mt-10 mr-4 border-2 border-black`}
-                >
-                  <button
-                    className={`text-${
-                      item.type === "question" ? "pink-600" : "black"
-                    } w-full hover:underline text-left`}
-                  >
-                    {item.type === "question" ? item.question : item.answer}
-                  </button>
-                  {user.id === item.userId && (
-                    <button
-                      onClick={() => handleDeleteItem(item.id, item.type)}
-                      className="absolute top-3 right-3 p-1 text-red-500 transition-opacity duration-200"
-                      style={{ opacity: 1 }}
-                    >
-                      <FaTrashAlt className="w-5 h-5" />
-                    </button>
-                  )}
+              <div
+                key={item.id}
+                className={`relative mb-4 group p-4 border rounded-lg ${
+                  item.type === "question"
+                    ? "bg-white border-gray-300"
+                    : "bg-gray-100 border-gray-200"
+                }`}
+              >
+                <div className="flex items-center mb-2">
+                  <img
+                    src={item.userAvatar || exampleImage} // Placeholder image
+                    alt="User Avatar"
+                    className="w-10 h-10 rounded-full mr-3"
+                  />
+                  <div className="text-sm text-gray-700">
+                    {item.nickname || "Unknown User"}
+                  </div>
                 </div>
+                <div className="text-lg">
+                  {item.type === "question" ? item.question : item.answer}
+                </div>
+                {user.id === item.userId && (
+                  <button
+                    onClick={() => handleDeleteItem(item.id, item.type)}
+                    className="absolute top-3 right-3 p-1 text-red-500 transition-opacity duration-200"
+                  >
+                    <FaTrashAlt className="w-5 h-5" />
+                  </button>
+                )}
               </div>
             ))}
           </div>

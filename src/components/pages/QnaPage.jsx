@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import api from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import QnaList from "../qna/QnaList";
-import { AiFillQuestionCircle } from "react-icons/ai";
-import { FaPlus, FaUser, FaTrashAlt, FaSyncAlt } from "react-icons/fa";
+import exampleImage from "../../assets/images/example.jpg";
+import { FaPlus, FaUser, FaSyncAlt } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 
 const QnA = () => {
@@ -18,7 +18,7 @@ const QnA = () => {
   useEffect(() => {
     // 접속중인 사용자 정보 가져오기
     api
-      .get(`/users/me`)
+      .get("/users/me")
       .then((response) => {
         setUser(response.data);
       })
@@ -74,77 +74,71 @@ const QnA = () => {
     setSearchTerm(e.target.value);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("정말로 이 QnA를 삭제하시겠습니까?")) {
-      api
-        .delete(`/qa/${id}`)
-        .then(() => {
-          setQnas(Qnas.filter((qna) => qna.id !== id));
-          setFilteredQnas(filteredQnas.filter((qna) => qna.id !== id));
-        })
-        .catch((error) => {
-          console.error("Error deleting QnA: ", error);
-        });
-    }
-  };
-
   const handleMyQnas = () => {
     setShowMyQnas(!showMyQnas);
     if (!showMyQnas) {
       fetchMyQnas();
     } else {
-      window.location.reload();
+      fetchQnas();
     }
   };
 
   return (
-    <div className="flex flex-col items-center w-full font-doodle relative bg-gray-100 pt-30">
-      <div className="flex flex-col items-center w-full max-w-3xl bg-white border-4 border-black rounded-md p-6 mb-20 shadow-lg relative">
-        <div className="flex items-center w-full mb-10">
-          <AiFillQuestionCircle className="text-5xl text-pink-500 mr-2" />
-          <h2 className="text-4xl font-bold">Qna 페이지</h2>
-          <div className="ml-auto flex items-center space-x-2 ml-20">
+    <div className="min-h-screen bg-gradient-to-r from-pink-100 to-blue-100 w-full">
+      {/* Top Bar */}
+      <div className="w-full bg-white shadow-lg fixed top-0 z-10 h-20">
+        <div className="max-w-screen-lg mx-auto flex justify-between items-center p-4">
+          <img
+            src={exampleImage}
+            alt="Example"
+            className="w-55 h-14 object-cover mb-2 rounded"
+          />
+          <div className="flex-grow"></div>
+          <div className="flex space-x-4 items-center">
             <input
               type="text"
               value={searchTerm}
               onChange={handleSearchChange}
-              className="p-2 border rounded"
+              className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
               placeholder="검색어를 입력하세요"
             />
-            <FiSearch className="text-2xl text-gray-700" />
-          </div>
-        </div>
-        <div className="flex justify-center space-x-8 mb-4">
-          <button
-            onClick={handleButtonClick}
-            className="bg-pastel-blue text-black p-3 rounded-full border-4 border-black hover:bg-pastel-blue-light transition-colors flex items-center"
-          >
-            <FaPlus className="text-xl" />
-          </button>
-          <button
-            onClick={handleMyQnas}
-            className="bg-gray-200 text-black p-3 rounded-full border-4 border-black hover:bg-gray-300 transition-colors flex items-center"
-          >
-            <FaUser className="text-xl mr-2" />{" "}
-            {showMyQnas ? "All QnAs" : "My QnAs"}
-          </button>
-          <button
-            onClick={handleRefresh}
-            className="bg-gray-200 text-black p-3 rounded-full border-4 border-black hover:bg-gray-300 transition-colors flex items-center"
-          >
-            <FaSyncAlt className="text-xl" />
-          </button>
-        </div>
-        <div className="w-full max-w-3xl h-[650px] overflow-y-auto p-6 border-black rounded-md bg-white font-doodle mt-4 shadow-inner">
-          <div className="bg-pastel-pink-light p-4 rounded-md shadow-lg h-full overflow-y-auto">
-            <QnaList
-              user={user}
-              Qnas={filteredQnas}
-              handleDelete={handleDelete}
-            />
+            <FiSearch className="text-3xl text-gray-700" />
           </div>
         </div>
       </div>
+
+      {/* QnA 목록 및 새 질문 버튼 영역 */}
+      <div className="fixed top-16 left-1/2 transform -translate-x-1/2 z-20 flex space-x-4 mt-10">
+        <button
+          onClick={handleMyQnas}
+          className="bg-pink-500 text-white px-4 py-2 text-lg rounded-lg hover:bg-pink-600 transition-colors flex items-center"
+        >
+          <FaUser className="mr-2" />
+          <span>{showMyQnas ? "All QnAs" : "My QnAs"}</span>
+        </button>
+        <button
+          onClick={handleButtonClick}
+          className="bg-blue-500 text-white px-4 py-2 text-lg rounded-lg hover:bg-blue-600 transition-colors flex items-center"
+        >
+          <FaPlus className="mr-2" />
+          <span>추가하기</span>
+        </button>
+      </div>
+
+      {/* QnA 목록 */}
+      <div className="max-w-screen-lg mx-auto pt-24 px-4">
+        <div className="bg-white rounded-lg border-t border-gray-300 max-w-full mx-auto p-8 divide-y divide-gray-300">
+          <QnaList user={user} Qnas={filteredQnas} handleDelete={() => {}} />
+        </div>
+      </div>
+
+      {/* Refresh Button */}
+      <button
+        onClick={handleRefresh}
+        className="fixed bottom-10 right-10 bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 transition-colors z-20"
+      >
+        <FaSyncAlt className="text-2xl" />
+      </button>
     </div>
   );
 };

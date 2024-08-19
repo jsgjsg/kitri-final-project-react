@@ -1,3 +1,4 @@
+// ReviewItem.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ReviewComment from "./ReviewComment";
@@ -10,7 +11,7 @@ import {
 } from "react-icons/fa";
 import api from "../../api/api"; // api 객체 추가
 
-const ReviewItem = ({ user, review }) => {
+const ReviewItem = ({ user, review, columns }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMe, setIsMe] = useState(false);
   const [liked, setLiked] = useState(false); // liked 상태 추가
@@ -62,7 +63,11 @@ const ReviewItem = ({ user, review }) => {
   };
 
   return (
-    <div className="relative p-4 border border-gray-300 rounded-md mb-4 bg-white shadow- w-full max-w-md h-150">
+    <div
+      className={`relative p-4 border border-gray-300 rounded-md mb-4 bg-white shadow-lg ${
+        columns === 1 ? "w-full max-w-md h-150" : "w-full"
+      } transition duration-100`}
+    >
       {isMe ? (
         <button
           onClick={handleUpdateButton}
@@ -79,15 +84,21 @@ const ReviewItem = ({ user, review }) => {
         </button>
       )}
       <h3 className="text-lg font-semibold truncate mb-2">
-        {reviewWithUser.item}
+        {reviewWithUser.userId}
       </h3>
       {reviewWithUser.image && (
         <img
           src={reviewWithUser.image}
           alt="Review Image"
-          className="w-full h-64 object-contain mb-2 rounded"
+          className={`w-full h-64 object-contain mb-2 rounded ${
+            columns === 1 ? "w-full h-64" : "w-full"
+          }`}
         />
       )}
+      <p className="text-gray-700 mb-2 text-sm">
+        <strong>item:</strong>
+        {reviewWithUser.item}
+      </p>
       <p className="text-gray-700 mb-2 text-sm">
         <strong>Good:</strong> {reviewWithUser.good}
       </p>
