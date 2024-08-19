@@ -17,6 +17,8 @@ import {
 import MyPage from "./components/pages/MyPage";
 import Login from "./components/pages/LoginPage";
 import Signup from "./components/pages/SignupPage";
+import DoctorLogin from "./components/pages/DoctorLoginPage";
+import DoctorSignup from "./components/pages/DoctorSignupPage";
 import AccountDeletion from "./components/AccountDeletion";
 import Feed from "./components/pages/FeedPage";
 import Navigation from "./components/Navigation";
@@ -48,6 +50,8 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/doctor/signup" element={<DoctorSignup />} />
+            <Route path="/doctor/login" element={<DoctorLogin />} />
             <Route path="/delete-account" element={<AccountDeletion />} />
             <Route path="/edit-account" element={<EditProfilePage />} />
             <Route path="/feed" element={<Feed />} />
