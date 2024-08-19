@@ -3,7 +3,7 @@ import { AiFillQuestionCircle } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/api";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt, FaClock } from "react-icons/fa"; // 추가된 아이콘
 import exampleImage from "../../assets/images/example.jpg";
 
 const QnaDetail = () => {
@@ -34,14 +34,13 @@ const QnaDetail = () => {
             const answers = answersResponse.data.map((a) => ({
               ...a,
               type: "answer",
+              isDoctor: a.isDoctor, // 의사 계정 확인 (이 필드는 실제 API에 따라 변경)
             }));
-            const combined = [...questions.slice(0, 1), ...answers].sort(
-              (a, b) => {
-                const dateA = new Date(a.createdAt);
-                const dateB = new Date(b.createdAt);
-                return dateA - dateB;
-              }
-            );
+            const combined = [...questions, ...answers].sort((a, b) => {
+              const dateA = new Date(a.createdAt);
+              const dateB = new Date(b.createdAt);
+              return dateA - dateB;
+            });
             setQnaItems(combined);
             setLoading(false);
           })
@@ -103,6 +102,7 @@ const QnaDetail = () => {
             answer: newAnswer,
             questionId: qnaItems[0].id,
             type: "answer",
+            isDoctor: response.data.isDoctor, // 의사 계정인지 확인
           };
           setQnaItems([...qnaItems, newAnswerItem]);
           setNewAnswer("");
@@ -118,51 +118,89 @@ const QnaDetail = () => {
     navigate(-1);
   };
 
+  // 날짜와 시간을 모두 반환하는 함수
+  const formatDateTime = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    const date = new Date(dateString);
+    return date.toLocaleDateString([], options);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-pink-100 to-blue-100 w-full">
       {/* Top Bar */}
       <div className="w-full bg-white shadow-lg fixed top-0 z-10 h-20 flex justify-between items-center px-8">
-        <h1 className="text-3xl font-bold text-gray-800">QnaDetail 페이지</h1>
-        <AiFillQuestionCircle className="text-4xl text-pink-500" />
+        <img
+          src={exampleImage}
+          alt="Example"
+          className="w-55 h-14 object-cover mb-2 rounded"
+        />
+        <AiFillQuestionCircle className="text-4xl text-pink-500 mr-20" />
+        {/* ml-8은 아이콘의 왼쪽에 2rem(32px)의 마진을 추가합니다. */}
       </div>
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto pt-24 p-8">
         {qnaItems.length > 0 && (
           <div className="flex flex-col space-y-6">
-            {/* 첫 질문만 표시 */}
+            {/* 첫 질문 표시 */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <div className="flex items-center mb-4">
                 <img
-                  src={qnaItems[0].userAvatar || exampleImage}
+                  src={qnaItems[0].image || exampleImage}
                   alt="User Avatar"
                   className="w-16 h-16 rounded-full mr-4"
                 />
-                <div className="text-xl font-semibold text-gray-800">
-                  {qnaItems[0].nickname || "Unknown User"}
+                <div>
+                  <div className="text-xl font-semibold text-gray-800">
+                    {qnaItems[0].nickname || "Unknown User"}
+                  </div>
+                  <div className="flex items-center text-gray-600">
+                    <FaClock className="mr-2" />
+                    <span>{formatDateTime(qnaItems[0].createdAt)}</span>
+                  </div>
                 </div>
               </div>
               <p className="text-xl text-gray-800">{qnaItems[0].question}</p>
             </div>
 
-            {/* 답변들 */}
+            {/* 질문과 답변들 */}
             <div className="overflow-y-auto max-h-96" ref={scrollContainerRef}>
               {qnaItems.slice(1).map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white p-6 rounded-lg shadow-md mb-4"
+                  className={`p-6 rounded-lg shadow-md mb-4 ${
+                    item.type === "answer"
+                      ? "bg-white border-4 border-red-200"
+                      : "bg-white"
+                  }`}
                 >
                   <div className="flex items-center mb-4">
                     <img
-                      src={item.userAvatar || exampleImage}
+                      src={item.image || exampleImage}
                       alt="User Avatar"
                       className="w-12 h-12 rounded-full mr-4"
                     />
-                    <div className="text-lg font-medium text-gray-700">
-                      {item.nickname || "Unknown User"}
+                    <div>
+                      <div className="text-lg font-medium text-gray-700">
+                        {item.nickname || "Unknown User"}
+                      </div>
+                      <div className="flex items-center text-gray-600">
+                        <FaClock className="mr-2" />
+                        <span className="text-sm">
+                          {formatDateTime(item.createdAt)}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <p className="text-lg text-gray-700">{item.answer}</p>
+                  <p className="text-lg text-gray-700 ml-10">
+                    {item.type === "question" ? item.question : item.answer}
+                  </p>
                   {user.id === item.userId && (
                     <button
                       onClick={() => handleDeleteItem(item.id, item.type)}

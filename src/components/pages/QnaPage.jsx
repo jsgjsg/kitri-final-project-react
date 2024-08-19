@@ -107,11 +107,11 @@ const QnA = () => {
         </div>
       </div>
 
-      {/* QnA 목록 및 새 질문 버튼 영역 */}
+      {/* My QnAs and Add QnA Buttons */}
       <div className="fixed top-16 left-1/2 transform -translate-x-1/2 z-20 flex space-x-4 mt-10">
         <button
           onClick={handleMyQnas}
-          className="bg-pink-500 text-white px-4 py-2 text-lg rounded-lg hover:bg-pink-600 transition-colors flex items-center"
+          className="bg-pink-500 text-white px-3 py-2 text-lg rounded-lg hover:bg-pink-600 transition-colors flex items-center mr-10"
         >
           <FaUser className="mr-2" />
           <span>{showMyQnas ? "All QnAs" : "My QnAs"}</span>

@@ -171,6 +171,7 @@ const Review = () => {
           onClick={handleAddreview}
         >
           <FaPlus className="mr-2" />
+          <span>추가하기</span>
         </button>
       </div>
       {/* Refresh Button */}

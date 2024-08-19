@@ -31,58 +31,56 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-start justify-center h-screen bg-gray-100 pt-20">
-      <div className="bg-white p-16 rounded-lg shadow-lg w-full max-w-xl border-4 border-black relative">
-        <FaPaw className="text-4xl text-pink-500 absolute top-10 right-10" />{" "}
-        {/* 발바닥 아이콘 위치 수정 */}
-        <h2 className="text-3xl font-bold mb-8 text-center">Login</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-lg font-medium text-gray-700"
-            >
-              <FaUser className="inline-block mr-2" /> Username
-            </label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-lg font-medium text-gray-700"
-            >
-              <FaLock className="inline-block mr-2" /> Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-pastel-blue text-black p-3 rounded-md border-4 border-black hover:bg-pastel-blue-light transition-colors"
+    <div className="bg-white p-16 rounded-lg shadow-lg w-50 border-4 border-black relative">
+      <FaPaw className="text-4xl text-pink-500 absolute top-10 right-10" />{" "}
+      {/* 발바닥 아이콘 위치 수정 */}
+      <h2 className="text-3xl font-bold mb-8 text-center">Login</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label
+            htmlFor="username"
+            className="block text-lg font-medium text-gray-700"
           >
-            Login
-          </button>
-        </form>
+            <FaUser className="inline-block mr-2" /> Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-lg font-medium text-gray-700"
+          >
+            <FaLock className="inline-block mr-2" /> Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="mt-2 block w-full p-3 border-4 border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
         <button
-          onClick={handleSignUp}
-          className="mt-6 w-full bg-pastel-gray text-black p-3 rounded-md border-4 border-black hover:bg-gray-600 transition-colors"
+          type="submit"
+          className="w-full bg-pastel-blue text-black p-3 rounded-md border-4 border-black hover:bg-pastel-blue-light transition-colors"
         >
-          Signup
+          Login
         </button>
-      </div>
+      </form>
+      <button
+        onClick={handleSignUp}
+        className="mt-6 w-full bg-pastel-gray text-black p-3 rounded-md border-4 border-black hover:bg-gray-600 transition-colors"
+      >
+        Signup
+      </button>
     </div>
   );
 };
