@@ -1,8 +1,9 @@
-// Feed.js
 import React, { useState, useEffect, useCallback } from "react";
 import FeedFilter from "../feed/FeedFilter";
 import FeedList from "../feed/FeedList";
 import api from "../../api/api";
+import Modal from "react-modal";
+import FeedForm from "./../feed/FeedForm";
 import {
   FaPlus,
   FaUser,
@@ -18,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 import exampleImage from "../../assets/images/example.jpg";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
+Modal.setAppElement("#root");
+
 const Feed = () => {
   const [user, setUser] = useState({});
   const [feeds, setFeeds] = useState([]);
@@ -27,6 +30,7 @@ const Feed = () => {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [showMyFeeds, setShowMyFeeds] = useState(false);
   const [columns, setColumns] = useState(3);
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -68,7 +72,11 @@ const Feed = () => {
   };
 
   const handleAddFeed = () => {
-    navigate("/feed/form");
+    setIsModalOpen(true); // 모달 열기
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // 모달 닫기
   };
 
   const handleMyFeeds = () => {
@@ -255,6 +263,17 @@ const Feed = () => {
           <FeedList user={user} feeds={feeds} columns={columns} />
         )}
       </div>
+
+      {/* 모달 */}
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Feed Form"
+        className="w-96 mx-auto my-16 p-8 rounded-lg shadow-lg border-none"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+      >
+        <FeedForm onClose={closeModal} />
+      </Modal>
     </div>
   );
 };

@@ -2,19 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { AiFillQuestionCircle } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../../api/api"; // api 모듈을 import
+import api from "../../api/api";
 import { FaTrashAlt } from "react-icons/fa";
 import exampleImage from "../../assets/images/example.jpg";
 
 const QnaDetail = () => {
   const { qaId } = useParams();
   const navigate = useNavigate();
-  const scrollContainerRef = useRef(null); // 스크롤 컨테이너 참조
-  const [user, setUser] = useState({}); // 사용자 정보 상태변수
+  const scrollContainerRef = useRef(null);
+  const [user, setUser] = useState({});
   const [qnaItems, setQnaItems] = useState([]);
   const [newAnswer, setNewAnswer] = useState("");
-  const [newQuestion, setNewQuestion] = useState("");
-  const [loading, setLoading] = useState(true); // 로딩 상태 변수
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     api
@@ -22,7 +21,6 @@ const QnaDetail = () => {
       .then((response) => {
         setUser(response.data);
 
-        // QnA 데이터 가져오기
         Promise.all([
           api.get(`/qa/${qaId}/questions`),
           api.get(`/qa/${qaId}/answers`),
@@ -37,13 +35,15 @@ const QnaDetail = () => {
               ...a,
               type: "answer",
             }));
-            const combined = [...questions, ...answers].sort((a, b) => {
-              const dateA = new Date(a.createdAt);
-              const dateB = new Date(b.createdAt);
-              return dateA - dateB;
-            });
+            const combined = [...questions.slice(0, 1), ...answers].sort(
+              (a, b) => {
+                const dateA = new Date(a.createdAt);
+                const dateB = new Date(b.createdAt);
+                return dateA - dateB;
+              }
+            );
             setQnaItems(combined);
-            setLoading(false); // 데이터 로딩 완료
+            setLoading(false);
           })
           .catch((error) => {
             console.error("Error fetching QnA data: ", error);
@@ -51,7 +51,7 @@ const QnaDetail = () => {
       })
       .catch((error) => {
         console.error("Error: ", error);
-        navigate("/login"); // 오류가 발생하면 로그인 페이지로 이동
+        navigate("/login");
       });
   }, [qaId, navigate]);
 
@@ -89,23 +89,19 @@ const QnaDetail = () => {
     setNewAnswer(e.target.value);
   };
 
-  const handleQuestionChange = (e) => {
-    setNewQuestion(e.target.value);
-  };
-
   const handleSubmitAnswer = () => {
     if (newAnswer.trim()) {
       api
         .post(`/qa/${qaId}/answers/create`, {
           answer: newAnswer,
-          questionId: qnaItems.find((item) => item.type === "question").id,
+          questionId: qnaItems[0].id,
         })
         .then((response) => {
           const newAnswerItem = {
             id: response.data.id,
             userId: user.id,
             answer: newAnswer,
-            questionId: qnaItems.find((item) => item.type === "question").id,
+            questionId: qnaItems[0].id,
             type: "answer",
           };
           setQnaItems([...qnaItems, newAnswerItem]);
@@ -113,127 +109,97 @@ const QnaDetail = () => {
         })
         .catch((error) => {
           alert("의사 계정이 아닙니다");
-          console.error("Error posting answer: ", error.message); // 에러 메시지 출력
-        });
-    }
-  };
-
-  const handleSubmitQuestion = () => {
-    if (newQuestion.trim()) {
-      api
-        .post(`/qa/${qaId}/questions`, {
-          question: newQuestion,
-        })
-        .then((response) => {
-          const newQuestionItem = {
-            ...response.data,
-            type: "question",
-          };
-          setQnaItems([...qnaItems, newQuestionItem]);
-          setNewQuestion("");
-        })
-        .catch((error) => {
-          console.error("Error posting question: ", error.message); // 에러 메시지 출력
+          console.error("Error posting answer: ", error.message);
         });
     }
   };
 
   const handleEndChat = () => {
-    navigate(-1); // 뒤로가기
+    navigate(-1);
   };
-  console.log(qnaItems);
-  console.log(user);
+
   return (
-    <div className="p-6 bg-white rounded-md max-w-3xl mx-auto mt-4 h-[600px] flex flex-col">
-      <div className="flex items-center mb-4">
-        <AiFillQuestionCircle className="text-4xl text-pink-500 mr-2" />
-        <h2 className="text-3xl font-bold">QnaDetail 페이지</h2>
+    <div className="min-h-screen bg-gradient-to-r from-pink-100 to-blue-100 w-full">
+      {/* Top Bar */}
+      <div className="w-full bg-white shadow-lg fixed top-0 z-10 h-20 flex justify-between items-center px-8">
+        <h1 className="text-3xl font-bold text-gray-800">QnaDetail 페이지</h1>
+        <AiFillQuestionCircle className="text-4xl text-pink-500" />
       </div>
 
-      {qnaItems.length > 0 && (
-        <div className="mt-6 flex flex-col flex-grow">
-          <div
-            className="overflow-y-auto max-h-80 mb-4"
-            ref={scrollContainerRef}
-          >
-            {qnaItems.map((item) => (
-              <div
-                key={item.id}
-                className={`relative mb-4 group p-4 border rounded-lg ${
-                  item.type === "question"
-                    ? "bg-white border-gray-300"
-                    : "bg-gray-100 border-gray-200"
-                }`}
-              >
-                <div className="flex items-center mb-2">
-                  <img
-                    src={item.userAvatar || exampleImage} // Placeholder image
-                    alt="User Avatar"
-                    className="w-10 h-10 rounded-full mr-3"
-                  />
-                  <div className="text-sm text-gray-700">
-                    {item.nickname || "Unknown User"}
-                  </div>
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto pt-24 p-8">
+        {qnaItems.length > 0 && (
+          <div className="flex flex-col space-y-6">
+            {/* 첫 질문만 표시 */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="flex items-center mb-4">
+                <img
+                  src={qnaItems[0].userAvatar || exampleImage}
+                  alt="User Avatar"
+                  className="w-16 h-16 rounded-full mr-4"
+                />
+                <div className="text-xl font-semibold text-gray-800">
+                  {qnaItems[0].nickname || "Unknown User"}
                 </div>
-                <div className="text-lg">
-                  {item.type === "question" ? item.question : item.answer}
-                </div>
-                {user.id === item.userId && (
-                  <button
-                    onClick={() => handleDeleteItem(item.id, item.type)}
-                    className="absolute top-3 right-3 p-1 text-red-500 transition-opacity duration-200"
-                  >
-                    <FaTrashAlt className="w-5 h-5" />
-                  </button>
-                )}
               </div>
-            ))}
-          </div>
+              <p className="text-xl text-gray-800">{qnaItems[0].question}</p>
+            </div>
 
-          <div className="flex">
-            {user.id ===
-            qnaItems.find((item) => item.type === "question")?.userId ? (
-              <>
-                <input
-                  type="text"
-                  value={newQuestion}
-                  onChange={handleQuestionChange}
-                  className="w-full p-2 border rounded"
-                  placeholder="새 질문을 입력하세요"
-                />
-                <button
-                  onClick={handleSubmitQuestion}
-                  className="ml-2 p-2 bg-pink-500 text-white rounded flex-shrink-0"
+            {/* 답변들 */}
+            <div className="overflow-y-auto max-h-96" ref={scrollContainerRef}>
+              {qnaItems.slice(1).map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-white p-6 rounded-lg shadow-md mb-4"
                 >
-                  질문하기
-                </button>
-              </>
-            ) : (
-              <>
-                <input
-                  type="text"
-                  value={newAnswer}
-                  onChange={handleAnswerChange}
-                  className="w-full p-2 border rounded"
-                  placeholder="답변을 입력하세요"
-                />
-                <button
-                  onClick={handleSubmitAnswer}
-                  className="ml-2 p-2 bg-blue-500 text-white rounded flex-shrink-0"
-                >
-                  답변하기
-                </button>
-              </>
-            )}
-            <button
-              onClick={handleEndChat}
-              className="ml-2 p-2 bg-red-500 text-white rounded flex-shrink-0"
-            >
-              <FiLogOut className="text-xl" />
-            </button>
+                  <div className="flex items-center mb-4">
+                    <img
+                      src={item.userAvatar || exampleImage}
+                      alt="User Avatar"
+                      className="w-12 h-12 rounded-full mr-4"
+                    />
+                    <div className="text-lg font-medium text-gray-700">
+                      {item.nickname || "Unknown User"}
+                    </div>
+                  </div>
+                  <p className="text-lg text-gray-700">{item.answer}</p>
+                  {user.id === item.userId && (
+                    <button
+                      onClick={() => handleDeleteItem(item.id, item.type)}
+                      className="absolute top-3 right-3 p-1 text-red-500 transition-opacity duration-200"
+                    >
+                      <FaTrashAlt className="w-5 h-5" />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* 답변 입력 */}
+            <div className="flex items-center space-x-4">
+              <input
+                type="text"
+                value={newAnswer}
+                onChange={handleAnswerChange}
+                className="flex-grow p-4 border rounded-lg"
+                placeholder="답변을 입력하세요"
+              />
+              <button
+                onClick={handleSubmitAnswer}
+                className="p-4 bg-blue-500 text-white rounded-lg"
+              >
+                답변하기
+              </button>
+              <button
+                onClick={handleEndChat}
+                className="p-4 bg-red-500 text-white rounded-lg"
+              >
+                <FiLogOut className="text-xl" />
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
