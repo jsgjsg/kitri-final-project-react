@@ -1,3 +1,4 @@
+// FeedItem.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import FeedComment from "./FeedComment";
@@ -10,7 +11,7 @@ import {
 } from "react-icons/fa";
 import api from "../../api/api";
 
-const FeedItem = ({ user, feed }) => {
+const FeedItem = ({ user, feed, columns }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const [isMe, setIsMe] = useState(false);
@@ -67,7 +68,11 @@ const FeedItem = ({ user, feed }) => {
   };
 
   return (
-    <div className="relative p-2 border border-gray-300 rounded-md mb-4 bg-white shadow-lg w-full max-w-xs h-150">
+    <div
+      className={`relative p-4 border border-gray-300 rounded-md mb-4 bg-white shadow-lg w-full ${
+        columns === 1 ? "max-w-md" : "max-w-xs"
+      } h-150`}
+    >
       {isMe ? (
         <button
           onClick={handleUpdateButton}
@@ -89,8 +94,10 @@ const FeedItem = ({ user, feed }) => {
       {feedWithUser.image && (
         <img
           src={feedWithUser.image}
-          alt="Review Image"
-          className="w-full h-64 object-contain mb-2 rounded"
+          alt="Feed Image"
+          className={`w-full h-64 object-contain mb-2 rounded ${
+            columns === 1 ? "w-full h-64" : "w-full"
+          }`}
         />
       )}
       {feedHashtags && feedHashtags.length > 0 && (

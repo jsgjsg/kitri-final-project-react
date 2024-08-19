@@ -1,40 +1,57 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa"; // 아이콘 변경
-import { FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt, FaClock } from "react-icons/fa";
 
 const QnaItem = ({ user, Qna, handleDelete }) => {
   const navigate = useNavigate();
   const [isMe, setIsMe] = useState(false);
-  console.log(Qna);
 
-  console.log(user);
-  if (!isMe && user.id === Qna.userId) {
-    setIsMe(true);
-  }
+  useEffect(() => {
+    setIsMe(user.id === Qna.userId);
+  }, [user.id, Qna.userId]);
 
   const handleTitleClick = () => {
     navigate(`/qna/detail/${Qna.id}`);
   };
 
   return (
-    <div className="relative mb-4 group w-full flex items-center mt-10">
-      <div className="flex items-center mt-10">
-        <FaUserCircle className="mr-2 text-2xl text-gray-700" />
-        <span className="text-2xl">{Qna.userId}</span>
+    <div className="relative mb-4 w-full flex items-center bg-white p-4 border-b border-gray-100 group">
+      <div className="flex items-center mr-10">
+        {/* 프로필 사진 추가 */}
+        {Qna.image ? (
+          <img
+            src={Qna.image}
+            alt="Profile"
+            className="w-16 h-16 rounded-full border border- object-cover"
+          />
+        ) : (
+          <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
+            <span className="text-white">?</span>
+          </div>
+        )}
       </div>
-      <div className="relative flex-1 bg-white rounded-lg p-3 shadow-lg mt-10 border-black ml-10">
+      <div className="flex-1">
         <button
           onClick={handleTitleClick}
-          className="text-pink-600 w-full hover:underline text-left"
+          className="text-pink-600 hover:underline text-lg font-medium w-full text-left"
         >
           {Qna.title}
         </button>
+        <div className="text-gray-500 text-sm mt-2 flex items-center">
+          <span className="font-semibold mr-2">
+            {Qna.nickname || "Unknown"}
+          </span>
+          <FaClock className="mr-1" />
+          <span>
+            {new Date(Qna.createdAt).toLocaleDateString()}{" "}
+            {new Date(Qna.createdAt).toLocaleTimeString()}
+          </span>
+        </div>
       </div>
       {isMe && (
         <button
           onClick={() => handleDelete(Qna.id)}
-          className="absolute top-1/2 right-6 transform -translate-y-1/2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity mt-5"
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 p-2 bg-red-500 text-white rounded-full transition-opacity group-hover:opacity-100"
         >
           <FaTrashAlt />
         </button>

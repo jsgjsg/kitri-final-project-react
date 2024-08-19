@@ -45,8 +45,8 @@ function App() {
 
   return (
     <Router>
-      <div className="flex min-h-screen bg-gray-100">
-        <main className="flex-1 p-6 bg-gray-100 flex justify-center items-center pt-20">
+      <div className="flex min-h-screen bg-white">
+        <main className="flex-1 p-6 bg-gradient-to-r from-pink-100 to-blue-100 flex justify-center items-center pt-20">
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
