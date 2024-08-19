@@ -5,7 +5,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import api from "../../api/api";
 import { storage } from "../../../firebaseConfig";
 
-const FeedForm = () => {
+const FeedForm = ({ onClose }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -116,7 +116,7 @@ const FeedForm = () => {
         .post("/feeds", feedData)
         .then((response) => {
           alert("글 작성 완료");
-          navigate("/feed");
+          onClose(); // 모달을 닫기
         })
         .catch((error) => {
           console.error("Error creating feed:", error);
@@ -125,7 +125,7 @@ const FeedForm = () => {
   };
 
   const handleCancel = () => {
-    navigate(-1);
+    onClose(); // 모달을 닫기
   };
 
   const handleHashtagsChange = (e) => {
@@ -149,7 +149,7 @@ const FeedForm = () => {
         .delete(`/feeds/${id}`)
         .then(() => {
           alert("피드가 삭제되었습니다.");
-          navigate("/feed");
+          onClose(); // 모달을 닫기
         })
         .catch((error) => {
           console.error("Error deleting feed:", error);
@@ -158,7 +158,7 @@ const FeedForm = () => {
   };
 
   return (
-    <div className="p-6 w-80 mx-auto border-2 border-black rounded-md shadow-md bg-white font-doodle">
+    <div className="p-6 w-80 mx-auto rounded-md shadow-md bg-white font-doodle">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-3xl font-bold">{id ? "Edit Form" : "Add Form"}</h2>
         {id && (
