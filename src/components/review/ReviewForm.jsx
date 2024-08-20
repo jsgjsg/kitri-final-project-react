@@ -124,7 +124,6 @@ const ReviewForm = ({ onClose }) => {
 
   const handleCancel = () => {
     onClose();
-    navigate(-1);
   };
 
   const handleDelete = () => {
