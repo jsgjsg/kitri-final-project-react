@@ -30,8 +30,8 @@ import QnaForm from "./components/qna/QnaForm";
 import QnaDetail from "./components/qna/QnaDetail";
 import FriendsPage from "./components/pages/FriendsPage";
 import EditProfilePage from "./components/pages/EditProfilePage";
-import InquiryList from "./components/inquiry/IncuiryList";
-import InquiryDetail from "./components/inquiry/IncuiryDetail";
+import InquiryPage from "./components/pages/InquiryPage";
+import InquiryDetail from "./components/inquiry/InquiryDetail";
 import CreateInquiry from "./components/inquiry/createIncuiry";
 import EditInquiry from "./components/inquiry/EditInquiry";
 import SocketTest from "./components/SocketTest";
@@ -66,7 +66,7 @@ function App() {
             <Route path="/qna/detail/:qaId" element={<QnaDetail />} />
             <Route path="/myPage" element={<MyPage />} />
             <Route path="/friends" element={<FriendsPage />} />
-            <Route path="/inquiry" element={<InquiryList />} />
+            <Route path="/inquiry" element={<InquiryPage />} />
             <Route path="/inquiry/:id" element={<InquiryDetail />} />
             <Route path="/create-inquiry" element={<CreateInquiry />} />
             <Route path="/inquiry/:id/edit" element={<EditInquiry />} />

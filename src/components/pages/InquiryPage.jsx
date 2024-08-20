@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/api"; // 설정한 axios 인스턴스
+import InquiryList from "../inquiry/InquiryList";
 
-function InquiryList() {
+function InquiryPage() {
   const [inquiries, setInquiries] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalInquiries, setTotalInquiries] = useState(0);
@@ -61,22 +62,7 @@ function InquiryList() {
           />
         </Link>
       </div>
-      <ul className="space-y-4">
-        {inquiries.map((inquiry) => (
-          <li
-            key={inquiry.id}
-            onClick={() => handleInquiryClick(inquiry.id)}
-            className="border border-gray-300 p-4 rounded-lg bg-white shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer"
-          >
-            <h2 className="text-lg font-semibold text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">
-              {inquiry.title}
-            </h2>
-            <p className="text-sm text-gray-500 mt-2">
-              {new Date(inquiry.createdAt).toLocaleDateString()}
-            </p>
-          </li>
-        ))}
-      </ul>
+      <InquiryList inquiries={inquiries} handleInquiryClick={handleInquiryClick}/>
       <div className="flex flex-col sm:flex-row items-center justify-between mt-6 space-y-4 sm:space-y-0">
         <button
           onClick={handlePreviousPage}
@@ -100,4 +86,4 @@ function InquiryList() {
   );
 }
 
-export default InquiryList;
+export default InquiryPage;
