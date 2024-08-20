@@ -22,13 +22,15 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 const Review = () => {
   const [user, setUser] = useState({});
   const [reviews, setReviews] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0); // 단일 리뷰 모드에서 현재 리뷰 인덱스
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [keyword, setKeyword] = useState("");
   const [animalFilter, setAnimalFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [showMyreviews, setShowMyreviews] = useState(false);
-  const [columns, setColumns] = useState(3); // 기본적으로 3줄 보기로 설정
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
+  const [columns, setColumns] = useState(3);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태
+  const [currentReview, setCurrentReview] = useState(null); // 수정하려는 리뷰 상태
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,16 +72,20 @@ const Review = () => {
   };
 
   const handleAddReview = () => {
+    setIsEditing(false); // 새 리뷰를 추가할 때는 수정 모드가 아님
+    setCurrentReview(null); // 수정할 리뷰 없음
+    setIsModalOpen(true); // 모달 열기
+  };
+
+  const handleEditReview = (review) => {
+    setIsEditing(true); // 수정 모드로 설정
+    setCurrentReview(review); // 수정하려는 리뷰 설정
     setIsModalOpen(true); // 모달 열기
   };
 
   const closeModal = () => {
     setIsModalOpen(false); // 모달 닫기
   };
-
-  // const handleAddReview = () => {
-  //   navigate("/review/form");
-  // };
 
   const handleMyreviews = () => {
     setShowMyreviews(!showMyreviews);
@@ -141,7 +147,7 @@ const Review = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-pink-100 to-blue-100 w-full">
-      {/* Top Bar */}
+      {/* 상단 바 */}
       <div className="w-full bg-white shadow-lg fixed top-0 z-10 h-20">
         <div className="max-w-screen-lg mx-auto flex justify-between items-center p-4">
           <img
@@ -168,31 +174,34 @@ const Review = () => {
           </div>
         </div>
       </div>
-      {/* My Reviews and Add Review Buttons */}
-      <div className="fixed top-16 left-1/2 transform -translate-x-1/2 z-20 flex space-x-4 mt-10">
-        <button
-          className="bg-pink-500 text-white px-3 py-2 text-lg rounded-lg hover:bg-pink-600 transition-colors flex items-center mr-10"
-          onClick={handleMyreviews}
-        >
-          <FaUser className="mr-2" />
-          <span>{showMyreviews ? "All Reviews" : "My Reviews"}</span>
-        </button>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 text-lg rounded-lg hover:bg-blue-600 transition-colors flex items-center"
-          onClick={handleAddReview}
-        >
-          <FaPlus className="mr-2" />
-          <span>추가하기</span>
-        </button>
-      </div>
-      {/* Refresh Button */}
+      {/* 내 리뷰 및 리뷰 추가 버튼 */}
+      {!isModalOpen && (
+        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 z-20 flex space-x-4 mt-10">
+          <button
+            className="bg-pink-500 text-white px-3 py-2 text-lg rounded-lg hover:bg-pink-600 transition-colors flex items-center mr-10"
+            onClick={handleMyreviews}
+          >
+            <FaUser className="mr-2" />
+            <span>{showMyreviews ? "전체 리뷰" : "내 리뷰"}</span>
+          </button>
+          <button
+            className="bg-blue-500 text-white px-4 py-2 text-lg rounded-lg hover:bg-blue-600 transition-colors flex items-center"
+            onClick={handleAddReview}
+          >
+            <FaPlus className="mr-2" />
+            <span>추가하기</span>
+          </button>
+        </div>
+      )}
+
+      {/* 새로고침 버튼 */}
       <button
         className="fixed bottom-10 right-10 bg-purple-500 text-white p-4 rounded-full hover:bg-purple-600 transition-colors z-20"
         onClick={handleRefresh}
       >
         <FaSyncAlt className="text-2xl" />
       </button>
-      {/* Navigation Arrows */}
+      {/* 네비게이션 화살표 */}
       {columns === 1 && (
         <>
           <button
@@ -209,7 +218,7 @@ const Review = () => {
           </button>
         </>
       )}
-      {/* Main Content */}
+      {/* 메인 컨텐츠 */}
       <div className="max-w-screen-lg mx-auto pt-24 px-4">
         {columns === 1 ? (
           reviews.length > 0 && (
@@ -269,7 +278,12 @@ const Review = () => {
             </div>
           )
         ) : (
-          <ReviewList user={user} reviews={reviews} columns={columns} />
+          <ReviewList
+            user={user}
+            reviews={reviews}
+            columns={columns}
+            onEditReview={handleEditReview} // ReviewList에서 수정 모드로 들어갈 수 있도록 설정
+          />
         )}
       </div>
       {/* 모달 */}
@@ -280,7 +294,11 @@ const Review = () => {
         className="w-96 mx-auto my-16 p-8 rounded-lg shadow-lg border-none"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
       >
-        <ReviewForm onClose={closeModal} />
+        <ReviewForm
+          onClose={closeModal}
+          isEditing={isEditing}
+          review={currentReview} // 수정하려는 리뷰 전달
+        />
       </Modal>
     </div>
   );
