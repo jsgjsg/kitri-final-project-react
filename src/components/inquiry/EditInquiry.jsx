@@ -88,12 +88,12 @@ function EditInquiry() {
   };
 
   return (
-    <div className="container mx-auto p-8 max-w-xl bg-gray-50 shadow-lg rounded-2xl relative">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">문의 수정</h1>
-      <form onSubmit={handleSubmit} className="space-y-6 flex flex-col">
+    <div className="container mx-auto p-10 max-w-3xl bg-white shadow-xl rounded-2xl relative">
+      <h1 className="text-4xl font-extrabold mb-8 text-gray-900">문의 수정</h1>
+      <form onSubmit={handleSubmit} className="space-y-8 flex flex-col">
         <div>
           <label
-            className="block text-base font-medium text-gray-700 mb-2"
+            className="block text-lg font-medium text-gray-800 mb-3"
             htmlFor="title"
           >
             제목
@@ -103,13 +103,13 @@ function EditInquiry() {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="block w-full border border-gray-300 rounded-lg shadow-sm focus:border-gray-400 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-3 text-base"
+            className="block w-full border border-gray-300 rounded-lg shadow-sm focus:border-gray-500 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-4 text-lg"
             required
           />
         </div>
         <div>
           <label
-            className="block text-base font-medium text-gray-700 mb-2"
+            className="block text-lg font-medium text-gray-800 mb-3"
             htmlFor="inquiry"
           >
             문의 내용
@@ -118,13 +118,13 @@ function EditInquiry() {
             id="inquiry"
             value={inquiry}
             onChange={(e) => setInquiry(e.target.value)}
-            className="block w-full border border-gray-300 rounded-lg shadow-sm focus:border-gray-400 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-3 text-base h-60"
+            className="block w-full border border-gray-300 rounded-lg shadow-sm focus:border-gray-500 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-4 text-lg h-72"
             required
           />
         </div>
         <div>
           <label
-            className="block text-base font-medium text-gray-700 mb-2"
+            className="block text-lg font-medium text-gray-800 mb-3"
             htmlFor="image"
           >
             이미지
@@ -133,20 +133,20 @@ function EditInquiry() {
             type="file"
             id="image"
             onChange={handleImageChange}
-            className="block w-full text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:border-gray-400 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-3 text-base"
+            className="block w-full text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:border-gray-500 focus:ring focus:ring-gray-200 focus:ring-opacity-50 p-4 text-lg"
           />
         </div>
-        <div className="flex justify-between mt-6 space-x-4">
+        <div className="flex justify-between mt-8 space-x-6">
           <button
             type="submit"
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300 ease-in-out text-base"
+            className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300 ease-in-out text-lg"
           >
             수정
           </button>
           <button
             type="button"
             onClick={() => navigate("/inquiry")}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300 ease-in-out text-base"
+            className="px-6 py-3 bg-gray-300 text-gray-700 rounded-full hover:bg-gray-400 transition duration-300 ease-in-out text-lg"
           >
             목록
           </button>
