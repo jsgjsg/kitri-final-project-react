@@ -55,7 +55,6 @@ const FeedForm = ({ onClose }) => {
         uploadTask.on(
           "state_changed",
           (snapshot) => {
-            // Progress function (optional)
             console.log("Upload is in progress...");
           },
           (error) => {
@@ -116,7 +115,7 @@ const FeedForm = ({ onClose }) => {
         .post("/feeds", feedData)
         .then((response) => {
           alert("글 작성 완료");
-          onClose(); // 모달을 닫기
+          onClose();
         })
         .catch((error) => {
           console.error("Error creating feed:", error);
@@ -125,7 +124,7 @@ const FeedForm = ({ onClose }) => {
   };
 
   const handleCancel = () => {
-    onClose(); // 모달을 닫기
+    onClose();
   };
 
   const handleHashtagsChange = (e) => {
@@ -149,7 +148,7 @@ const FeedForm = ({ onClose }) => {
         .delete(`/feeds/${id}`)
         .then(() => {
           alert("피드가 삭제되었습니다.");
-          onClose(); // 모달을 닫기
+          onClose();
         })
         .catch((error) => {
           console.error("Error deleting feed:", error);
@@ -158,9 +157,9 @@ const FeedForm = ({ onClose }) => {
   };
 
   return (
-    <div className="p-6 w-80 mx-auto rounded-md shadow-md bg-white font-doodle">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-3xl font-bold">{id ? "Edit Form" : "Add Form"}</h2>
+    <div className="p-8 w-full max-w-xl mx-auto rounded-md shadow-md bg-white font-sans">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold">{id ? "피드 수정" : "피드 작성"}</h2>
         {id && (
           <button
             onClick={handleDelete}
@@ -171,50 +170,53 @@ const FeedForm = ({ onClose }) => {
           </button>
         )}
       </div>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <div>
-            <label
-              htmlFor="image"
-              className="block text-lg font-medium text-gray-700"
-            >
-              Image
-            </label>
-            <input
-              type="file"
-              id="image"
-              onChange={handleImageChange}
-              className="mt-1 p-2 border-2 border-black rounded-md w-full"
-            />
-          </div>
+          <label
+            htmlFor="image"
+            className="block text-lg font-bold text-gray-700"
+          >
+            이미지
+          </label>
+          <input
+            type="file"
+            id="image"
+            onChange={handleImageChange}
+            className="mt-2 p-2 border-2 border-black rounded-md w-full"
+          />
+        </div>
 
+        <div>
           <label
             htmlFor="animal"
-            className="block text-lg font-medium text-gray-700"
+            className="block text-lg font-bold text-gray-700"
           >
-            Animal
+            동물
           </label>
-          <select
-            id="animal"
-            value={animal}
-            onChange={(e) => setAnimal(e.target.value)}
-            className="mt-1 p-2 border-2 border-black rounded-md w-full"
-            required
-          >
-            <option value="cat">Cat</option>
-            <option value="dog">Dog</option>
-            <option value="etc">Etc</option>
-          </select>
+          <div className="flex justify-between gap-4 mt-2">
+            {["고양이", "강아지", "기타"].map((type) => (
+              <button
+                type="button"
+                key={type}
+                onClick={() => setAnimal(type)}
+                className={`px-3 py-2 rounded-full border-2 border-black flex-grow text-sm ${
+                  animal === type ? "bg-pastel-blue" : "bg-white"
+                }`}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div>
           <label
             htmlFor="hashtags"
-            className="block text-lg font-medium text-gray-700"
+            className="block text-lg font-bold text-gray-700"
           >
-            Hashtags
+            해시태그
           </label>
-          <div className="flex space-x-2 mt-1">
+          <div className="flex space-x-2 mt-2">
             <input
               type="text"
               id="hashtags"
@@ -225,32 +227,16 @@ const FeedForm = ({ onClose }) => {
             <button
               type="button"
               onClick={addHashtag}
-              className="bg-pastel-blue text-black p-2 rounded-md border-2 border-black"
+              className="bg-pastel-red font-bold p-2 rounded-md border-2 border-black"
             >
-              Add
+              +
             </button>
           </div>
-
-          <div>
-            <label
-              htmlFor="content"
-              className="block text-lg font-medium text-gray-700"
-            >
-              Content
-            </label>
-            <textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="mt-1 p-2 border-2 border-black rounded-md w-full"
-              required
-            />
-          </div>
-          <div className="mt-2 flex flex-wrap space-x-2">
+          <div className="mt-4 flex flex-wrap gap-2">
             {hashtagsList.map((tag, index) => (
               <div
                 key={index}
-                className="bg-gray-200 p-1 rounded-md flex items-center mt-2 mr-2"
+                className="bg-gray-200 px-3 py-1 rounded-full flex items-center"
               >
                 <span className="mr-2">{tag}</span>
                 <FaTimes
@@ -261,19 +247,36 @@ const FeedForm = ({ onClose }) => {
             ))}
           </div>
         </div>
+
+        <div>
+          <label
+            htmlFor="content"
+            className="block text-lg font-bold text-gray-700"
+          >
+            내용
+          </label>
+          <textarea
+            id="content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="mt-2 p-2 border-2 border-black rounded-md w-full"
+            required
+          />
+        </div>
+
         <div className="flex justify-end space-x-4">
           <button
             type="submit"
-            className="text-black p-2 rounded-md border-2 border-black flex items-center"
+            className="text-black bg-pastel-blue p-2 rounded-md border-2 border-black flex items-center"
           >
-            <FaPlus className="mr-2" /> {id ? "Update" : "Add"}
+            <FaPlus className="mr-2" /> {id ? "수정" : "작성"}
           </button>
           <button
             type="button"
             onClick={handleCancel}
-            className="bg-gray-500 text-white p-2  flex items-center"
+            className="bg-gray-500 text-white p-2 rounded-md border-2 border-black flex items-center"
           >
-            <FaTimes className="mr-2" /> Cancel
+            <FaTimes className="mr-2" /> 취소
           </button>
         </div>
       </form>

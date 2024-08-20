@@ -59,7 +59,7 @@ const MyPage = () => {
     api.post("/auth/logout").then((response) => {
       localStorage.removeItem("jwtToken");
       alert(response.data);
-      navigate("/login");
+      navigate("/");
     });
   };
 

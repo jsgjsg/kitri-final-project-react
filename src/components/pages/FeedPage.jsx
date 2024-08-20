@@ -167,22 +167,24 @@ const Feed = () => {
         </div>
       </div>
       {/* My Feeds and Add Feed Buttons */}
-      <div className="fixed top-16 left-1/2 transform -translate-x-1/2 z-20 flex space-x-4 mt-10 ">
-        <button
-          className="bg-pink-500 text-white px-3 py-2 text-lg rounded-lg hover:bg-pink-600 transition-colors flex items-center mr-10"
-          onClick={handleMyFeeds}
-        >
-          <FaUser className="mr-2" />
-          <span>{showMyFeeds ? "All Feeds" : "My Feeds"}</span>
-        </button>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 text-lg rounded-lg hover:bg-blue-600 transition-colors flex items-center"
-          onClick={handleAddFeed}
-        >
-          <FaPlus className="mr-2" />
-          <span>추가하기</span>
-        </button>
-      </div>
+      {!isModalOpen && (
+        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 z-20 flex space-x-4 mt-10 ">
+          <button
+            className="bg-pink-500 text-white px-3 py-2 text-lg rounded-lg hover:bg-pink-600 transition-colors flex items-center mr-10"
+            onClick={handleMyFeeds}
+          >
+            <FaUser className="mr-2" />
+            <span>{showMyFeeds ? "All Feeds" : "My Feeds"}</span>
+          </button>
+          <button
+            className="bg-blue-500 text-white px-4 py-2 text-lg rounded-lg hover:bg-blue-600 transition-colors flex items-center"
+            onClick={handleAddFeed}
+          >
+            <FaPlus className="mr-2" />
+            <span>추가하기</span>
+          </button>
+        </div>
+      )}
       {/* Refresh Button */}
       <button
         className="fixed bottom-10 right-10 bg-purple-500 text-white p-4 rounded-full hover:bg-purple-600 transition-colors z-20"

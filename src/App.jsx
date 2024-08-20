@@ -8,11 +8,11 @@ import {
 } from "react-router-dom";
 import {
   AiOutlineAppstore,
-  AiOutlineGlobal,
   AiOutlineForm,
-  AiOutlineQuestionCircle,
   AiOutlineUser,
 } from "react-icons/ai";
+import { MessageCircle } from "react-feather";
+import { MapPin } from "react-feather";
 
 import MyPage from "./components/pages/MyPage";
 import Login from "./components/pages/LoginPage";
@@ -48,7 +48,7 @@ function App() {
       <div className="flex min-h-screen bg-white">
         <main className="flex-1 p-6 bg-gradient-to-r from-pink-100 to-blue-100 flex justify-center items-center pt-20">
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/doctor/signup" element={<DoctorSignup />} />
             <Route path="/doctor/login" element={<DoctorLogin />} />
@@ -80,72 +80,86 @@ function App() {
             isNavOpen ? "translate-x-0" : "translate-x-full"
           } transition-transform z-40`}
         >
-          <NavLink
-            to="/scTest"
-            className={({ isActive }) =>
-              isActive
-                ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
-                : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
-            }
-          >
-            <AiOutlineAppstore className="text-2xl mr-2" />
-            <span className="flex-grow">채팅 Test</span>
-          </NavLink>
-          <NavLink
-            to="/feed"
-            className={({ isActive }) =>
-              isActive
-                ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
-                : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
-            }
-          >
-            <AiOutlineAppstore className="text-2xl mr-2" />
-            <span className="flex-grow">Feed</span>
-          </NavLink>
-          <NavLink
-            to="/navigation"
-            className={({ isActive }) =>
-              isActive
-                ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
-                : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
-            }
-          >
-            <AiOutlineGlobal className="text-2xl mr-2" />
-            <span className="flex-grow">Navigation</span>
-          </NavLink>
-          <NavLink
-            to="/review"
-            className={({ isActive }) =>
-              isActive
-                ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
-                : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
-            }
-          >
-            <AiOutlineForm className="text-2xl mr-2" />
-            <span className="flex-grow">Review</span>
-          </NavLink>
-          <NavLink
-            to="/qna"
-            className={({ isActive }) =>
-              isActive
-                ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
-                : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
-            }
-          >
-            <AiOutlineQuestionCircle className="text-2xl mr-2" />
-            <span className="flex-grow">Dr.QnA</span>
-          </NavLink>
-          <NavLink
-            to="/myPage"
-            className={({ isActive }) =>
-              isActive
-                ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
-                : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
-            }
-          >
-            <AiOutlineUser className="text-2xl mr-2" />
-            <span className="flex-grow">MyPage</span>
-          </NavLink>
+          <div className="flex-grow flex flex-col space-y-4">
+            {" "}
+            {/* Add flex-grow to ensure the space is utilized */}
+            <NavLink
+              to="/feed"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
+                  : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
+              }
+            >
+              <AiOutlineAppstore className="text-2xl mr-2" />
+              <span className="flex-grow">Feed</span>
+            </NavLink>
+            <NavLink
+              to="/navigation"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
+                  : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
+              }
+            >
+              <MapPin className="text-2xl mr-2" />
+              <span className="flex-grow">Navigation</span>
+            </NavLink>
+            <NavLink
+              to="/review"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
+                  : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
+              }
+            >
+              <AiOutlineForm className="text-2xl mr-2" />
+              <span className="flex-grow">Review</span>
+            </NavLink>
+            <NavLink
+              to="/qna"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
+                  : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
+              }
+            >
+              <MessageCircle className="text-2xl mr-2" />
+              <span className="flex-grow">Dr.QnA</span>
+            </NavLink>
+            <NavLink
+              to="/scTest"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
+                  : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
+              }
+            >
+              <AiOutlineAppstore className="text-2xl mr-2" />
+              <span className="flex-grow">채팅 Test</span>
+            </NavLink>
+            <NavLink
+              to="/myPage"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
+                  : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
+              }
+            >
+              <AiOutlineUser className="text-2xl mr-2" />
+              <span className="flex-grow">MyPage</span>
+            </NavLink>
+          </div>
+          {/* Add image at the bottom of the nav */}
+          <div className="flex justify-center mt-4 mb-24">
+            {" "}
+            {/* Adjust margin as needed */}
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/kitri-final-project.appspot.com/o/images%2F--unscreen.gif?alt=media&token=997c23fc-58fb-4d3b-930d-1a1548030936"
+              alt="Bottom Image"
+              className="w-36 h-46 rounded-lg"
+            />
+          </div>
         </nav>
 
         {/* 토글 버튼 */}
