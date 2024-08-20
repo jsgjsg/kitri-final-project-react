@@ -8,11 +8,11 @@ import {
 } from "react-router-dom";
 import {
   AiOutlineAppstore,
-  AiOutlineGlobal,
   AiOutlineForm,
-  AiOutlineQuestionCircle,
   AiOutlineUser,
 } from "react-icons/ai";
+import { MessageCircle } from "react-feather";
+import { MapPin } from "react-feather";
 
 import MyPage from "./components/pages/MyPage";
 import Login from "./components/pages/LoginPage";
@@ -48,7 +48,7 @@ function App() {
       <div className="flex min-h-screen bg-white">
         <main className="flex-1 p-6 bg-gradient-to-r from-pink-100 to-blue-100 flex justify-center items-center pt-20">
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/doctor/signup" element={<DoctorSignup />} />
             <Route path="/doctor/login" element={<DoctorLogin />} />
@@ -84,17 +84,6 @@ function App() {
             {" "}
             {/* Add flex-grow to ensure the space is utilized */}
             <NavLink
-              to="/scTest"
-              className={({ isActive }) =>
-                isActive
-                  ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
-                  : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
-              }
-            >
-              <AiOutlineAppstore className="text-2xl mr-2" />
-              <span className="flex-grow">채팅 Test</span>
-            </NavLink>
-            <NavLink
               to="/feed"
               className={({ isActive }) =>
                 isActive
@@ -113,7 +102,7 @@ function App() {
                   : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
               }
             >
-              <AiOutlineGlobal className="text-2xl mr-2" />
+              <MapPin className="text-2xl mr-2" />
               <span className="flex-grow">Navigation</span>
             </NavLink>
             <NavLink
@@ -135,8 +124,19 @@ function App() {
                   : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
               }
             >
-              <AiOutlineQuestionCircle className="text-2xl mr-2" />
+              <MessageCircle className="text-2xl mr-2" />
               <span className="flex-grow">Dr.QnA</span>
+            </NavLink>
+            <NavLink
+              to="/scTest"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
+                  : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
+              }
+            >
+              <AiOutlineAppstore className="text-2xl mr-2" />
+              <span className="flex-grow">채팅 Test</span>
             </NavLink>
             <NavLink
               to="/myPage"

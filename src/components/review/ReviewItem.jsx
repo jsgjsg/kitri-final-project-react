@@ -1,21 +1,23 @@
-// ReviewItem.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ReviewComment from "./ReviewComment";
+import ReviewForm from "./ReviewForm";
 import {
   FaComments,
   FaEdit,
   FaPlus,
   FaRegHeart,
   FaHeart,
+  FaTrash,
 } from "react-icons/fa";
-import api from "../../api/api"; // api 객체 추가
+import api from "../../api/api";
 
 const ReviewItem = ({ user, review, columns }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isMe, setIsMe] = useState(false);
-  const [liked, setLiked] = useState(false); // liked 상태 추가
-  const [likeCount, setLikeCount] = useState(0); // likeCount 상태 추가
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
   const navigate = useNavigate();
   const { reviewWithUser } = review;
 
@@ -32,14 +34,34 @@ const ReviewItem = ({ user, review, columns }) => {
     setIsModalOpen(false);
   };
 
+  const handleOpenReviewModal = () => {
+    setIsReviewModalOpen(true);
+  };
+
+  const handleCloseReviewModal = () => {
+    setIsReviewModalOpen(false);
+  };
+
   const handleCreateButton = () => {
-    navigate("/review/form");
+    setIsReviewModalOpen(true);
   };
 
   const handleUpdateButton = () => {
-    navigate(`/review/form/${reviewWithUser.id}`, {
-      state: { reviewWithUser },
-    });
+    setIsReviewModalOpen(true);
+  };
+
+  const handleDeleteReview = () => {
+    if (window.confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
+      api
+        .delete(`/reviews/${reviewWithUser.id}`)
+        .then(() => {
+          alert("리뷰가 삭제되었습니다.");
+          window.location.reload(); // 페이지 새로고침
+        })
+        .catch((error) => {
+          console.error("Error deleting review: ", error);
+        });
+    }
   };
 
   useEffect(() => {
@@ -69,12 +91,14 @@ const ReviewItem = ({ user, review, columns }) => {
       } transition duration-100`}
     >
       {isMe ? (
-        <button
-          onClick={handleUpdateButton}
-          className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
-        >
-          <FaEdit />
-        </button>
+        <>
+          <button
+            onClick={handleUpdateButton}
+            className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
+          >
+            <FaEdit />
+          </button>
+        </>
       ) : (
         <button
           onClick={handleCreateButton}
@@ -142,6 +166,15 @@ const ReviewItem = ({ user, review, columns }) => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
         />
+      )}
+      {isReviewModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <ReviewForm
+            onClose={handleCloseReviewModal}
+            isEditing={isMe}
+            review={reviewWithUser}
+          />
+        </div>
       )}
     </div>
   );
