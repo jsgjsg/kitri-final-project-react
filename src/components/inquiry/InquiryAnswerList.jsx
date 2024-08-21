@@ -10,6 +10,15 @@ function InquiryAnswerList({ answers, setAnswers }) {
     setEditAnswerText("");
   }, [answers]);
 
+  const formatTextWithLineBreaks = (text) => {
+    return text.split("\n").map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        <br />
+      </React.Fragment>
+    ));
+  };
+
   const handleEditAnswer = async (answerId) => {
     if (!answerId || !editAnswerText.trim()) return;
 
@@ -76,7 +85,9 @@ function InquiryAnswerList({ answers, setAnswers }) {
                 </div>
               ) : (
                 <div>
-                  <p className="text-base">{answer.inquiryAnswer}</p>
+                  <p className="text-base">
+                    {formatTextWithLineBreaks(answer.inquiryAnswer)}
+                  </p>
                   <small className="text-sm text-gray-500">
                     {new Date(answer.createdAt).toLocaleString()}
                   </small>
