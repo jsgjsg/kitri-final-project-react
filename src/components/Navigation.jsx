@@ -26,13 +26,14 @@ const BasicMap = () => {
   const [markersData, setMarkersData] = useState([]);
   const [selectedCity, setSelectedCity] = useState("");
   const [mapInstance, setMapInstance] = useState(null);
+  const [markers, setMarkers] = useState([]); // 마커 배열 관리
 
-  // 첫 번째 useEffect에서 데이터를 가져옴
   useEffect(() => {
-    api.get(`/navigate/animal-hospital?city=${selectedCity}`)
+    api
+      .get(`/navigate/animal-hospital?city=${selectedCity}`)
       .then((response) => {
+        console.log(response.data);
         setMarkersData(response.data); // API 데이터가 markersData에 저장됨
-        console.log("API Data:", response.data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -40,8 +41,6 @@ const BasicMap = () => {
   }, [selectedCity]);
 
   useEffect(() => {
-    if (markersData.length === 0) return; // markersData가 있을 때만 실행
-
     const { naver } = window;
     if (!naver) return; // 네이버 지도 API가 로드되지 않은 경우
 
@@ -50,54 +49,63 @@ const BasicMap = () => {
       zoom: 8, // 초기 줌 레벨
     };
 
-    // 지도 인스턴스 생성
     const mapInstance = new naver.maps.Map(mapElement.current, mapOptions);
     setMapInstance(mapInstance); // mapInstance 상태 업데이트
-
-    // InfoWindow 생성
-    const infoWindow = new naver.maps.InfoWindow({
-      anchorColor: "#333",
-      anchorSize: new naver.maps.Size(20, 10),
-      maxWidth: 200,
-    });
-
-    // 마커 생성 및 추가 (API 데이터 기반으로)
-    markersData.forEach((data) => {
-      const marker = new naver.maps.Marker({
-        position: new naver.maps.LatLng(data.fcltyLa, data.fcltyLo), // 위도 경도에 맞게 설정
-        map: mapInstance,
-        title: data.fcltyNm
-      });
-
-      // 마커 클릭 이벤트 리스너 추가
-      naver.maps.Event.addListener(marker, "click", () => {
-        infoWindow.setContent(`
-          <div class="p-4 bg-white border border-gray-300 rounded-lg shadow-lg max-w-xs">
-            <h4 class="text-lg font-semibold text-gray-800 mb-2">${data.fcltyNm}</h4>
-            <p class="text-gray-600">${data.rdnmadrNm}</p>
-          </div>
-        `);
-        infoWindow.open(mapInstance, marker);
-      });
-    });
-
-    // 지도에 빈 곳 클릭시 InfoWindow 닫기
-    naver.maps.Event.addListener(mapInstance, "click", () => {
-      infoWindow.close();
-    });
 
     return () => {
       // Cleanup: 지도 인스턴스가 더 이상 필요하지 않을 때 리소스를 해제할 수 있습니다.
     };
-  }, [markersData]);
+  }, []);
 
   useEffect(() => {
-    if (mapInstance && selectedCity) {
-      const { lat, lng, zoom } = cityCoordinates[selectedCity];
+    if (mapInstance && markersData.length >= 0) {
+      const { lat, lng, zoom } = cityCoordinates[selectedCity] || {lat: 36.7, lng: 127.8, zoom: 8};
+
+      // 먼저 줌과 센터를 설정
       mapInstance.setCenter(new naver.maps.LatLng(lat, lng));
       mapInstance.setZoom(zoom);
+
+      const infoWindow = new naver.maps.InfoWindow({
+        anchorColor: "#333",
+        anchorSize: new naver.maps.Size(20, 10),
+        maxWidth: 200,
+      });
+
+      // 기존 마커 제거
+      markers.forEach((marker) => marker.setMap(null));
+      setMarkers([]); // 마커 배열 초기화
+
+      // 마커 생성 및 추가 (API 데이터 기반으로)
+      const newMarkers = markersData.map((data) => {
+        const marker = new naver.maps.Marker({
+          position: new naver.maps.LatLng(data.fcltyLa, data.fcltyLo),
+          map: mapInstance,
+          title: data.fcltyNm,
+        });
+
+        // 마커 클릭 이벤트 리스너 추가
+        naver.maps.Event.addListener(marker, "click", () => {
+          infoWindow.setContent(`
+            <div class="p-4 bg-white border border-gray-300 rounded-lg shadow-lg max-w-xs">
+              <h4 class="text-lg font-semibold text-gray-800 mb-2">${data.fcltyNm}</h4>
+              <p class="text-gray-600">${data.rdnmadrNm}</p>
+            </div>
+          `);
+          infoWindow.open(mapInstance, marker);
+        });
+
+        return marker;
+      });
+
+      // 새로 생성한 마커 배열로 교체
+      setMarkers(newMarkers);
+
+      // 지도에 빈 곳 클릭시 InfoWindow 닫기
+      naver.maps.Event.addListener(mapInstance, "click", () => {
+        infoWindow.close();
+      });
     }
-  }, [selectedCity, mapInstance]); // selectedCity와 mapInstance가 변경될 때마다 호출
+  }, [markersData, selectedCity, mapInstance]);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -109,7 +117,6 @@ const BasicMap = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    // 여기서 검색어에 대한 동작을 정의합니다.
     console.log("검색어:", searchTerm);
   };
 
