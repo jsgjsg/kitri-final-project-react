@@ -17,48 +17,26 @@ function InquiryDetail() {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const fetchInquiry = async () => {
+    const fetchData = async () => {
       try {
-        const response = await api.get(`/inquiry/${id}`);
-        setInquiry(response.data);
+        const inquiryResponse = await api.get(`/inquiry/${id}`);
+        setInquiry(inquiryResponse.data);
+
+        const answersResponse = await api.get(`/inquiry/answer/${id}`);
+        setAnswers(answersResponse.data);
+
+        const userResponse = await api.get("/users/me");
+        setCurrentUserId(userResponse.data.id);
       } catch (error) {
-        setErrorMessage("문의 정보를 가져오는 중 오류가 발생했습니다.");
+        setErrorMessage("데이터를 가져오는 중 오류가 발생했습니다.");
         console.error(
-          "Error fetching inquiry:",
+          "Error fetching data:",
           error.response ? error.response.data : error.message
         );
       }
     };
 
-    const fetchAnswers = async () => {
-      try {
-        const response = await api.get(`/inquiry/answer/${id}`);
-        setAnswers(response.data);
-      } catch (error) {
-        setErrorMessage("답변을 가져오는 중 오류가 발생했습니다.");
-        console.error(
-          "Error fetching answers:",
-          error.response ? error.response.data : error.message
-        );
-      }
-    };
-
-    const fetchCurrentUser = async () => {
-      try {
-        const response = await api.get("/users/me");
-        setCurrentUserId(response.data.id);
-      } catch (error) {
-        setErrorMessage("사용자 정보를 가져오는 중 오류가 발생했습니다.");
-        console.error(
-          "Error fetching current user data:",
-          error.response ? error.response.data : error.message
-        );
-      }
-    };
-
-    fetchInquiry();
-    fetchAnswers();
-    fetchCurrentUser();
+    fetchData();
   }, [id]);
 
   const handleAddAnswer = async () => {
@@ -134,6 +112,15 @@ function InquiryDetail() {
     }
   };
 
+  const formatTextWithLineBreaks = (text) => {
+    return text.split("\n").map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        <br />
+      </React.Fragment>
+    ));
+  };
+
   return (
     <div className="container mx-auto p-8 max-w-4xl bg-white shadow-lg rounded-lg relative">
       {errorMessage && (
@@ -167,7 +154,9 @@ function InquiryDetail() {
             </div>
           </div>
           <div className="border-t border-gray-200 pt-8 mb-8">
-            <p className="text-xl text-gray-700">{inquiry.inquiry}</p>
+            <p className="text-xl text-gray-700">
+              {formatTextWithLineBreaks(inquiry.inquiry)}
+            </p>
             {inquiry.image && (
               <img
                 src={inquiry.image}

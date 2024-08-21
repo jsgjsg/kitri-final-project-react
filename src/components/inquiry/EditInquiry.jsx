@@ -148,7 +148,7 @@ function EditInquiry() {
             onClick={() => navigate("/inquiry")}
             className="px-6 py-3 bg-gray-300 text-gray-700 rounded-full hover:bg-gray-400 transition duration-300 ease-in-out text-lg"
           >
-            목록
+            취소
           </button>
         </div>
       </form>
