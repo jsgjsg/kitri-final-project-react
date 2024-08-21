@@ -58,7 +58,7 @@ const BasicMap = () => {
   }, []);
 
   useEffect(() => {
-    if (mapInstance && markersData.length >= 0) {
+    if (mapInstance && markersData.length > 0) {
       const { lat, lng, zoom } = cityCoordinates[selectedCity] || {lat: 36.7, lng: 127.8, zoom: 8};
 
       // 먼저 줌과 센터를 설정
