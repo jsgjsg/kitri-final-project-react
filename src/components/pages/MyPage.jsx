@@ -199,28 +199,30 @@ const MyPage = () => {
         <hr className="w-full mb-6 border-2 border-gray" />
         <div className="w-full space-y-4">
           <button
-            className="flex items-center justify-center w-full bg-pastel-purple text-black p-4 rounded-lg border-4 border-black hover:bg-pastel-purple-light"
-            onClick={() => {navigate("/inquiry")}}
+            className="flex items-center justify-center w-full bg-pastel-purple text-black p-3 rounded-lg border-4 border-black hover:bg-pastel-purple-light"
+            onClick={() => {
+              navigate("/inquiry");
+            }}
           >
             <FaQuestionCircle className="mr-2 text-2xl" />
             <span className="text-xl">문의</span>
           </button>
           <button
-            className="flex items-center justify-center w-full bg-pastel-blue text-black p-4 rounded-lg border-4 border-black hover:bg-pastel-blue-light"
+            className="flex items-center justify-center w-full bg-pastel-blue text-black p-3 rounded-lg border-4 border-black hover:bg-pastel-blue-light"
             onClick={() => navigate("/edit-account")}
           >
             <FaUserEdit className="mr-2 text-2xl" />
             <span className="text-xl">비밀번호 수정</span>
           </button>
           <button
-            className="flex items-center justify-center w-full bg-pastel-green text-black p-4 rounded-lg border-4 border-black hover:bg-pastel-green-light"
+            className="flex items-center justify-center w-full bg-pastel-green text-black p-3 rounded-lg border-4 border-black hover:bg-pastel-green-light"
             onClick={handleLogout}
           >
             <FaSignOutAlt className="mr-2 text-2xl" />
             <span className="text-xl">Logout</span>
           </button>
           <button
-            className="flex items-center justify-center w-full bg-pastel-red text-black p-4 rounded-lg border-4 border-black hover:bg-pastel-red-light"
+            className="flex items-center justify-center w-full bg-pastel-red text-black p-3 rounded-lg border-4 border-black hover:bg-pastel-red-light"
             onClick={handleDeleteAccount}
           >
             <FaUserTimes className="mr-2 text-2xl" />

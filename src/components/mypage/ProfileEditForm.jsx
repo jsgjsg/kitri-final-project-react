@@ -14,7 +14,15 @@ const ProfileEditForm = ({ profile, onSave, onCancel }) => {
 
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
-      setImage(e.target.files[0]);
+      const selectedImage = e.target.files[0];
+      setImage(selectedImage);
+
+      // 이미지 미리보기를 위해 FileReader 사용
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(selectedImage);
     }
   };
 
