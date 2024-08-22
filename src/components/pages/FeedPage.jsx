@@ -148,22 +148,25 @@ const Feed = () => {
             className="w-55 h-14 object-cover mb-2 rounded"
           />
           <div className="flex-grow"></div>
-          <div className="flex space-x-4 items-center">
-            <FeedFilter
-              setKeyword={setKeyword}
-              setAnimalFilter={setAnimalFilter}
-              setCategoryFilter={setCategoryFilter}
-            />
-            <button onClick={() => handleColumnChange(1)} className="p-2">
-              <FaBars />
-            </button>
-            <button onClick={() => handleColumnChange(2)} className="p-2">
-              <FaThList />
-            </button>
-            <button onClick={() => handleColumnChange(3)} className="p-2">
-              <FaTh />
-            </button>
-          </div>
+          {/* 모달이 열려있지 않을 때만 버튼들을 표시 */}
+          {!isModalOpen && (
+            <div className="flex space-x-4 items-center">
+              <FeedFilter
+                setKeyword={setKeyword}
+                setAnimalFilter={setAnimalFilter}
+                setCategoryFilter={setCategoryFilter}
+              />
+              <button onClick={() => handleColumnChange(1)} className="p-2">
+                <FaBars />
+              </button>
+              <button onClick={() => handleColumnChange(2)} className="p-2">
+                <FaThList />
+              </button>
+              <button onClick={() => handleColumnChange(3)} className="p-2">
+                <FaTh />
+              </button>
+            </div>
+          )}
         </div>
       </div>
       {/* My Feeds and Add Feed Buttons */}
@@ -271,10 +274,10 @@ const Feed = () => {
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         contentLabel="Feed Form"
-        className="w-96 mx-auto my-16 p-8 rounded-lg shadow-lg border-none"
+        className="w-96 mx-auto my-0 rounded-lg shadow-lg border-none"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
       >
-        <FeedForm onClose={closeModal} />
+        <FeedForm onClose={closeModal} feed={feeds[currentIndex]} />
       </Modal>
     </div>
   );
