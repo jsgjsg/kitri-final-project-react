@@ -1,44 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { FaPlus, FaTimes, FaTrash } from "react-icons/fa";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import api from "../../api/api";
 import { storage } from "../../../firebaseConfig";
 
-const FeedForm = ({ onClose }) => {
-  const { id } = useParams();
+const FeedForm = ({ onClose, onOpen, isEditing = false, feed }) => {
+  const { id } = useParams(); // 피드 ID 가져오기
   const navigate = useNavigate();
-  const location = useLocation();
-  const feed = location.state?.feedWithUser || {};
-  const feedHashtags = location.state?.feedHashtags || [];
-
   const [user, setUser] = useState({});
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(feed?.content || ""); // 내용 초기화
   const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
-  const [animal, setAnimal] = useState("cat");
-  const [hashtags, setHashtags] = useState("");
-  const [hashtagsList, setHashtagsList] = useState([]);
+  const [imageUrl, setImageUrl] = useState(feed?.image || ""); // 이미지 URL 초기화
+  const [animal, setAnimal] = useState(feed?.animal || ""); // 동물 종류 초기화
+  const [hashtags, setHashtags] = useState(""); // 해시태그 초기화
+  const [hashtagsList, setHashtagsList] = useState(
+    feed?.hashtags?.split(" ") || []
+  ); // 해시태그 리스트 초기화
 
   useEffect(() => {
+    // 사용자 정보 가져오기
     api
       .get(`/users/me`)
       .then((response) => {
         setUser(response.data);
+        if (onOpen) onOpen(); // FeedForm이 열릴 때 부모 컴포넌트에 알림
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
       });
-  }, []);
 
-  useEffect(() => {
-    if (id) {
-      setContent(feed.content);
-      setImageUrl(feed.image);
-      setAnimal(feed.animal);
-      setHashtagsList(feedHashtags.map((tag) => tag.hashtag));
-    }
-  }, [id, feed, feedHashtags]);
+    return () => {
+      if (onClose) onClose(); // FeedForm이 닫힐 때 부모 컴포넌트에 알림
+    };
+  }, [onOpen, onClose]);
 
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
@@ -54,9 +49,7 @@ const FeedForm = ({ onClose }) => {
 
         uploadTask.on(
           "state_changed",
-          (snapshot) => {
-            console.log("Upload is in progress...");
-          },
+          null,
           (error) => {
             console.error("Upload error:", error);
             reject(error);
@@ -82,7 +75,6 @@ const FeedForm = ({ onClose }) => {
       try {
         uploadedImageUrl = await handleUpload();
       } catch (error) {
-        console.error("Image upload failed:", error);
         alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
         return;
       }
@@ -91,19 +83,18 @@ const FeedForm = ({ onClose }) => {
     const reqHashtags = hashtagsList.map((hashtag) => ({ hashtag }));
 
     const feedData = {
-      feedWithUser: {
-        userId: user.id,
-        content,
-        animal,
-        image: uploadedImageUrl,
-      },
-      feedHashtags: reqHashtags,
+      userId: user.id,
+      content,
+      animal,
+      image: uploadedImageUrl,
+      hashtags: reqHashtags,
     };
 
-    if (id) {
+    console.log(feedData);
+    if (isEditing) {
       api
-        .put(`/feeds/${id}`, feedData)
-        .then((response) => {
+        .put(`/feeds/${feed.id}`, feedData)
+        .then(() => {
           alert("글 수정 완료");
           navigate("/feed");
         })
@@ -113,7 +104,7 @@ const FeedForm = ({ onClose }) => {
     } else {
       api
         .post("/feeds", feedData)
-        .then((response) => {
+        .then(() => {
           alert("글 작성 완료");
           onClose();
         })
@@ -145,7 +136,7 @@ const FeedForm = ({ onClose }) => {
   const handleDelete = () => {
     if (window.confirm("정말로 이 피드를 삭제하시겠습니까?")) {
       api
-        .delete(`/feeds/${id}`)
+        .delete(`/feeds/${feed.id}`)
         .then(() => {
           alert("피드가 삭제되었습니다.");
           onClose();
@@ -157,13 +148,15 @@ const FeedForm = ({ onClose }) => {
   };
 
   return (
-    <div className="p-8 w-full max-w-xl mx-auto rounded-md shadow-md bg-white font-sans">
+    <div className="p-4 w-80 mx-auto border-2 border-black rounded-md shadow-md bg-white font-doodle">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">{id ? "피드 수정" : "피드 작성"}</h2>
-        {id && (
+        <h2 className="text-2xl font-bold">
+          {isEditing ? "피드 수정" : "피드 작성"}
+        </h2>
+        {isEditing && (
           <button
             onClick={handleDelete}
-            className="text-red-600 hover:text-red-800"
+            className="text-red-600 hover:text-red-800 bg-transparent"
             aria-label="Delete"
           >
             <FaTrash size={24} />
@@ -171,20 +164,22 @@ const FeedForm = ({ onClose }) => {
         )}
       </div>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label
-            htmlFor="image"
-            className="block text-lg font-bold text-gray-700"
-          >
-            이미지
-          </label>
-          <input
-            type="file"
-            id="image"
-            onChange={handleImageChange}
-            className="mt-2 p-2 border-2 border-black rounded-md w-full"
-          />
-        </div>
+        <input
+          type="file"
+          id="image"
+          onChange={handleImageChange}
+          className="mt-2 p-2 border-2 border-black rounded-md w-full text-lg font-sans"
+        />
+        {imageUrl && (
+          <div className="flex justify-center mt-4">
+            <img
+              src={imageUrl}
+              alt="Uploaded"
+              className="h-32 w-32 object-contain "
+              style={{ margin: "0 auto", display: "block" }}
+            />
+          </div>
+        )}
 
         <div>
           <label
@@ -267,9 +262,9 @@ const FeedForm = ({ onClose }) => {
         <div className="flex justify-end space-x-4">
           <button
             type="submit"
-            className="text-black bg-pastel-blue p-2 rounded-md border-2 border-black flex items-center"
+            className="text- bg-pastel-blue p-2 rounded-md border-2 border-black flex items-center"
           >
-            <FaPlus className="mr-2" /> {id ? "수정" : "작성"}
+            <FaPlus className="mr-2" /> {isEditing ? "수정" : "작성"}
           </button>
           <button
             type="button"
