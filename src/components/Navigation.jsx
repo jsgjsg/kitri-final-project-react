@@ -4,20 +4,20 @@ import { FiSearch } from "react-icons/fi";
 import api from "../api/api";
 
 const cityCoordinates = {
-  "서울특별시": { lat: 37.5665, lng: 126.978, zoom: 11 },
-  "대구광역시": { lat: 35.8714, lng: 128.6014, zoom: 12 },
-  "대전광역시": { lat: 36.3504, lng: 127.3845, zoom: 12 },
-  "강원도": { lat: 37.9, lng: 127.876, zoom: 10 },
-  "전라남도": { lat: 35.1, lng: 127, zoom: 9 },
-  "경기도": { lat: 37.4565, lng: 126.95, zoom: 9 },
-  "인천광역시": { lat: 37.4663, lng: 126.7052, zoom: 11 },
-  "충청남도": { lat: 36.6359, lng: 126.6608, zoom: 9 },
-  "광주광역시": { lat: 35.1595, lng: 126.8526, zoom: 12 },
-  "전라북도": { lat: 35.3762, lng: 127.1342, zoom: 10 },
-  "세종특별자치시": { lat: 36.4804, lng: 127.2899, zoom: 12 },
-  "경상남도": { lat: 35.1372, lng: 128.5907, zoom: 9 },
-  "경상북도": { lat: 36.4919, lng: 128.8889, zoom: 8 },
-  "부산광역시": { lat: 35.1796, lng: 129.0256, zoom: 11 },
+  서울특별시: { lat: 37.5665, lng: 126.978, zoom: 11 },
+  대구광역시: { lat: 35.8714, lng: 128.6014, zoom: 12 },
+  대전광역시: { lat: 36.3504, lng: 127.3845, zoom: 12 },
+  강원도: { lat: 37.9, lng: 127.876, zoom: 10 },
+  전라남도: { lat: 35.1, lng: 127, zoom: 9 },
+  경기도: { lat: 37.4565, lng: 126.95, zoom: 9 },
+  인천광역시: { lat: 37.4663, lng: 126.7052, zoom: 11 },
+  충청남도: { lat: 36.6359, lng: 126.6608, zoom: 9 },
+  광주광역시: { lat: 35.1595, lng: 126.8526, zoom: 12 },
+  전라북도: { lat: 35.3762, lng: 127.1342, zoom: 10 },
+  세종특별자치시: { lat: 36.4804, lng: 127.2899, zoom: 12 },
+  경상남도: { lat: 35.1372, lng: 128.5907, zoom: 9 },
+  경상북도: { lat: 36.4919, lng: 128.8889, zoom: 8 },
+  부산광역시: { lat: 35.1796, lng: 129.0256, zoom: 11 },
 };
 
 const BasicMap = () => {
@@ -29,6 +29,8 @@ const BasicMap = () => {
   const [markers, setMarkers] = useState([]); // 마커 배열 관리
 
   useEffect(() => {
+    if (!selectedCity) return; // 선택된 도시가 없으면 API 호출하지 않음
+
     api
       .get(`/navigate/animal-hospital?city=${selectedCity}`)
       .then((response) => {
@@ -59,7 +61,11 @@ const BasicMap = () => {
 
   useEffect(() => {
     if (mapInstance && markersData.length > 0) {
-      const { lat, lng, zoom } = cityCoordinates[selectedCity] || {lat: 36.7, lng: 127.8, zoom: 8};
+      const { lat, lng, zoom } = cityCoordinates[selectedCity] || {
+        lat: 36.7,
+        lng: 127.8,
+        zoom: 8,
+      };
 
       // 먼저 줌과 센터를 설정
       mapInstance.setCenter(new naver.maps.LatLng(lat, lng));
@@ -85,12 +91,12 @@ const BasicMap = () => {
 
         // 마커 클릭 이벤트 리스너 추가
         naver.maps.Event.addListener(marker, "click", () => {
-          infoWindow.setContent(`
-            <div class="p-4 bg-white border border-gray-300 rounded-lg shadow-lg max-w-xs">
+          infoWindow.setContent(
+            `<div class="p-4 bg-white border border-gray-300 rounded-lg shadow-lg max-w-xs">
               <h4 class="text-lg font-semibold text-gray-800 mb-2">${data.fcltyNm}</h4>
               <p class="text-gray-600">${data.rdnmadrNm}</p>
-            </div>
-          `);
+            </div>`
+          );
           infoWindow.open(mapInstance, marker);
         });
 
@@ -165,7 +171,13 @@ const BasicMap = () => {
           </div>
         </div>
       </div>
-      <div className="max-w-6xl mx-auto pt-28 p-8 h-full flex flex-col items-center space-y-6">
+      <div className="relative max-w-6xl mx-auto pt-28 p-8 h-full flex flex-col items-center space-y-6">
+        {/* 지도 위에 이미지 추가 */}
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/kitri-final-project.appspot.com/o/images%2F%EC%9A%B0%EB%8B%A4%EB%8B%A4.png?alt=media&token=1efced6f-3036-4e20-8a60-c4a35008fe94"
+          alt="Overlay"
+          className="absolute top-4 right-40 w-60 h-auto"
+        />
         <div
           ref={mapElement}
           className="w-[800px] h-[600px] border-2 border-gray-300"
