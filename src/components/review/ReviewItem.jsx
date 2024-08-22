@@ -13,7 +13,7 @@ import {
 import api from "../../api/api";
 
 const ReviewItem = ({ user, review, columns }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isMe, setIsMe] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -27,11 +27,11 @@ const ReviewItem = ({ user, review, columns }) => {
   }, [review]);
 
   const handleOpenModal = () => {
-    setIsModalOpen(true);
+    setIsCommentModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsCommentModalOpen(false);
   };
 
   const handleOpenReviewModal = () => {
@@ -162,10 +162,10 @@ const ReviewItem = ({ user, review, columns }) => {
           <FaComments />
         </button>
       </div>
-      {isModalOpen && (
+      {isCommentModalOpen && (
         <ReviewComment
           reviewId={reviewWithUser.id}
-          isOpen={isModalOpen}
+          isOpen={isCommentModalOpen}
           onClose={handleCloseModal}
         />
       )}
