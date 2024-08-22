@@ -44,7 +44,7 @@ api.interceptors.response.use(
         hasAlerted = true;
         alert("접근 권한이 없습니다. 로그인 해주세요");
         // 로그인 페이지로 리디렉션
-        window.location.href = "/";
+        window.location.href = "/login";
       }
     }
     return Promise.reject(error);

@@ -35,6 +35,7 @@ import InquiryDetail from "./components/inquiry/InquiryDetail";
 import CreateInquiry from "./components/inquiry/createIncuiry";
 import EditInquiry from "./components/inquiry/EditInquiry";
 import SocketTest from "./components/SocketTest";
+import NotFound from "./components/NotFound";
 
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -48,7 +49,8 @@ function App() {
       <div className="flex min-h-screen bg-white">
         <main className="flex-1 p-6 bg-gradient-to-r from-pink-100 to-blue-100 flex justify-center items-center pt-20">
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<Feed />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/doctor/signup" element={<DoctorSignup />} />
             <Route path="/doctor/login" element={<DoctorLogin />} />
@@ -71,6 +73,7 @@ function App() {
             <Route path="/create-inquiry" element={<CreateInquiry />} />
             <Route path="/inquiry/:id/edit" element={<EditInquiry />} />
             <Route path="/scTest" element={<SocketTest />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
 
