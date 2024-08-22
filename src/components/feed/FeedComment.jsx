@@ -36,8 +36,9 @@ const FeedComment = ({ feedId, isOpen, onClose }) => {
     const comment = { content: newComment, feedId, userId: user.id };
 
     api
-      .post(`feeds/${feedId}/comments`, comment)
+      .post(`/feeds/${feedId}/comments`, comment)
       .then((response) => {
+        console.log(comment);
         console.log(response.data);
 
         setComments([...comments, comment]);

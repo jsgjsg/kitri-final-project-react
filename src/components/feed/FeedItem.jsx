@@ -10,10 +10,12 @@ import {
 import Modal from "react-modal";
 import api from "../../api/api";
 import FeedForm from "./FeedForm";
+import FeedComment from "./FeedComment";
 
 Modal.setAppElement("#root");
 
 const FeedItem = ({ user, feed, columns }) => {
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMe, setIsMe] = useState(false);
   const {
@@ -61,25 +63,26 @@ const FeedItem = ({ user, feed, columns }) => {
     setIsModalOpen(false);
   };
 
+  const handleOpenCommentModal = () => {
+    setIsCommentModalOpen(true);
+  };
+
+  const handleCloseCommentModal = () => {
+    setIsCommentModalOpen(false);
+  };
+
   return (
     <div
       className={`relative p-4 border border-gray-300 rounded-md mb-4 bg-white shadow-lg w-full ${
         columns === 1 ? "max-w-md" : "max-w-xs"
       } h-150`}
     >
-      {isMe ? (
+      {isMe && (
         <button
           onClick={handleOpenModal}
           className="absolute top-2 right-1 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
         >
           <FaEdit />
-        </button>
-      ) : (
-        <button
-          onClick={handleOpenModal}
-          className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
-        >
-          <FaPlus />
         </button>
       )}
       <h3 className="text-lg font-semibold truncate mb-2">
@@ -120,12 +123,20 @@ const FeedItem = ({ user, feed, columns }) => {
           <span className="ml-1">{likeCount}</span>
         </button>
         <button
-          onClick={handleOpenModal}
+          onClick={handleOpenCommentModal}
           className="flex items-center space-x-1 text-green-500 p-2 rounded hover:bg-green-200 transition-colors"
         >
           <FaComments />
         </button>
       </div>
+
+      {isCommentModalOpen && (
+        <FeedComment
+          feedId={feedWithUser.id}
+          isOpen={isCommentModalOpen}
+          onClose={handleCloseCommentModal}
+        />
+      )}
 
       <Modal
         isOpen={isModalOpen}
@@ -138,7 +149,7 @@ const FeedItem = ({ user, feed, columns }) => {
           onClose={handleCloseModal}
           isEditing={isMe}
           feed={feedWithUser}
-          hashtags={feedHashtags.map((tag) => tag.hashtag).join(" ")}
+          feedHashtags={feedHashtags.map((tag) => tag.hashtag).join(" ")}
         />
       </Modal>
     </div>

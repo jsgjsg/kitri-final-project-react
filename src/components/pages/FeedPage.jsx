@@ -51,6 +51,7 @@ const Feed = () => {
       .get("http://127.0.0.1:8080/api/feeds")
       .then((response) => {
         setFeeds(response.data);
+        console.log(feeds);
       })
       .catch((error) => {
         console.error("Error: ", error);

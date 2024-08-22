@@ -19,6 +19,7 @@ import Login from "./components/pages/LoginPage";
 import Signup from "./components/pages/SignupPage";
 import DoctorLogin from "./components/pages/DoctorLoginPage";
 import DoctorSignup from "./components/pages/DoctorSignupPage";
+import SigupChoice from "./components/pages/SignupChoicePage";
 import AccountDeletion from "./components/AccountDeletion";
 import Feed from "./components/pages/FeedPage";
 import Navigation from "./components/Navigation";
@@ -55,6 +56,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/doctor/signup" element={<DoctorSignup />} />
             <Route path="/doctor/login" element={<DoctorLogin />} />
+            <Route path="/signup/choice" element={<SigupChoice />} />
             <Route path="/delete-account" element={<AccountDeletion />} />
             <Route path="/edit-account" element={<EditProfilePage />} />
             <Route path="/feed" element={<Feed />} />
