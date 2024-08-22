@@ -36,6 +36,7 @@ import CreateInquiry from "./components/inquiry/createIncuiry";
 import EditInquiry from "./components/inquiry/EditInquiry";
 import SocketTest from "./components/SocketTest";
 import NotFound from "./components/NotFound";
+import PrivateChat from "./components/PrivateChat";
 
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -73,6 +74,7 @@ function App() {
             <Route path="/create-inquiry" element={<CreateInquiry />} />
             <Route path="/inquiry/:id/edit" element={<EditInquiry />} />
             <Route path="/scTest" element={<SocketTest />} />
+            <Route path="/chat" element={<PrivateChat />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
@@ -140,6 +142,17 @@ function App() {
             >
               <AiOutlineAppstore className="text-2xl mr-2" />
               <span className="flex-grow">채팅 Test</span>
+            </NavLink>
+            <NavLink
+              to="/chat"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
+                  : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
+              }
+            >
+              <AiOutlineAppstore className="text-2xl mr-2" />
+              <span className="flex-grow">1:1 chat</span>
             </NavLink>
             <NavLink
               to="/myPage"

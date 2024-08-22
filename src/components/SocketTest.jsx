@@ -22,7 +22,7 @@ function SocketTest() {
       });
 
     // WebSocket 연결
-    const ws = new WebSocket("ws://localhost:8080/chat");
+    const ws = new WebSocket("ws://localhost:8080/chat/0");
     setSocket(ws);
 
     // 서버에서 메시지를 받을 때마다 처리
@@ -37,10 +37,13 @@ function SocketTest() {
 
     ws.addEventListener("message", handleMessage);
 
-    // 로컬스토리지에서 이전 메시지 불러오기
-    const storedMessages =
-      JSON.parse(localStorage.getItem("chatMessages")) || [];
-    setMessages(storedMessages);
+    // 이전 메시지 불러오기
+    api
+    .get(`/chat/0/messages`)
+    .then((response) => {
+      setMessages(response.data.map(msg => `${msg.sender}: ${msg.message}`));
+    })
+    .catch((error) => console.error("Error fetching chat messages: ", error));
 
     // 컴포넌트가 언마운트될 때 WebSocket 닫기
     return () => {
@@ -89,7 +92,7 @@ function SocketTest() {
       <div className="max-w-6xl mx-auto pt-24 p-8 h-full flex flex-col">
         <div className="w-full shadow-lg rounded-lg border-2 border-black overflow-hidden flex-grow">
           <div className="bg-gray-200 p-6 flex justify-between items-center">
-            <h2 className="text-2xl  font-semibold text-black">Active Chat</h2>
+            <h2 className="text-2xl  font-semibold text-black">전체 채팅</h2>
             <button
               className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
               onClick={clearChat}
