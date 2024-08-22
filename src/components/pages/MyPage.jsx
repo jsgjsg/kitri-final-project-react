@@ -6,18 +6,13 @@ import AddAnimalForm from "../mypage/AddAnimalForm";
 import EditAnimalForm from "../mypage/EditAnimalFrom";
 import Modal from "react-modal";
 import {
-  FaPenAlt,
-  FaCommentDots,
-  FaStarHalfAlt,
+  FaEdit,
+  FaUserCircle,
+  FaUserFriends,
   FaQuestionCircle,
   FaUserEdit,
   FaSignOutAlt,
   FaUserTimes,
-  FaUserCircle,
-  FaUserFriends,
-  FaInbox,
-  FaPaperPlane,
-  FaEdit,
 } from "react-icons/fa";
 
 Modal.setAppElement("#root"); // root 엘리먼트를 모달의 루트로 설정
@@ -31,24 +26,26 @@ const MyPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Fetch user profile
     api
       .get("/users/me")
       .then((response) => {
         setProfile(response.data);
         console.log(response.data);
+
+        // Fetch user's animals
+        api
+          .get(`/animal/${response.data.id}`)
+          .then((animalResponse) => {
+            setAnimals(animalResponse.data);
+            console.log(animalResponse.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching animals: ", error);
+          });
       })
       .catch((error) => {
         console.error("Error fetching profile: ", error);
-      });
-
-    api
-      .get("/animal")
-      .then((response) => {
-        setAnimals(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching animals: ", error);
       });
 
     // 쿠키 설정
@@ -104,6 +101,7 @@ const MyPage = () => {
       )
     );
     setEditingAnimal(null);
+    // You can handle updating the backend if needed
     window.location.reload(); // 프로필 업데이트 후 새로고침
   };
 
@@ -122,7 +120,7 @@ const MyPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full font-doodle relative ">
+    <div className="flex flex-col items-center w-full font-doodle relative">
       <div className="flex flex-col items-center w-full max-w-2xl bg-white border-4 border-black rounded-lg p-6 mt-24 mb-20">
         <div className="flex items-center w-full mb-6 relative">
           <div className="flex items-center justify-center w-32 h-32 bg-gray-200 rounded-full border-4 border-black">
@@ -146,7 +144,6 @@ const MyPage = () => {
           >
             <FaEdit className="text-xl" />
           </button>
-          {/* 친구 페이지로 이동하는 버튼을 프로필 근처로 이동 */}
           <button
             className="absolute bottom-0 right-0 mt-2 mr-2 bg-pastel-yellow text-black p-2 rounded-lg border-4 border-black hover:bg-pastel-yellow-light"
             onClick={handleNavigateToFriends}
@@ -200,7 +197,9 @@ const MyPage = () => {
         <div className="w-full space-y-4">
           <button
             className="flex items-center justify-center w-full bg-pastel-purple text-black p-4 rounded-lg border-4 border-black hover:bg-pastel-purple-light"
-            onClick={() => {navigate("/inquiry")}}
+            onClick={() => {
+              navigate("/inquiry");
+            }}
           >
             <FaQuestionCircle className="mr-2 text-2xl" />
             <span className="text-xl">문의</span>

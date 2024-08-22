@@ -80,7 +80,7 @@ function EditInquiry() {
         inquiry,
         image: uploadedImageUrl,
       });
-      navigate("/inquiry");
+      navigate(`/inquiry/${id}`);
     } catch (error) {
       console.error("Error updating inquiry:", error.message);
       alert("문의 수정에 실패했습니다. 다시 시도해주세요.");
@@ -145,7 +145,7 @@ function EditInquiry() {
           </button>
           <button
             type="button"
-            onClick={() => navigate("/inquiry")}
+            onClick={() => navigate(`/inquiry/${id}`)}
             className="px-6 py-3 bg-gray-300 text-gray-700 rounded-full hover:bg-gray-400 transition duration-300 ease-in-out text-lg"
           >
             취소
