@@ -210,7 +210,7 @@ const DoctorSignup = () => {
         <div className="mt-4 text-center">
           <button
             type="button"
-            onClick={() => navigate("/doctor/login")}
+            onClick={() => navigate("/login")}
             className="bg-pastel-gray text-black p-2 rounded-md border-2 border-black hover:bg-gray-600 transition-colors"
           >
             로그인 페이지로 이동
