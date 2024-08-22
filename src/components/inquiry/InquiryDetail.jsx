@@ -227,7 +227,7 @@ function InquiryDetail() {
             </div>
           )}
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/inquiry")}
             className="fixed bottom-8 right-8 bg-gradient-to-b from-purple-400 to-purple-100 text-white px-6 py-3 rounded-lg shadow-md hover:from-purple-300 hover:to-purple-50 transition duration-300"
           >
             돌아가기
