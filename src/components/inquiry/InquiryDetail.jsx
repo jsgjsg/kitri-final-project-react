@@ -122,7 +122,7 @@ function InquiryDetail() {
   };
 
   return (
-    <div className="container mx-auto p-8 max-w-4xl bg-white shadow-lg rounded-lg relative">
+    <div className="container mx-auto p-6 max-w-4xl bg-white shadow-lg rounded-lg relative">
       {errorMessage && (
         <div className="bg-red-500 text-white p-4 rounded-lg mb-4">
           {errorMessage}
@@ -130,8 +130,8 @@ function InquiryDetail() {
       )}
       {inquiry ? (
         <div>
-          <div className="flex items-center justify-between mb-12">
-            <h1 className="text-5xl font-extrabold text-gray-900 mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-4xl font-extrabold text-gray-900 mb-1">
               {inquiry.title}
             </h1>
             <div className="flex space-x-6">
@@ -153,6 +153,17 @@ function InquiryDetail() {
               )}
             </div>
           </div>
+          {/* Slightly Larger Image */}
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/kitri-final-project.appspot.com/o/images%2F%EC%9A%B0%EB%8B%A4%EB%8B%A4.png?alt=media&token=1efced6f-3036-4e20-8a60-c4a35008fe94"
+            alt="Decorative"
+            className="w-auto h-24 mb-6 rounded-lg"
+            style={{
+              marginLeft: "auto",
+              marginRight: 0,
+              display: "block",
+            }}
+          />
           <div className="border-t border-gray-200 pt-8 mb-8">
             <p className="text-xl text-gray-700">
               {formatTextWithLineBreaks(inquiry.inquiry)}

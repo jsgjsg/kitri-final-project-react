@@ -65,8 +65,10 @@ const ReviewItem = ({ user, review, columns }) => {
   };
 
   useEffect(() => {
-    if (!isMe && user.id === reviewWithUser.userId) {
-      setIsMe(true);
+    if (user && reviewWithUser && user.id === reviewWithUser.userId) {
+      setIsMe(true); // 현재 유저가 이 피드를 소유하고 있는지 확인
+    } else {
+      setIsMe(false);
     }
   }, [user.id, reviewWithUser.userId, isMe]);
 
@@ -108,7 +110,7 @@ const ReviewItem = ({ user, review, columns }) => {
         </button>
       )}
       <h3 className="text-lg font-semibold truncate mb-2">
-        {reviewWithUser.userId}
+        {reviewWithUser.nickname}
       </h3>
       {reviewWithUser.image && (
         <img

@@ -10,6 +10,9 @@ const FeedList = ({ user, feeds, columns }) => {
       ? "grid-cols-2"
       : "grid-cols-3";
 
+  console.log(user);
+  console.log(feeds);
+
   return (
     <div className={`grid ${columnClass} gap-4 max-w-full`}>
       {feeds.length === 0 ? (

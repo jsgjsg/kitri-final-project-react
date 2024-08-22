@@ -48,7 +48,7 @@ function App() {
   return (
     <Router>
       <div className="flex min-h-screen bg-white">
-        <main className="flex-1 p-6 bg-gradient-to-r from-pink-100 to-blue-100 flex justify-center items-center pt-20">
+        <main className="flex-1 bg-gradient-to-r from-pink-100 to-blue-100 flex justify-center items-center pt-20">
           <Routes>
             <Route path="/" element={<Feed />} />
             <Route path="/login" element={<Login />} />

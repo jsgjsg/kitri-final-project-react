@@ -1,19 +1,20 @@
-// FeedItem.js
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import FeedComment from "./FeedComment";
 import {
   FaComments,
   FaEdit,
   FaPlus,
   FaHeart,
   FaRegHeart,
+  FaTimes,
 } from "react-icons/fa";
+import Modal from "react-modal";
 import api from "../../api/api";
+import FeedForm from "./FeedForm";
+
+Modal.setAppElement("#root");
 
 const FeedItem = ({ user, feed, columns }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
   const [isMe, setIsMe] = useState(false);
   const {
     feedWithUser,
@@ -29,29 +30,14 @@ const FeedItem = ({ user, feed, columns }) => {
     setLikeCount(initialLikeCount);
   }, [initialLiked, initialLikeCount]);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCreateButton = () => {
-    navigate("/feed/form");
-  };
-
-  const handleUpdateButton = () => {
-    navigate(`/feed/form/${feedWithUser.id}`, {
-      state: { feedWithUser, feedHashtags },
-    });
-  };
-
   useEffect(() => {
-    if (!isMe && user.id === feedWithUser.userId) {
-      setIsMe(true);
+    // user와 feedWithUser가 제대로 로드된 후 비교하여 isMe 상태를 설정합니다.
+    if (user && feedWithUser && user.id === feedWithUser.userId) {
+      setIsMe(true); // 현재 유저가 이 피드를 소유하고 있는지 확인
+    } else {
+      setIsMe(false);
     }
-  }, [user.id, feedWithUser.userId, isMe]);
+  }, [user, feedWithUser]);
 
   const handleLikeToggle = () => {
     const newLiked = !liked;
@@ -67,6 +53,14 @@ const FeedItem = ({ user, feed, columns }) => {
       });
   };
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div
       className={`relative p-4 border border-gray-300 rounded-md mb-4 bg-white shadow-lg w-full ${
@@ -75,14 +69,14 @@ const FeedItem = ({ user, feed, columns }) => {
     >
       {isMe ? (
         <button
-          onClick={handleUpdateButton}
+          onClick={handleOpenModal}
           className="absolute top-2 right-1 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
         >
           <FaEdit />
         </button>
       ) : (
         <button
-          onClick={handleCreateButton}
+          onClick={handleOpenModal}
           className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors"
         >
           <FaPlus />
@@ -132,13 +126,21 @@ const FeedItem = ({ user, feed, columns }) => {
           <FaComments />
         </button>
       </div>
-      {isModalOpen && (
-        <FeedComment
-          feedId={feedWithUser.id}
-          isOpen={isModalOpen}
+
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={handleCloseModal}
+        contentLabel={isMe ? "Edit Feed" : "Add Feed"}
+        className="w-96 mx-auto my-16 p-8 rounded-lg shadow-lg bg-white border-none"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" // z-index 높이기
+      >
+        <FeedForm
           onClose={handleCloseModal}
+          isEditing={isMe}
+          feed={feedWithUser}
+          hashtags={feedHashtags.map((tag) => tag.hashtag).join(" ")}
         />
-      )}
+      </Modal>
     </div>
   );
 };
