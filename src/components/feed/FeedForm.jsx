@@ -5,7 +5,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import api from "../../api/api";
 import { storage } from "../../../firebaseConfig";
 
-const FeedForm = ({ onClose, onOpen, isEditing = false, feed }) => {
+const FeedForm = ({ onClose, onOpen, isEditing, feed, feedHashtags }) => {
   const { id } = useParams(); // 피드 ID 가져오기
   const navigate = useNavigate();
   const [user, setUser] = useState({});
@@ -15,7 +15,7 @@ const FeedForm = ({ onClose, onOpen, isEditing = false, feed }) => {
   const [animal, setAnimal] = useState(feed?.animal || ""); // 동물 종류 초기화
   const [hashtags, setHashtags] = useState(""); // 해시태그 초기화
   const [hashtagsList, setHashtagsList] = useState(
-    feed?.hashtags?.split(" ") || []
+    feedHashtags?.split(" ") || []
   ); // 해시태그 리스트 초기화
 
   useEffect(() => {
@@ -83,11 +83,12 @@ const FeedForm = ({ onClose, onOpen, isEditing = false, feed }) => {
     const reqHashtags = hashtagsList.map((hashtag) => ({ hashtag }));
 
     const feedData = {
-      userId: user.id,
-      content,
-      animal,
-      image: uploadedImageUrl,
-      hashtags: reqHashtags,
+      feedWithUser: {
+        content,
+        animal,
+        image: uploadedImageUrl,
+      },
+      feedHashtags: reqHashtags
     };
 
     console.log(feedData);
@@ -97,6 +98,7 @@ const FeedForm = ({ onClose, onOpen, isEditing = false, feed }) => {
         .then(() => {
           alert("글 수정 완료");
           navigate("/feed");
+          window.location.reload();
         })
         .catch((error) => {
           console.error("Error updating feed:", error);
@@ -107,6 +109,7 @@ const FeedForm = ({ onClose, onOpen, isEditing = false, feed }) => {
         .then(() => {
           alert("글 작성 완료");
           onClose();
+          window.location.reload();
         })
         .catch((error) => {
           console.error("Error creating feed:", error);
@@ -140,6 +143,7 @@ const FeedForm = ({ onClose, onOpen, isEditing = false, feed }) => {
         .then(() => {
           alert("피드가 삭제되었습니다.");
           onClose();
+          window.location.reload();
         })
         .catch((error) => {
           console.error("Error deleting feed:", error);

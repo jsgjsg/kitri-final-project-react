@@ -4,20 +4,20 @@ import { FiSearch } from "react-icons/fi";
 import api from "../api/api";
 
 const cityCoordinates = {
-  서울특별시: { lat: 37.5665, lng: 126.978, zoom: 11 },
-  대구광역시: { lat: 35.8714, lng: 128.6014, zoom: 12 },
-  대전광역시: { lat: 36.3504, lng: 127.3845, zoom: 12 },
-  강원도: { lat: 37.9, lng: 127.876, zoom: 10 },
-  전라남도: { lat: 35.1, lng: 127, zoom: 9 },
-  경기도: { lat: 37.4565, lng: 126.95, zoom: 9 },
-  인천광역시: { lat: 37.4663, lng: 126.7052, zoom: 11 },
-  충청남도: { lat: 36.6359, lng: 126.6608, zoom: 9 },
-  광주광역시: { lat: 35.1595, lng: 126.8526, zoom: 12 },
-  전라북도: { lat: 35.3762, lng: 127.1342, zoom: 10 },
-  세종특별자치시: { lat: 36.4804, lng: 127.2899, zoom: 12 },
-  경상남도: { lat: 35.1372, lng: 128.5907, zoom: 9 },
-  경상북도: { lat: 36.4919, lng: 128.8889, zoom: 8 },
-  부산광역시: { lat: 35.1796, lng: 129.0256, zoom: 11 },
+  "서울특별시": { lat: 37.5665, lng: 126.978, zoom: 11 },
+  "대구광역시": { lat: 35.8714, lng: 128.6014, zoom: 12 },
+  "대전광역시": { lat: 36.3504, lng: 127.3845, zoom: 12 },
+  "강원도": { lat: 37.9, lng: 127.876, zoom: 10 },
+  "전라남도": { lat: 35.1, lng: 127, zoom: 9 },
+  "경기도": { lat: 37.4565, lng: 126.95, zoom: 9 },
+  "인천광역시": { lat: 37.4663, lng: 126.7052, zoom: 11 },
+  "충청남도": { lat: 36.6359, lng: 126.6608, zoom: 9 },
+  "광주광역시": { lat: 35.1595, lng: 126.8526, zoom: 12 },
+  "전라북도": { lat: 35.3762, lng: 127.1342, zoom: 10 },
+  "세종특별자치시": { lat: 36.4804, lng: 127.2899, zoom: 12 },
+  "경상남도": { lat: 35.1372, lng: 128.5907, zoom: 9 },
+  "경상북도": { lat: 36.4919, lng: 128.8889, zoom: 8 },
+  "부산광역시": { lat: 35.1796, lng: 129.0256, zoom: 11 },
 };
 
 const BasicMap = () => {
@@ -29,8 +29,6 @@ const BasicMap = () => {
   const [markers, setMarkers] = useState([]); // 마커 배열 관리
 
   useEffect(() => {
-    if (!selectedCity) return; // 선택된 도시가 없으면 API 호출하지 않음
-
     api
       .get(`/navigate/animal-hospital?city=${selectedCity}`)
       .then((response) => {
