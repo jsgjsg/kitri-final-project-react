@@ -13,7 +13,7 @@ import {
 } from "react-icons/ai";
 import { MessageCircle } from "react-feather";
 import { MapPin } from "react-feather";
-import { BiMessageSquareDetail } from 'react-icons/bi';
+import { BiMessageSquareDetail } from "react-icons/bi";
 import MyPage from "./components/pages/MyPage";
 import Login from "./components/pages/LoginPage";
 import Signup from "./components/pages/SignupPage";
