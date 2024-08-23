@@ -41,7 +41,7 @@ const FeedComment = ({ feedId, isOpen, onClose }) => {
         console.log(comment);
         console.log(response.data);
 
-        setComments([...comments, comment]);
+        setComments([...comments, response.data]);
       })
       .catch((error) => {
         console.error("Error fetching feedComments: ", error);
