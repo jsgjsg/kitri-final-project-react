@@ -220,71 +220,12 @@ const Review = () => {
       )}
       {/* 메인 컨텐츠 */}
       <div className="max-w-screen-lg mx-auto pt-24 px-4">
-        {columns === 1 ? (
-          reviews.length > 0 && (
-            <div className="bg-white rounded-lg shadow-lg max-w-md w-full mx-auto p-8 h-4/5 flex flex-col justify-center items-center transition duration-100">
-              <h3 className="text-2xl font-semibold mb-4">
-                {reviews[currentIndex].reviewWithUser.item}
-              </h3>
-              {reviews[currentIndex].reviewWithUser.image && (
-                <img
-                  src={reviews[currentIndex].reviewWithUser.image}
-                  alt="Review Image"
-                  className="w-full h-64 object-contain mb-4 rounded"
-                />
-              )}
-              <p className="text-gray-700 mb-4">
-                <strong>Good:</strong>{" "}
-                {reviews[currentIndex].reviewWithUser.good}
-              </p>
-              <p className="text-gray-700 mb-4">
-                <strong>Bad:</strong> {reviews[currentIndex].reviewWithUser.bad}
-              </p>
-              <p className="text-gray-700 mb-4">
-                <strong>Tip:</strong> {reviews[currentIndex].reviewWithUser.tip}
-              </p>
-              <p className="text-gray-700 mb-4">
-                <strong>Repurchase:</strong>{" "}
-                {reviews[currentIndex].reviewWithUser.repurchase ? "Yes" : "No"}
-              </p>
-              <p className="text-gray-700 mb-4">
-                <strong>Satisfaction:</strong>{" "}
-                {reviews[currentIndex].reviewWithUser.satisfaction}
-              </p>
-              <p className="text-gray-700 mb-4">
-                <strong>Animal:</strong>{" "}
-                {reviews[currentIndex].reviewWithUser.animal}
-              </p>
-              <p className="text-gray-700 mb-4">
-                <strong>Category:</strong>{" "}
-                {reviews[currentIndex].reviewWithUser.category}
-              </p>
-              <p className="text-gray-500 text-xs mb-4">
-                {reviews[currentIndex].reviewWithUser.createdAt}
-              </p>
-              <div className="flex justify-end mt-4">
-                <button className="flex items-center text-red-500 p-4 hover:bg-red-100 rounded transition-colors mr-4">
-                  {reviews[currentIndex].liked ? <FaHeart /> : <FaRegHeart />}
-                  {reviews[currentIndex].likeCount && (
-                    <span className="ml-2">
-                      {reviews[currentIndex].likeCount}
-                    </span>
-                  )}
-                </button>
-                <button className="flex items-center text-green-500 p-4 hover:bg-green-100 rounded transition-colors">
-                  <FaComments />
-                </button>
-              </div>
-            </div>
-          )
-        ) : (
-          <ReviewList
-            user={user}
-            reviews={reviews}
-            columns={columns}
-            onEditReview={handleEditReview} // ReviewList에서 수정 모드로 들어갈 수 있도록 설정
-          />
-        )}
+        <ReviewList
+          user={user}
+          reviews={reviews}
+          columns={columns}
+          onEditReview={handleEditReview} // ReviewList에서 수정 모드로 들어갈 수 있도록 설정
+        />
       </div>
       {/* 모달 */}
       <Modal

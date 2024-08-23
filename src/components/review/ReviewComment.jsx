@@ -36,7 +36,7 @@ const ReviewComment = ({ reviewId, isOpen, onClose }) => {
       .post(`/reviews/${reviewId}/comments`, comment)
       .then((response) => {
         console.log(response.data);
-        setComments([...comments, comment]);
+        setComments([...comments, response.data]);
       })
       .catch((error) => {
         console.error("Error: ", error);
