@@ -26,8 +26,7 @@ const Feed = () => {
   const [feeds, setFeeds] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [keyword, setKeyword] = useState("");
-  const [animalFilter, setAnimalFilter] = useState("all");
-  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [filter, setFilter] = useState("all");
   const [showMyFeeds, setShowMyFeeds] = useState(false);
   const [columns, setColumns] = useState(3);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
@@ -92,7 +91,7 @@ const Feed = () => {
   useEffect(() => {
     api
       .get(
-        `/feeds/search?query=${keyword}&animal=${animalFilter}&category=${categoryFilter}`
+        `/feeds/search?query=${keyword}&animal=${filter}`
       )
       .then((response) => {
         setFeeds(response.data);
@@ -100,7 +99,7 @@ const Feed = () => {
       .catch((error) => {
         console.error("Error fetching feeds: ", error);
       });
-  }, [keyword, animalFilter, categoryFilter]);
+  }, [keyword, filter]);
 
   const handleRefresh = () => {
     window.location.reload();
@@ -154,8 +153,8 @@ const Feed = () => {
             <div className="flex space-x-4 items-center">
               <FeedFilter
                 setKeyword={setKeyword}
-                setAnimalFilter={setAnimalFilter}
-                setCategoryFilter={setCategoryFilter}
+                filter={filter}
+                setFilter={setFilter}
               />
               <button onClick={() => handleColumnChange(1)} className="p-2">
                 <FaBars />
@@ -215,59 +214,7 @@ const Feed = () => {
       )}
       {/* Main Content */}
       <div className="max-w-screen-lg mx-auto pt-24 px-4 h-full flex justify-center items-center">
-        {columns === 1 ? (
-          feeds.length > 0 && (
-            <div className="bg-white rounded-lg shadow-lg max-w-md w-full mx-auto p-8 h-4/5 flex flex-col justify-center items-center transition duration-100">
-              <h3 className="text-2xl font-semibold mb-4">
-                {feeds[currentIndex].feedWithUser.nickname}
-              </h3>
-              {feeds[currentIndex].feedWithUser.image && (
-                <img
-                  src={feeds[currentIndex].feedWithUser.image}
-                  alt="Feed Image"
-                  className="w-full h-64 object-contain mb-4 rounded"
-                />
-              )}
-              {feeds[currentIndex].feedHashtags &&
-                feeds[currentIndex].feedHashtags.length > 0 && (
-                  <div className="flex flex-wrap mb-2">
-                    {feeds[currentIndex].feedHashtags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="mr-2 mb-2 px-2 py-1 bg-gray-200 text-gray-700 rounded-full text-xs"
-                      >
-                        #{tag.hashtag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              <p className="text-gray-700 mb-4">
-                category : {feeds[currentIndex].feedWithUser.animal}
-              </p>
-              <p className="text-gray-700 mb-4">
-                {feeds[currentIndex].feedWithUser.content}
-              </p>
-              <p className="text-gray-500 text-xs mb-4">
-                {feeds[currentIndex].feedWithUser.createdAt}
-              </p>
-              <div className="flex justify-end mt-4">
-                <button className="flex items-center text-red-500 p-4 hover:bg-red-100 rounded transition-colors mr-4">
-                  {feeds[currentIndex].liked ? <FaHeart /> : <FaRegHeart />}
-                  {feeds[currentIndex].likeCount && (
-                    <span className="ml-2">
-                      {feeds[currentIndex].likeCount}
-                    </span>
-                  )}
-                </button>
-                <button className="flex items-center text-green-500 p-4 hover:bg-green-100 rounded transition-colors">
-                  <FaComments />
-                </button>
-              </div>
-            </div>
-          )
-        ) : (
-          <FeedList user={user} feeds={feeds} columns={columns} />
-        )}
+        <FeedList user={user} feeds={feeds} columns={columns} />
       </div>
 
       {/* 모달 */}

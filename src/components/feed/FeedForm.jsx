@@ -15,7 +15,7 @@ const FeedForm = ({ onClose, onOpen, isEditing, feed, feedHashtags }) => {
   const [animal, setAnimal] = useState(feed?.animal || ""); // 동물 종류 초기화
   const [hashtags, setHashtags] = useState(""); // 해시태그 초기화
   const [hashtagsList, setHashtagsList] = useState(
-    feedHashtags?.split(" ") || []
+    feedHashtags?.split(" ").filter(tag => tag) || []
   ); // 해시태그 리스트 초기화
 
   useEffect(() => {
@@ -197,9 +197,16 @@ const FeedForm = ({ onClose, onOpen, isEditing, feed, feedHashtags }) => {
               <button
                 type="button"
                 key={type}
-                onClick={() => setAnimal(type)}
+                onClick={() => {
+                  type === "고양이"
+                    ? setAnimal("cat")
+                    : type === "강아지"
+                      ? setAnimal("dog")
+                      : setAnimal("all")
+                  }
+                }
                 className={`px-3 py-2 rounded-full border-2 border-black flex-grow text-sm ${
-                  animal === type ? "bg-pastel-blue" : "bg-white"
+                  animal === (type === "고양이" ? "cat" : type === "강아지" ? "dog" : "all") ? "bg-pastel-blue" : "bg-white"
                 }`}
               >
                 {type}

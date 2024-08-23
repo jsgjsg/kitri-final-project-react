@@ -109,11 +109,15 @@ const FeedItem = ({ user, feed, columns }) => {
           ))}
         </div>
       )}
-      <p className="text-gray-700 mb-2 text-sm">
-        category : {feedWithUser.animal}
+      {/* 스타일을 개선한 카테고리 섹션 */}
+      <p className="text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-md mb-2 inline-block">
+        카테고리: {feedWithUser.animal || "없음"}
       </p>
-      <p className="text-gray-700 mb-2 text-sm">{feedWithUser.content}</p>
-      <p className="text-gray-500 text-xs mb-2">{feedWithUser.createdAt}</p>
+      {/* 스타일을 개선한 내용 섹션 */}
+      <p className="text-gray-700 mb-4 text-sm leading-relaxed">
+        <b>{feedWithUser.nickname}</b> {feedWithUser.content}
+      </p>
+      <p className="text-gray-500 text-xs mb-2">{feedWithUser.createdAt.replaceAll("T", " ")}</p>
       <div className="flex justify-end mt-2">
         <button
           onClick={handleLikeToggle}
