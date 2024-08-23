@@ -13,7 +13,7 @@ import {
 } from "react-icons/ai";
 import { MessageCircle } from "react-feather";
 import { MapPin } from "react-feather";
-
+import { BiMessageSquareDetail } from 'react-icons/bi';
 import MyPage from "./components/pages/MyPage";
 import Login from "./components/pages/LoginPage";
 import Signup from "./components/pages/SignupPage";
@@ -131,19 +131,8 @@ function App() {
                   : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
               }
             >
-              <MessageCircle className="text-2xl mr-2" />
+              <BiMessageSquareDetail className="text-2xl mr-2" />
               <span className="flex-grow">Dr.QnA</span>
-            </NavLink>
-            <NavLink
-              to="/scTest"
-              className={({ isActive }) =>
-                isActive
-                  ? "bg-yellow-300 text-black p-4 flex items-center justify-center w-full"
-                  : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
-              }
-            >
-              <AiOutlineAppstore className="text-2xl mr-2" />
-              <span className="flex-grow">채팅 Test</span>
             </NavLink>
             <NavLink
               to="/chat"
@@ -153,8 +142,8 @@ function App() {
                   : "bg-gray-800 text-white p-4 flex items-center justify-center w-full hover:bg-gray-700 transition-colors"
               }
             >
-              <AiOutlineAppstore className="text-2xl mr-2" />
-              <span className="flex-grow">1:1 chat</span>
+              <MessageCircle className="text-2xl mr-2" />
+              <span className="flex-grow">Chat</span>
             </NavLink>
             <NavLink
               to="/myPage"
