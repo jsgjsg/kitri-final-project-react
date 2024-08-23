@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import api from "../api/api";
-import { FaPaw } from "react-icons/fa"; // 아이콘 추가
+import { FaPaw, FaUserCircle } from "react-icons/fa"; // 아이콘 추가
 import exampleImage from "../assets/images/example.jpg";
 
 function PrivateChat() {
@@ -96,7 +96,6 @@ function PrivateChat() {
   };
 
   const selectChatRoom = (roomId, chatRoomNum) => {
-    console.log(`${roomId}번 채팅방 선택!~`);
     setRoomId(roomId);
     setChatRoom(chatRoomNum);
   }
@@ -115,6 +114,13 @@ function PrivateChat() {
 
       {/* Sidebar */}
       <div className="w-1/5 bg-white shadow-lg fixed top-60 left-0 bottom-80 p-4 flex flex-col z-20">
+        <button
+          className="w-full text-left bg-gray-100 hover:bg-gray-200 p-4 rounded-lg"
+          onClick={() => selectChatRoom(0, -1)}  // 실제로 채팅방을 선택할 때 이 함수가 호출될 예정
+        >
+          전체 채팅
+        </button>
+        <br/>
         <h2 className="text-2xl font-semibold mb-6">친구 목록</h2>
         <ul className="flex-grow overflow-y-auto">
           {chatRooms.map((room, idx) => (
@@ -140,7 +146,18 @@ function PrivateChat() {
         ) : (
           <div className="w-full shadow-lg rounded-lg border-2 border-black overflow-hidden flex-grow">
             <div className="bg-gray-200 p-6 flex justify-between items-center">
-              <h2 className="text-2xl font-semibold text-black">상대방: {chatRooms[chatRoom].nickname}</h2>
+              <div className="flex items-center justify-center w-24 h-24 bg-gray-200 rounded-full border-4 border-black">
+              {chatRooms[chatRoom]?.image ? (
+                <img
+                  src={chatRooms[chatRoom].image}
+                  alt="Profile"
+                  className="w-full h-full object-cover rounded-full"
+                />
+              ) : (
+                <FaUserCircle className="w-full h-full text-gray-500" />
+              )}
+            </div>
+              <h2 className="text-2xl font-semibold text-black">{chatRooms[chatRoom]?.nickname || "전체 채팅"}</h2>
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
                 onClick={clearChat}
