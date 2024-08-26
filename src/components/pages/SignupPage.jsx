@@ -30,7 +30,7 @@ const Signup = () => {
       return;
     }
     axios
-      .get(`http://127.0.0.1:8080/api/auth/check-username?username=${username}`)
+      .get(`${publicApi.baseURL}/auth/check-username?username=${username}`)
       .then((response) => {
         if (response.data) {
           setUsernameError("사용 가능한 아이디입니다.");
@@ -53,7 +53,7 @@ const Signup = () => {
       return;
     }
     axios
-      .get(`http://127.0.0.1:8080/api/auth/check-nickname?nickname=${nickname}`)
+      .get(`${publicApi.baseURL}/auth/check-nickname?nickname=${nickname}`)
       .then((response) => {
         if (response.data) {
           setNicknameError("사용 가능한 닉네임입니다.");
@@ -86,7 +86,7 @@ const Signup = () => {
     const data = { username, password, nickname };
 
     axios
-      .post("http://127.0.0.1:8080/api/auth/signup", data)
+      .post(`${publicApi.baseURL}/auth/signup`, data)
       .then((response) => {
         console.log("Response: ", response.data);
         alert("회원가입 성공!");

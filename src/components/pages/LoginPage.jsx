@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaPaw } from "react-icons/fa"; // 새로운 아이콘 추가
+import publicApi from "../../api/publicApi";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,8 +13,8 @@ const Login = () => {
     e.preventDefault();
     const data = { username, password };
 
-    axios
-      .post("http://127.0.0.1:8080/api/auth/login", data)
+    publicApi
+      .post(`/auth/login`, data)
       .then((response) => {
         const { token } = response.data;
         localStorage.setItem("jwtToken", token);
