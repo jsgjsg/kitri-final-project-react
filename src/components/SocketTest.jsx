@@ -23,7 +23,7 @@ function SocketTest() {
 
     // WebSocket 연결
     // const ws = new WebSocket("ws://localhost:8080/chat/0");
-    const ws = new WebSocket("ws://3.38.115.167:8080/chat/0");
+    const ws = new WebSocket("ws://3.35.176.186:8080/chat/0");
     setSocket(ws);
 
     // 서버에서 메시지를 받을 때마다 처리
