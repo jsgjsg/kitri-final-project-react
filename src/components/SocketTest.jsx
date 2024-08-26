@@ -22,7 +22,8 @@ function SocketTest() {
       });
 
     // WebSocket 연결
-    const ws = new WebSocket("ws://localhost:8080/chat/0");
+    // const ws = new WebSocket("ws://localhost:8080/chat/0");
+    const ws = new WebSocket("ws://3.38.115.167:8080/chat/0");
     setSocket(ws);
 
     // 서버에서 메시지를 받을 때마다 처리
@@ -66,6 +67,8 @@ function SocketTest() {
     if (socket && input.trim()) {
       // socket이 null이 아닌지 확인
       const message = `${user.nickname}: ${input}`;
+      console.log(message);
+
       socket.send(message);
       setInput("");
     }

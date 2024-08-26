@@ -55,7 +55,7 @@ function PrivateChat() {
       .catch((error) => console.error("Error fetching chat messages: ", error));
 
     // WebSocket 연결
-    const ws = new WebSocket(`ws://localhost:8080/chat/${roomId}`); // roomId 기반 연결
+    const ws = new WebSocket(`ws://3.38.115.167:8080/chat/${roomId}`); // roomId 기반 연결
     setSocket(ws);
 
     // 서버에서 메시지를 받을 때마다 처리
@@ -96,11 +96,14 @@ function PrivateChat() {
       const message = {
         sender: user.nickname,
         message: input,
+        timestamp: new Date().toISOString(), // 타임스탬프 추가
       };
+  
       socket.send(JSON.stringify(message)); // JSON 형식으로 메시지 전송
       setInput("");
     }
   };
+  
 
   const clearChat = () => {
     setMessages([]);
