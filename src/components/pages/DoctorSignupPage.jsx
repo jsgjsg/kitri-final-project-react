@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaSignature } from "react-icons/fa"; // 새로운 아이콘 추가
+import publicApi from "../../api/publicApi";
 
 const DoctorSignup = () => {
   const navigate = useNavigate();
@@ -29,9 +30,9 @@ const DoctorSignup = () => {
       setIsUsernameAvailable(false);
       return;
     }
-    axios
+    publicApi
       .get(
-        `http://127.0.0.1:8080/api/doctor/check-doctorname?doctorname=${username}`
+        `/doctor/check-doctorname?doctorname=${username}`
       )
       .then((response) => {
         if (response.data) {
@@ -54,9 +55,9 @@ const DoctorSignup = () => {
       setIsNicknameAvailable(false);
       return;
     }
-    axios
+    publicApi
       .get(
-        `http://127.0.0.1:8080/api/doctor/check-nickname?nickname=${nickname}`
+        `/doctor/check-nickname?nickname=${nickname}`
       )
       .then((response) => {
         if (response.data) {
@@ -89,8 +90,8 @@ const DoctorSignup = () => {
     // 회원가입 처리 로직 추가
     const data = { username, password, nickname };
 
-    axios
-      .post("http://127.0.0.1:8080/api/doctor/signup", data)
+    publicApi
+      .post("/doctor/signup", data)
       .then((response) => {
         console.log("Response: ", response.data);
         alert("회원가입 성공!");

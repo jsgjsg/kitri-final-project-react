@@ -47,7 +47,7 @@ const Feed = () => {
 
   const fetchFeeds = () => {
     api
-      .get("http://127.0.0.1:8080/api/feeds")
+      .get("/feeds")
       .then((response) => {
         setFeeds(response.data);
         console.log(feeds);
@@ -59,7 +59,7 @@ const Feed = () => {
 
   const fetchMyFeeds = () => {
     api
-      .get("http://127.0.0.1:8080/api/feeds")
+      .get("/feeds")
       .then((response) => {
         const myFeeds = response.data.filter(
           (feed) => feed.feedWithUser.userId === user.id
