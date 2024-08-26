@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 // API 기본 URL 설정
 // const API_URL = "http://127.0.0.1:8080/api";
-const API_URL = "http://3.38.115.167:8080/api";
+const API_URL = "http://3.35.176.186:8080/api";
 
 // axios 인스턴스 생성
 const api = axios.create({
