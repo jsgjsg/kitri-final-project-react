@@ -116,36 +116,56 @@ const ReviewItem = ({ user, review, columns }) => {
         <img
           src={reviewWithUser.image}
           alt="Review Image"
-          className={`w-full h-64 object-contain mb-2 rounded ${
+          className={`w-full h-64 object-contain mb-4 rounded ${
             columns === 1 ? "w-full h-64" : "w-full"
           }`}
         />
       )}
-      <p className="text-gray-700 mb-2 text-sm">
-        <strong>item:</strong>
-        {reviewWithUser.item}
-      </p>
-      <p className="text-gray-700 mb-2 text-sm">
-        <strong>Good:</strong> {reviewWithUser.good}
-      </p>
-      <p className="text-gray-700 mb-2 text-sm">
-        <strong>Bad:</strong> {reviewWithUser.bad}
-      </p>
-      <p className="text-gray-700 mb-2 text-sm">
-        <strong>Tip:</strong> {reviewWithUser.tip}
-      </p>
-      <p className="text-gray-700 mb-2 text-sm">
-        <strong>Repurchase:</strong> {reviewWithUser.repurchase ? "Yes" : "No"}
-      </p>
-      <p className="text-gray-700 mb-2 text-sm">
-        <strong>Satisfaction:</strong> {reviewWithUser.satisfaction}
-      </p>
-      <p className="text-gray-700 mb-2 text-sm">
-        <strong>Animal:</strong> {reviewWithUser.animal}
-      </p>
-      <p className="text-gray-700 mb-2 text-sm">
-        <strong>Category:</strong> {reviewWithUser.category}
-      </p>
+
+      <div className="border-2 border-red-200 rounded-md p-3">
+        <p className="font-semibold truncate mb-2">{reviewWithUser.item}</p>
+        <div className="grid grid-cols-2 gap-4">
+          <p className="text-gray-700 text-sm">#{reviewWithUser.animal}</p>
+          <p className="text-gray-700 text-sm">#{reviewWithUser.category}</p>
+
+          <div className="flex items-center">
+            {Array.from({ length: reviewWithUser.satisfaction }, (_, index) => (
+              <FaHeart key={index} className="text-red-500 mr-1" />
+            ))}
+          </div>
+          <p className="text-gray-700 text-sm">{reviewWithUser.repurchase}</p>
+        </div>
+      </div>
+      {/* Review Sections */}
+      {reviewWithUser.good && (
+        <div className="mt-4">
+          <p className="inline-block bg-red-200 text-gray-800 text-sm font-bold rounded-full px-3 py-1">
+            이런점이 좋았어요
+          </p>
+          <div className="text-gray-700 text-sm mt-2">
+            {reviewWithUser.good}
+          </div>
+        </div>
+      )}
+
+      {reviewWithUser.bad && (
+        <div className="mt-4">
+          <p className="inline-block bg-blue-200 text-gray-800 text-sm font-bold rounded-full px-3 py-1">
+            아쉬워요 ...
+          </p>
+          <div className="text-gray-700 text-sm mt-2">{reviewWithUser.bad}</div>
+        </div>
+      )}
+
+      {reviewWithUser.tip && (
+        <div className="mt-4">
+          <p className="inline-block bg-green-200 text-gray-800 text-sm font-bold rounded-full px-3 py-1">
+            알아두면 좋은 팁
+          </p>
+          <div className="text-gray-700 text-sm mt-2">{reviewWithUser.tip}</div>
+        </div>
+      )}
+
       <p className="text-gray-500 text-xs mb-2">{reviewWithUser.created_at}</p>
       <div className="flex justify-end mt-2">
         <button

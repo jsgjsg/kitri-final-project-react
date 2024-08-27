@@ -123,7 +123,7 @@ const MyPage = () => {
     <div className="flex flex-col items-center w-full font-doodle relative">
       <div className="flex flex-col items-center w-full max-w-2xl bg-white border-4 border-black rounded-lg p-6 mt-24 mb-20">
         <div className="flex items-center w-full mb-6 relative">
-          <div className="flex items-center justify-center w-32 h-32 bg-gray-200 rounded-full border-4 border-black bottom-10">
+          <div className="flex items-center justify-center w-32 h-32 bg-gray-200 rounded-full border-4 border-black">
             {profile.image ? (
               <img
                 src={profile.image}

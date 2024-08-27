@@ -90,9 +90,7 @@ const Feed = () => {
 
   useEffect(() => {
     api
-      .get(
-        `/feeds/search?query=${keyword}&animal=${filter}`
-      )
+      .get(`/feeds/search?query=${keyword}&animal=${filter}`)
       .then((response) => {
         setFeeds(response.data);
       })
@@ -214,7 +212,12 @@ const Feed = () => {
       )}
       {/* Main Content */}
       <div className="max-w-screen-lg mx-auto pt-24 px-4 h-full flex justify-center items-center">
-        <FeedList user={user} feeds={feeds} columns={columns} />
+        <FeedList
+          user={user}
+          feeds={feeds}
+          columns={columns}
+          currentIndex={currentIndex}
+        />
       </div>
 
       {/* 모달 */}
