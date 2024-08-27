@@ -13,7 +13,7 @@ const DoctorLogin = () => {
     const data = { username, password };
 
     axios
-      .post("http://127.0.0.1:8080/api/doctor/login", data)
+      .post(`${publicApi.baseURL}/doctor/login`, data)
       .then((response) => {
         const { token } = response.data;
         localStorage.setItem("jwtToken", token);

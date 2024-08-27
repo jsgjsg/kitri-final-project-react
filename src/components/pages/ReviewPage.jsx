@@ -49,7 +49,7 @@ const Review = () => {
 
   const fetchReviews = () => {
     api
-      .get("http://127.0.0.1:8080/api/reviews")
+      .get("/reviews")
       .then((response) => {
         setReviews(response.data);
       })
@@ -60,7 +60,7 @@ const Review = () => {
 
   const fetchMyReviews = () => {
     api
-      .get("http://127.0.0.1:8080/api/reviews")
+      .get("/reviews")
       .then((response) => {
         const myReviews = response.data.filter(
           (review) => review.reviewWithUser.userId === user.id

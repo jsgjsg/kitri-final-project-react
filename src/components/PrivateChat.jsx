@@ -44,23 +44,33 @@ function PrivateChat() {
       .get(`/chat/${roomId}/messages`)
       .then((response) => {
         setMessages(
-          response.data.map((msg) => ({
-            id: msg.id,
-            sender: msg.sender,
-            message: msg.message,
-            timestamp: new Date(msg.timestamp), // 타임스탬프 추가
-          }))
+          response.data.map((msg) => {
+            const timestamp = new Date(msg.timestamp);
+            
+            // 9시간(9 * 60 * 60 * 1000 밀리초)을 빼줍니다.
+            timestamp.setHours(timestamp.getHours() + 9);
+    
+            return {
+              id: msg.id,
+              sender: msg.sender,
+              message: msg.message,
+              timestamp: timestamp, // 타임스탬프에 9시간을 뺀 값 추가
+            };
+          })
         );
       })
       .catch((error) => console.error("Error fetching chat messages: ", error));
 
     // WebSocket 연결
-    const ws = new WebSocket(`ws://localhost:8080/chat/${roomId}`); // roomId 기반 연결
+    const ws = new WebSocket(`ws://my-first-elb-1013166709.ap-northeast-2.elb.amazonaws.com/chat/${roomId}`); // roomId 기반 연결
     setSocket(ws);
 
     // 서버에서 메시지를 받을 때마다 처리
     const handleMessage = (event) => {
-      const newMessage = JSON.parse(event.data); // JSON 형식으로 파싱
+      // const newMessage = JSON.parse(event.data); // JSON 형식으로 파싱
+      const [sender, message] = event.data.split(": ")
+      const newMessage = {sender, message};
+
       newMessage.timestamp = new Date(); // 타임스탬프 추가
       setMessages((prevMessages) => {
         const updatedMessages = [...prevMessages, newMessage];
@@ -93,11 +103,16 @@ function PrivateChat() {
 
   const sendMessage = () => {
     if (socket && input.trim()) {
-      const message = {
-        sender: user.nickname,
-        message: input,
-      };
-      socket.send(JSON.stringify(message)); // JSON 형식으로 메시지 전송
+      // const message = {
+      //   sender: user.nickname,
+      //   message: input,
+      // };
+      const message = `${user.nickname}: ${input}`;
+
+      console.log(message);
+
+      socket.send(message);
+      // socket.send(JSON.stringify(message)); // JSON 형식으로 메시지 전송
       setInput("");
     }
   };
