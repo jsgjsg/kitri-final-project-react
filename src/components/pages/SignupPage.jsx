@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaSignature } from "react-icons/fa"; // 새로운 아이콘 추가
+import publicApi from "../../api/publicApi";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -29,8 +30,8 @@ const Signup = () => {
       setIsUsernameAvailable(false);
       return;
     }
-    axios
-      .get(`${publicApi.baseURL}/auth/check-username?username=${username}`)
+    publicApi
+      .get(`/auth/check-username?username=${username}`)
       .then((response) => {
         if (response.data) {
           setUsernameError("사용 가능한 아이디입니다.");
@@ -52,8 +53,8 @@ const Signup = () => {
       setIsNicknameAvailable(false);
       return;
     }
-    axios
-      .get(`${publicApi.baseURL}/auth/check-nickname?nickname=${nickname}`)
+    publicApi
+      .get(`/auth/check-nickname?nickname=${nickname}`)
       .then((response) => {
         if (response.data) {
           setNicknameError("사용 가능한 닉네임입니다.");
@@ -85,8 +86,8 @@ const Signup = () => {
     // 회원가입 처리 로직 추가
     const data = { username, password, nickname };
 
-    axios
-      .post(`${publicApi.baseURL}/auth/signup`, data)
+    publicApi
+      .post(`/auth/signup`, data)
       .then((response) => {
         console.log("Response: ", response.data);
         alert("회원가입 성공!");
