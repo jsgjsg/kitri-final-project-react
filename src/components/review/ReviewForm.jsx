@@ -390,7 +390,7 @@ const ReviewForm = ({ onClose, isEditing = false, review }) => {
                   재구매를 하실건가요?
                 </label>
                 <div className="flex justify-between gap-4 mt-4">
-                  {["네", "아니오", "고민이에요"].map((option) => (
+                  {["재구매 Ok", "재구매 No"].map((option) => (
                     <button
                       type="button"
                       key={option}

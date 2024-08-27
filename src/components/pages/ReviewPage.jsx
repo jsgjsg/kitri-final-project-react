@@ -31,6 +31,7 @@ const Review = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태
   const [currentReview, setCurrentReview] = useState(null); // 수정하려는 리뷰 상태
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -225,6 +226,7 @@ const Review = () => {
           reviews={reviews}
           columns={columns}
           onEditReview={handleEditReview} // ReviewList에서 수정 모드로 들어갈 수 있도록 설정
+          currentIndex={currentIndex}
         />
       </div>
       {/* 모달 */}
