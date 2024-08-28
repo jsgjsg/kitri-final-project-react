@@ -62,7 +62,8 @@ function PrivateChat() {
       .catch((error) => console.error("Error fetching chat messages: ", error));
 
     // WebSocket 연결
-    const ws = new WebSocket(`ws://my-first-elb-1013166709.ap-northeast-2.elb.amazonaws.com/chat/${roomId}`); // roomId 기반 연결
+    const ws = new WebSocket(`ws://127.0.0.1:8080/chat/${roomId}`); // roomId 기반 연결
+    // const ws = new WebSocket(`ws://my-first-elb-1013166709.ap-northeast-2.elb.amazonaws.com/chat/${roomId}`); // roomId 기반 연결
     setSocket(ws);
 
     // 서버에서 메시지를 받을 때마다 처리
