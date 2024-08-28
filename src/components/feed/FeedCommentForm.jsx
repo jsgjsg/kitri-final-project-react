@@ -29,7 +29,8 @@ const FeedCommentForm = ({ onSubmit }) => {
           type="submit"
           className="bg-pastel-blue text-black p-2 rounded-md border-2 border-black hover:bg-blue-600 transition-colors flex items-center"
         >
-          <FaPaperPlane className="mr-2" /> Submit Comment
+          <FaPaperPlane className="mr-2" />
+          추가하기
         </button>
       </div>
     </form>

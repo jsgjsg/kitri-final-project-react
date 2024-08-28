@@ -71,7 +71,7 @@ const FeedComment = ({ feedId, isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-md shadow-lg w-full max-w-md border-2 border-black font-doodle">
-        <h2 className="text-2xl font-semibold mb-4">Comments</h2>
+        <h2 className="text-2xl font-semibold mb-4">댓글</h2>
         <FeedCommentForm onSubmit={handleSubmitComment} />
         <br />
         <div className="max-h-80 overflow-y-auto">
@@ -82,7 +82,7 @@ const FeedComment = ({ feedId, isOpen, onClose }) => {
             onClick={onClose}
             className="mt-4 bg-yellow-500 text-white p-2 rounded-md hover:bg-red-600 transition-colors flex items-center"
           >
-            <FaTimes className="mr-2" /> Close
+            <FaTimes className="mr-2" /> 닫기
           </button>
         </div>
       </div>
