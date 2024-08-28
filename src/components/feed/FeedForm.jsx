@@ -11,7 +11,7 @@ const FeedForm = ({ onClose, onOpen, isEditing, feed, feedHashtags }) => {
   const [user, setUser] = useState({});
   const [content, setContent] = useState(feed?.content || ""); // 내용 초기화
   const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState(feed?.image || ""); // 이미지 URL 초기화
+  const [imageUrl, setImageUrl] = useState(feed?.image || null); // 이미지 URL 초기화
   const [animal, setAnimal] = useState(feed?.animal || ""); // 동물 종류 초기화
   const [hashtags, setHashtags] = useState(""); // 해시태그 초기화
   const [hashtagsList, setHashtagsList] = useState(
@@ -78,6 +78,10 @@ const FeedForm = ({ onClose, onOpen, isEditing, feed, feedHashtags }) => {
         alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
         return;
       }
+    }
+    else {
+      alert("이미지를 넣어주세요.");
+      return;
     }
 
     const reqHashtags = hashtagsList.map((hashtag) => ({ hashtag }));
