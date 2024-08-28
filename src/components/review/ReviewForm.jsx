@@ -28,6 +28,7 @@ const ReviewForm = ({ onClose, isEditing = false, review }) => {
   const [satisfaction, setSatisfaction] = useState(0);
   const [animal, setAnimal] = useState("");
   const [category, setCategory] = useState("");
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     api
@@ -109,6 +110,8 @@ const ReviewForm = ({ onClose, isEditing = false, review }) => {
       category,
     };
 
+    if (!validateForm()) return;
+
     if (isEditing) {
       api
         .put(`/reviews/${review.id}`, reviewData)
@@ -160,11 +163,54 @@ const ReviewForm = ({ onClose, isEditing = false, review }) => {
   };
 
   const handleNextPage = () => {
-    setCurrentPage(2);
+    // 1페이지에서 동물, 카테고리, 제품명, 이미지 유효성만 검증
+    const newErrors = {};
+    if (!imageUrl && !image) newErrors.image = "이미지를 업로드하세요.";
+    if (!animal) newErrors.animal = "반려동물을 선택하세요.";
+    if (!category) newErrors.category = "카테고리를 선택하세요.";
+    if (!item) newErrors.item = "제품명을 입력하세요.";
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      setCurrentPage(2);
+    }
   };
 
   const handlePrevPage = () => {
     setCurrentPage(1);
+  };
+
+  const handleAnimalSelect = (type) => {
+    setAnimal(type);
+    setErrors((prev) => ({ ...prev, animal: "" })); // 에러 메시지 제거
+  };
+
+  const handleCategorySelect = (categoryType) => {
+      setCategory(categoryType);
+      setErrors((prev) => ({ ...prev, category: "" })); // 에러 메시지 제거
+    };
+
+  const handleImageSelect = (e) => {
+      if (e.target.files[0]) {
+        const selectedImage = e.target.files[0];
+        setImage(selectedImage);
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImageUrl(reader.result);
+        };
+        reader.readAsDataURL(selectedImage);
+
+        // 에러 메시지 제거
+        setErrors((prev) => ({ ...prev, image: "" }));
+      }
+  };
+
+  const handleItemSelect = (e) => {
+    setItem(e.target.value);
+    // 에러 메시지 제거
+    setErrors((prev) => ({ ...prev, item: "" }));
   };
 
   const renderStars = (level) => {
@@ -179,6 +225,17 @@ const ReviewForm = ({ onClose, isEditing = false, review }) => {
         {i < level ? <FaStar className="text-yellow-400" /> : <FaRegStar />}
       </button>
     ));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // 2페이지에서는 만족도만 검증
+    if (currentPage === 2 && satisfaction === 0)
+      newErrors.satisfaction = "만족도를 선택하세요.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   return (
@@ -206,11 +263,11 @@ const ReviewForm = ({ onClose, isEditing = false, review }) => {
           >
             이미지 업로드*
           </label>
-
+          {errors.image && <p className="text-red-500 text-sm mt-2">{errors.image}</p>}
           <input
             type="file"
             id="image"
-            onChange={handleImageChange}
+            onChange={handleImageSelect}
             className="mt-2 p-2 border-2 border-black rounded-md w-full text-lg font-sans"
           />
           {imageUrl && (
@@ -232,12 +289,13 @@ const ReviewForm = ({ onClose, isEditing = false, review }) => {
                 >
                   반려동물*
                 </label>
+                {errors.animal && <p className="text-red-500 text-sm mt-2">{errors.animal}</p>}
                 <div className="flex justify-between gap-4">
                   {["고양이", "강아지", "기타"].map((type) => (
                     <button
                       type="button"
                       key={type}
-                      onClick={() => setAnimal(type)}
+                      onClick={() => handleAnimalSelect(type)}
                       className={`px-3 py-2 rounded-full border-2 border-black flex-grow text-sm ${
                         animal === type ? "bg-pastel-blue" : "bg-white"
                       }`}
@@ -253,15 +311,16 @@ const ReviewForm = ({ onClose, isEditing = false, review }) => {
                   htmlFor="category"
                   className="block text-lg font-bold text-gray-700 mb-1 font-sans"
                 >
-                  제품 카테고리*
+                  카테고리*
                 </label>
+                {errors.category && <p className="text-red-500 text-sm mt-2">{errors.category}</p>}
                 <div className="flex flex-wrap gap-4">
                   {["사료", "간식", "영양제", "용품", "장난감", "의류"].map(
                     (categoryType) => (
                       <button
                         type="button"
                         key={categoryType}
-                        onClick={() => setCategory(categoryType)}
+                        onClick={() => handleCategorySelect(categoryType)}
                         className={`px-4 py-2 rounded-full border-2 border-black flex-grow text-sm ${
                           category === categoryType
                             ? "bg-pastel-pink"
@@ -280,12 +339,16 @@ const ReviewForm = ({ onClose, isEditing = false, review }) => {
                   htmlFor="item"
                   className="block text-lg font-bold text-gray-700 mb-1 font-sans"
                 >
-                  제품*
+                  제품명*
                 </label>
+                {errors.item && <p className="text-red-500 text-sm mt-2">{errors.item}</p>}
                 <input
                   id="item"
                   value={item}
-                  onChange={(e) => setItem(e.target.value)}
+                  onChange={(e) => {
+                    setItem(e.target.value)
+                    setErrors((prev) => ({ ...prev, item: "" }));
+                  }}
                   className="mt-2 p-2 border-2 border-black rounded-md w-full text-lg font-sans"
                   required
                 />
@@ -332,6 +395,7 @@ const ReviewForm = ({ onClose, isEditing = false, review }) => {
                 >
                   반려인 만족도*
                 </label>
+                {errors.satisfaction && <p className="text-red-500 text-sm mt-2">{errors.satisfaction}</p>}
                 <div className="flex justify-center gap-2 mt-2">
                   {renderStars(satisfaction)}
                 </div>
