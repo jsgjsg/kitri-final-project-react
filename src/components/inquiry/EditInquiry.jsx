@@ -138,17 +138,17 @@ function EditInquiry() {
         </div>
         <div className="flex justify-between mt-8 space-x-6">
           <button
-            type="submit"
-            className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300 ease-in-out text-lg"
-          >
-            수정
-          </button>
-          <button
             type="button"
             onClick={() => navigate(`/inquiry/${id}`)}
             className="px-6 py-3 bg-gray-300 text-gray-700 rounded-full hover:bg-gray-400 transition duration-300 ease-in-out text-lg"
           >
             취소
+          </button>
+          <button
+            type="submit"
+            className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300 ease-in-out text-lg"
+          >
+            수정
           </button>
         </div>
       </form>

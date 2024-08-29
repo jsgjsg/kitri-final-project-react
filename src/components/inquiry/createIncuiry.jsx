@@ -129,17 +129,17 @@ function CreateInquiry() {
         </div>
         <div className="flex justify-between mt-8 space-x-6">
           <button
-            type="submit"
-            className="px-6 py-3 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300 ease-in-out text-lg"
-          >
-            제출
-          </button>
-          <button
             type="button"
             onClick={() => navigate("/inquiry")}
             className="px-6 py-3 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300 ease-in-out text-lg"
           >
-            목록
+            취소
+          </button>
+          <button
+            type="submit"
+            className="px-6 py-3 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300 ease-in-out text-lg"
+          >
+            제출
           </button>
         </div>
       </form>
