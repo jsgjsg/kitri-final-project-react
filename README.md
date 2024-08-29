@@ -1,6 +1,6 @@
 # 📝 반려동물 커뮤니티 (멍냥 party)
 
-![작게](https://github.com/jsgjsg/kitri-final-project-react/blob/main/%EC%82%B0%EC%B6%9C%EB%AC%BC/%EB%A1%9C%EA%B3%A0.png)
+<img src="https://github.com/jsgjsg/kitri-final-project-react/blob/main/%EC%82%B0%EC%B6%9C%EB%AC%BC/%EB%A1%9C%EA%B3%A0.png" style="width: 48%;">
 
 ### 왜 우리의 반려동물 커뮤니티가 특별한가요?
 <p>반려동물과 함께하는 생활은 소중하지만, 관리와 정보 탐색이 번거로울 때가 있습니다. 저희 커뮤니티는 반려동물의 건강, 놀이, 훈련 등 다양한 정보를 쉽게 찾아보고, 다른 반려인들과 경험을 나누며 맞춤형 조언을 얻을 수 있는 공간입니다. 이 커뮤니티는 반려동물과의 시간을 더 즐겁고 편리하게 만들어줍니다.</p>
@@ -16,7 +16,7 @@
 
 
 
-###  [초기 화면 설계](산출물/와이어프레임(초기%20화면%20설계).jpg)      |      [최종 화면 설계](산출물/프로토타이핑(최종%20화면%20설계).PNG)   
+###  [초기 화면 설계](산출물/와이어프레임(초기%20화면%20설계).jpg) &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; [최종 화면 설계](산출물/프로토타이핑(최종%20화면%20설계).PNG)   
 ----
 <br>
 
@@ -44,18 +44,28 @@
 
 ## 🛠️ Tech Stacks
 <div style="display: flex; flex-wrap: wrap;">
-  <img src="https://img.shields.io/badge/Amazon%20EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white" alt="Amazon EC2" style="flex: 1 1 50%; margin-bottom: 10px;">
-  <img src="https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white" alt="Amazon S3" style="flex: 1 1 50%; margin-bottom: 10px;">
-  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white" alt="Node.js" style="flex: 1 1 50%; margin-bottom: 10px;">
-  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white" alt="Git" style="flex: 1 1 50%; margin-bottom: 10px;">
-  <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=for-the-badge&logo=Tailwind%20CSS&logoColor=white" alt="Tailwind CSS" style="flex: 1 1 50%; margin-bottom: 10px;">
-  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white" alt="React" style="flex: 1 1 50%; margin-bottom: 10px;">
-  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white" alt="MongoDB" style="flex: 1 1 50%; margin-bottom: 10px;">
+ <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white" alt="React" style="flex: 1 1 50%; margin-bottom: 10px;">
+ <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=for-the-badge&logo=Tailwind%20CSS&logoColor=white" alt="Tailwind CSS" style="flex: 1 1 50%; margin-bottom: 10px;">
+ <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+ <img src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">
+
+ <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
+ <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+ <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
+
+ <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+
+ <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+ <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+ 
+ <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">
+ <img src="https://img.shields.io/badge/Amazon%20EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white" alt="Amazon EC2" style="flex: 1 1 50%; margin-bottom: 10px;">
+ <img src="https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white" alt="Amazon S3" style="flex: 1 1 50%; margin-bottom: 10px;">
 </div>
 
+## ⚙️ Architecture
 <div style="display: flex; flex-direction: column; align-items: center;">
   <img src="https://github.com/jsgjsg/kitri-final-project-react/blob/main/%EC%82%B0%EC%B6%9C%EB%AC%BC/%EA%B0%9C%EB%B0%9C.png" alt="프로젝트 다이어그램" style="width: 100%; margin-bottom: 20px;">
-
 </div>
  
 ----
