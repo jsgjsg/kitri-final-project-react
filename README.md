@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/b05e371a-19d3-45ab-aea2-2291f7f4e38d)# 📝 반려동물 커뮤니티 (멍냥 party)
+# 📝 반려동물 커뮤니티 (멍냥 party)
 
 ![작게](https://github.com/jsgjsg/kitri-final-project-react/blob/main/%EC%82%B0%EC%B6%9C%EB%AC%BC/%EB%A1%9C%EA%B3%A0.png)
 
@@ -21,7 +21,6 @@
 <br>
 ## ⭐ [주요기능](산출물/주요기능.pdf)
 <div style="display: flex; flex-wrap: wrap; justify-content: flex-start;">
-  <img src="https://github.com/user-attachments/assets/f81096fe-efa8-42a8-aa54-fafade9da1c9" alt="기능 이미지" style="width: 48%; margin: 1%;">
   <img src="https://github.com/user-attachments/assets/94fe1de7-0eb8-43df-b969-3e7a9d93f5ee" alt="기능 이미지" style="width: 48%; margin: 1%;">
   <img src="https://github.com/user-attachments/assets/228b3707-401f-4bb6-b57f-54cae53112e0" alt="기능 이미지" style="width: 48%; margin: 1%;">
   <img src="https://github.com/user-attachments/assets/74c51c9b-da5c-4f98-9439-e24a17766c0c" alt="기능 이미지" style="width: 48%; margin: 1%;">
