@@ -1,5 +1,6 @@
 # 📝 반려동물 커뮤니티 (멍냥 party)
 <a href="http://192.168.10.171:5173" target="_blank">링크</a>
+https://www.canva.com/design/DAGPAUKtvBI/FWP78Ki3_3Sp_yp8yK07Kw/edit
 <img src="https://github.com/jsgjsg/kitri-final-project-react/blob/main/%EC%82%B0%EC%B6%9C%EB%AC%BC/%EB%A1%9C%EA%B3%A0.png" style="width: 48%;">
 
 ### 왜 우리의 반려동물 커뮤니티가 특별한가요?
