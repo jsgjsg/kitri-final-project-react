@@ -95,8 +95,8 @@
 </table>
 
 ----
-### <a href="https://www.canva.com/design/DAGPAUKtvBI/FWP78Ki3_3Sp_yp8yK07Kw/edit" target="__blank">더 자세한 설명(Canva)</a>
-### <a href="http://my-first-kitri-react.s3-website.ap-northeast-2.amazonaws.com" target="__blank">멍냥Party 홈페이지</a>
+### <a href="https://www.canva.com/design/DAGPAUKtvBI/FWP78Ki3_3Sp_yp8yK07Kw/edit" target="_blank">더 자세한 설명(Canva)</a>
+### <a href="http://my-first-kitri-react.s3-website.ap-northeast-2.amazonaws.com" target="_blank">멍냥Party 홈페이지</a>
 ----
 
 ## ✒ 프로젝트 회고
