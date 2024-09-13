@@ -22,8 +22,8 @@ function SocketTest() {
       });
 
     // WebSocket 연결
-    const ws = new WebSocket("ws://localhost:8080/chat/0");
-    // const ws = new WebSocket("ws://my-first-elb-1013166709.ap-northeast-2.elb.amazonaws.com/chat/0");
+    // const ws = new WebSocket("ws://localhost:8080/chat/0");
+    const ws = new WebSocket("ws://43.203.217.13:8080/chat/0");
     setSocket(ws);
 
     // 서버에서 메시지를 받을 때마다 처리
